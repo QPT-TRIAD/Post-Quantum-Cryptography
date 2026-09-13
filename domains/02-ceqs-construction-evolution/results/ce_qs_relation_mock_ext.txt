@@ -1,0 +1,12 @@
+PASS regression_valid_quorum            v0.3 baseline still holds
+EXPECTED-FAIL below_threshold_rejection  42 distinct valid contributions correctly rejected (need >= 43)
+EXPECTED-FAIL cross_topic_unlinkability  signer=7 cross-topic tags did not cancel to x_i (as required by Section 15)
+EXPECTED-FAIL same_message_linkability   repeat tag is linkable (equal) but extraction is correctly undefined (c0==c1), matching Section 4.4/14
+EXPECTED-FAIL identity_impersonation     real secrets of signer=7 correctly rejected against claimed index=12
+EXPECTED-FAIL post_exposure_probe        200000 random guesses for k_i found no G_mask preimage; x_i exposure alone did not yield a forgeable contribution (Section 16)
+
+ALL EXTENSION-PASS CHECKS PASSED (5 new + 1 regression gate)
+NOTE: relation mock only. Games 3 (quorum anonymity, formal),
+7 (trace soundness, formal), 8 (non-frameability, formal) and
+11 (QROM) are NOT exercised by this file or by v0.3's script --
+they require the real VOLEitH proof system and are not mockable.

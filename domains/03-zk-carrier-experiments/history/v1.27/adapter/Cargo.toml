@@ -1,0 +1,43 @@
+# The binius-* entries below are relative path dependencies into the vendored
+# upstream tree `continuation_v1.17/binius64-source`, which is third-party source and
+# is NOT part of this repository. To build this adapter, check that tree out from
+# https://github.com/binius-zk/binius64 at commit
+# 37e9cd64e82243cde0e79c7d8ac0dc319f1cbeb4, apply the six-file patch retained at
+# src/prover_memory.patch (sha256
+# b916606810a4b8416baddadfac531302eec91935a73b1528a201a4a189a4b563), and build with
+# `cargo build --locked --release` under Rust 1.97.1. See docs/provenance.md.
+[package]
+name = "ceqs-paired-trace-v127"
+version = "0.1.27"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.98"
+serde_json = "1.0.140"
+rand = { version = "0.10.1", features = ["thread_rng"] }
+binius-circuits = { path = "../../continuation_v1.17/binius64-source/crates/circuits" }
+binius-core = { path = "../../continuation_v1.17/binius64-source/crates/core" }
+binius-frontend = { path = "../../continuation_v1.17/binius64-source/crates/frontend" }
+binius-hash = { path = "../../continuation_v1.17/binius64-source/crates/hash" }
+binius-prover = { path = "../../continuation_v1.17/binius64-source/crates/prover" }
+binius-verifier = { path = "../../continuation_v1.17/binius64-source/crates/verifier" }
+
+binius-field = { path = "../../continuation_v1.17/binius64-source/crates/field" }
+binius-iop = { path = "../../continuation_v1.17/binius64-source/crates/iop" }
+binius-ip = { path = "../../continuation_v1.17/binius64-source/crates/ip" }
+binius-spartan-verifier = { path = "../../continuation_v1.17/binius64-source/crates/spartan-verifier" }
+binius-transcript = { path = "../../continuation_v1.17/binius64-source/crates/transcript" }
+bytes = "1.7.2"
+
+binius-math = { path = "../../continuation_v1.17/binius64-source/crates/math" }
+binius-utils = { path = "../../continuation_v1.17/binius64-source/crates/utils" }
+digest = "0.11.2"
+
+[profile.release]
+lto = false
+
+[profile.release.package.binius-prover]
+codegen-units = 1
+
+[profile.release.package.ceqs-paired-trace-v127]
+codegen-units = 1

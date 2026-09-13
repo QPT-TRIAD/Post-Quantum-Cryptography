@@ -1,0 +1,5 @@
+x.x.......
+=========================== short test summary info ============================
+XFAIL test_props_tesla.py::TeslaProperties::test_S4_004_stranded_pending_packets_under_loss
+XFAIL test_props_tesla.py::TeslaProperties::test_S4_005_unauthenticated_replay_filter_dos
+8 passed, 2 xfailed in 3.38s

@@ -1,0 +1,187 @@
+...F....
+[MTL] observations: {'extra_unused_node_accepted': True}
+[MTL multiproof catalogue] ACCEPTS=['empty_proof_dict'] CRASHES={'leaf_index_beyond_all_leaves': 'IndexError', 'unknown_rung_key': 'IndexError', 'nodes_wrong_shape': 'ValueError'}
+F.
+[LMS differential] 100 cases over pairs [(5, 1), (5, 2), (5, 3), (5, 4), (10, 5), (10, 6), (10, 7), (10, 8), (5, 8), (10, 4)]: 20 disagreements
+FF...
+[LMS mixed n/m matrix] {(5, 8): {'len_T4': 820, 'len_hsslms': 812, 'len_formula_T4': 820, 'T4->T4': True, 'T4->hsslms': True, 'hsslms->hsslms': False, 'hsslms->T4': False}, (10, 4): {'len_T4': 1252, 'len_hsslms': 1260, 'len_formula_T4': 1252, 'T4->T4': True, 'T4->hsslms': True, 'hsslms->hsslms': False, 'hsslms->T4': False}}
+F
+=================================== FAILURES ===================================
+_ MerkleProperties.test_merkle_verify_malformed_signature_objects_return_false _
+
+self = <test_props_hashsig.MerkleProperties testMethod=test_merkle_verify_malformed_signature_objects_return_false>
+
+    def test_merkle_verify_malformed_signature_objects_return_false(self):
+        """Invalid-encoding catalogue for merkle_verify: it must return False, not raise."""
+        m, sig = POOL[0]
+        cases = {
+            'idx_float': dict(copy_sig(sig), idx=float(sig['idx'])),
+            'idx_str': dict(copy_sig(sig), idx=str(sig['idx'])),
+            'idx_none': dict(copy_sig(sig), idx=None),
+            'missing_auth': {'idx': sig['idx'], 'ots': list(sig['ots'])},
+            'missing_ots': {'idx': sig['idx'], 'auth': list(sig['auth'])},
+            'auth_not_list': dict(copy_sig(sig), auth=b''.join(sig['auth'])),
+            'ots_element_int': dict(copy_sig(sig), ots=[0] * T3.LEN),
+            'empty_dict': {},
+        }
+        crashes = {}
+        for name, bad in cases.items():
+            try:
+                self.assertFalse(mverify(m, bad), name)
+            except AssertionError:
+                raise
+            except Exception as e:                                          # noqa: BLE001
+                crashes[name] = type(e).__name__
+>       self.assertEqual(crashes, {}, 'merkle_verify raises instead of returning False: %r' % crashes)
+E       AssertionError: {'idx_float': 'AttributeError', 'idx_str':[146 chars]ror'} != {}
+E       + {}
+E       - {'empty_dict': 'KeyError',
+E       -  'idx_float': 'AttributeError',
+E       -  'idx_none': 'TypeError',
+E       -  'idx_str': 'TypeError',
+E       -  'missing_auth': 'KeyError',
+E       -  'missing_ots': 'KeyError',
+E       -  'ots_element_int': 'TypeError'} : merkle_verify raises instead of returning False: {'idx_float': 'AttributeError', 'idx_str': 'TypeError', 'idx_none': 'TypeError', 'missing_auth': 'KeyError', 'missing_ots': 'KeyError', 'ots_element_int': 'TypeError', 'empty_dict': 'KeyError'}
+
+test_props_hashsig.py:211: AssertionError
+______________ MTLProperties.test_multiproof_non_canonical_inputs ______________
+
+self = <test_props_hashsig.MTLProperties testMethod=test_multiproof_non_canonical_inputs>
+
+    def test_multiproof_non_canonical_inputs(self):
+        """Invalid-encoding catalogue for MTLMultiproof.verify (must return False, never raise
+        and never accept a proof that proves nothing)."""
+        leaves, lad = self._ladder(20)
+        V = T3.MTLMultiproof.verify
+        proof = T3.MTLMultiproof.build(lad, [3, 7])
+        self.assertTrue(V(lad.rung_roots, lad.rungs, leaves, proof))
+        observations = {}
+        # extra unused node: accepted (non-minimal proof) -- observation only, semantically sound
+        q = {0: {'leaves': list(proof[0]['leaves']), 'nodes': list(proof[0]['nodes']) + [(0, 15, H(b'junk'))]}}
+        observations['extra_unused_node_accepted'] = V(lad.rung_roots, lad.rungs, leaves, q)
+        print('\n[MTL] observations:', observations)
+        crashes, accepts = {}, []
+        cases = {
+            'empty_proof_dict': {},
+            'rung_with_no_leaves': {0: {'leaves': [], 'nodes': []}},
+            'leaf_index_equal_to_rung_size': {0: {'leaves': [16], 'nodes': []}},
+            'leaf_index_beyond_all_leaves': {0: {'leaves': [10 ** 6], 'nodes': []}},
+            'negative_leaf_index': {0: {'leaves': [-1], 'nodes': []}},
+            'unknown_rung_key': {5: {'leaves': [0], 'nodes': []}},
+            'nodes_wrong_shape': {0: {'leaves': [3], 'nodes': [(0, 2)]}},
+        }
+        for name, bad in cases.items():
+            try:
+                if V(lad.rung_roots, lad.rungs, leaves, bad) is not False:
+                    accepts.append(name)
+            except Exception as e:                                          # noqa: BLE001
+                crashes[name] = type(e).__name__
+        print('[MTL multiproof catalogue] ACCEPTS=%r CRASHES=%r' % (accepts, crashes))
+>       self.assertTrue(accepts == [] and crashes == {},
+                        'ACCEPT-ON-INVALID multiproof: %r ; raises instead of False: %r' % (accepts, crashes))
+E       AssertionError: False is not true : ACCEPT-ON-INVALID multiproof: ['empty_proof_dict'] ; raises instead of False: {'leaf_index_beyond_all_leaves': 'IndexError', 'unknown_rung_key': 'IndexError', 'nodes_wrong_shape': 'ValueError'}
+
+test_props_hashsig.py:329: AssertionError
+________________ LMSProperties.test_differential_lms_100_cases _________________
+
+self = <test_props_hashsig.LMSProperties testMethod=test_differential_lms_100_cases>
+
+    def test_differential_lms_100_cases(self):
+        """100 seeded (typecode pair, message) cases: sign with T4 -> verify with hsslms, and sign
+        with hsslms -> verify with T4; tampered signatures rejected by both. Any disagreement is a finding."""
+        rng = random.Random(2024)
+        disagreements = []
+        for c in range(100):
+            pair = PAIRS[c % len(PAIRS)]
+            msg = rng.randbytes(rng.randint(0, 3000))
+            t4k = t4_key(pair)
+            hsk = hs_key(pair)
+            t4pk, hspk = t4k.public_key(), hsk.gen_pub().get_pubkey()
+            t4sig, hssig = t4k.sign(msg), hsk.sign(msg)
+            row = {
+                'T4->hsslms': hs_verify(t4pk, msg, t4sig),
+                'hsslms->T4': T4.lms_verify(hspk, msg, hssig),
+                'T4->T4': T4.lms_verify(t4pk, msg, t4sig),
+                'hsslms->hsslms': hs_verify(hspk, msg, hssig),
+                'sizes_equal': (len(t4sig), len(t4pk)) == (len(hssig), len(hspk)) == (T4.lms_sizes(*pair)['sig'], T4.lms_sizes(*pair)['pub']),
+            }
+            pos = rng.randrange(len(t4sig))
+            x = rng.randrange(1, 256)
+            row['tamper_T4sig_rejected_by_both'] = (not hs_verify(t4pk, msg, flip(t4sig, pos, x))) and (not T4.lms_verify(t4pk, msg, flip(t4sig, pos, x)))
+            row['tamper_hssig_rejected_by_both'] = (not hs_verify(hspk, msg, flip(hssig, pos % len(hssig), x))) and (not T4.lms_verify(hspk, msg, flip(hssig, pos % len(hssig), x)))
+            row['wrong_msg_rejected_by_both'] = (not hs_verify(t4pk, msg + b'!', t4sig)) and (not T4.lms_verify(hspk, msg + b'!', hssig))
+            if not all(row.values()):
+                disagreements.append((c, pair, len(msg), row))
+        DIFF_LOG.append(('lms_100', disagreements))
+        print('\n[LMS differential] 100 cases over pairs %s: %d disagreements' % (PAIRS, len(disagreements)))
+>       self.assertEqual(disagreements, [])
+E       AssertionError: Lists differ: [(8, (5, 8), 2263, {'T4->hsslms': True, 'h[4754 chars]ue})] != []
+E       
+E       First list contains 20 additional elements.
+E       First extra element 0:
+E       (8, (5, 8), 2263, {'T4->hsslms': True, 'hsslms->T4': False, 'T4->T4': True, 'hsslms->hsslms': False, 'sizes_equal': False, 'tamper_T4sig_rejected_by_both': True, 'tamper_hssig_rejected_by_both': True, 'wrong_msg_rejected_by_both': True})
+E       
+E       Diff is 5806 characters long. Set self.maxDiff to None to see it.
+
+test_props_hashsig.py:406: AssertionError
+________________ LMSProperties.test_differential_lms_hypothesis ________________
+
+self = <test_props_hashsig.LMSProperties testMethod=test_differential_lms_hypothesis>
+
+    @given(st.sampled_from(PAIRS), st.binary(max_size=2000), st.integers(0, 31))
+>   @settings(max_examples=40)
+               ^^^^^^^
+
+test_props_hashsig.py:409: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_props_hashsig.py:417: in test_differential_lms_hypothesis
+    self.assertTrue(T4.lms_verify(hsk.gen_pub().get_pubkey(), msg, hssig), pair)
+E   AssertionError: False is not true : (5, 8)
+E   Falsifying example: test_differential_lms_hypothesis(
+E       # The test always failed when commented parts were varied together.
+E       self=<test_props_hashsig.LMSProperties testMethod=test_differential_lms_hypothesis>,
+E       pair=(5, 8),
+E       msg=b'',  # or any other generated value
+E       q=0,  # or any other generated value
+E   )
+E   Explanation:
+E       These lines were always and only run by failing examples:
+E           <source-tree>/pq_audit_s1_lms_v2.1.py:186
+E           /usr/lib/python3.12/unittest/case.py:726
+E   
+E   You can reproduce this example by temporarily adding @reproduce_failure('6.151.9', b'AEEIYEEA') as a decorator on your test case
+________________ LMSProperties.test_mixed_n_m_typecodes_FINDING ________________
+
+self = <test_props_hashsig.LMSProperties testMethod=test_mixed_n_m_typecodes_FINDING>
+
+    def test_mixed_n_m_typecodes_FINDING(self):
+        """LMS/LM-OTS pairs with different hash lengths (LMS m=32 with LM-OTS n=24 and vice versa)
+        are accepted by both constructors (neither enforces m == n). Property asserted: for every
+        accepted pair the two implementations interoperate in both directions and each verifies its
+        own output. Any failure is a differential finding; the message lists the exact matrix."""
+        matrix = {}
+        for pair in ((5, 8), (10, 4)):
+            pk, key, _ = T4SIGS[pair]
+            hsk = hs_key(pair)
+            hspk = hsk.gen_pub().get_pubkey()
+            t4sig, hssig = key.sign_with_index(7, b'mixed'), hsk.sign(b'mixed')
+            matrix[pair] = {
+                'len_T4': len(t4sig), 'len_hsslms': len(hssig), 'len_formula_T4': T4.lms_sizes(*pair)['sig'],
+                'T4->T4': T4.lms_verify(pk, b'mixed', t4sig),
+                'T4->hsslms': hs_verify(pk, b'mixed', t4sig),
+                'hsslms->hsslms': hs_verify(hspk, b'mixed', hssig),
+                'hsslms->T4': T4.lms_verify(hspk, b'mixed', hssig),
+            }
+        print('\n[LMS mixed n/m matrix]', matrix)
+        for pair, row in matrix.items():
+>           self.assertTrue(all(v is True for k, v in row.items() if '->' in k), (pair, row))
+E           AssertionError: False is not true : ((5, 8), {'len_T4': 820, 'len_hsslms': 812, 'len_formula_T4': 820, 'T4->T4': True, 'T4->hsslms': True, 'hsslms->hsslms': False, 'hsslms->T4': False})
+
+test_props_hashsig.py:439: AssertionError
+=========================== short test summary info ============================
+FAILED test_props_hashsig.py::MerkleProperties::test_merkle_verify_malformed_signature_objects_return_false
+FAILED test_props_hashsig.py::MTLProperties::test_multiproof_non_canonical_inputs
+FAILED test_props_hashsig.py::LMSProperties::test_differential_lms_100_cases
+FAILED test_props_hashsig.py::LMSProperties::test_differential_lms_hypothesis
+FAILED test_props_hashsig.py::LMSProperties::test_mixed_n_m_typecodes_FINDING
+5 failed, 11 passed in 33.94s

@@ -1,0 +1,121 @@
+{
+  "independent_implementation": "hsslms 0.1.3",
+  "sizes": {
+    "LMS_tc8/OTS_tc4": {
+      "pub": 56,
+      "sig": 1772
+    },
+    "LMS_tc8/OTS_tc3": {
+      "pub": 56,
+      "sig": 2828
+    },
+    "LMS_tc13/OTS_tc8": {
+      "pub": 48,
+      "sig": 1140
+    },
+    "LMS_tc5/OTS_tc4": {
+      "pub": 56,
+      "sig": 1292
+    }
+  },
+  "attack_games_n256": [
+    {
+      "id": "G1",
+      "game": "second preimage of the message hash Q = H(I||q||D_MESG||C||m) for a signed (C,m)",
+      "quantum_queries_log2": 128.0,
+      "why": "Grover on a fixed function, single target (C fixed by signer)"
+    },
+    {
+      "id": "G2",
+      "game": "invert one LM-OTS chain node H(I||q||i||j||.) to lower a digit",
+      "quantum_queries_log2": 128.0,
+      "why": "single-target Grover; (I,q,i,j) prefix makes each node its own function"
+    },
+    {
+      "id": "G3",
+      "game": "hash collision on Q to sign two messages with one OTS leaf",
+      "quantum_queries_log2": 85.33333333333333,
+      "why": "BHT with QRAM; but the attacker does not choose C, so a collision gives no forgery in EUF-CMA (recorded, not counted)",
+      "counts": false
+    },
+    {
+      "id": "G4",
+      "game": "forge a Merkle path to a fresh leaf (second preimage on an interior node)",
+      "quantum_queries_log2": 128.0,
+      "why": "node prefix (I, r, D_INTR) fixes the function"
+    },
+    {
+      "id": "G5",
+      "game": "find a message whose digit vector dominates a signed one (no inversion)",
+      "quantum_queries_log2": Infinity,
+      "why": "impossible: checksum strictly decreases when any digit increases"
+    }
+  ],
+  "cheapest_game": "G1",
+  "qpt128": [
+    {
+      "n_bits": 128,
+      "queries_log2": 64.0,
+      "gates_log2": 82.0,
+      "margin_bits": -46.0,
+      "passes": false
+    },
+    {
+      "n_bits": 192,
+      "queries_log2": 96.0,
+      "gates_log2": 114.0,
+      "margin_bits": -14.0,
+      "passes": false
+    },
+    {
+      "n_bits": 256,
+      "queries_log2": 128.0,
+      "gates_log2": 146.0,
+      "margin_bits": 18.0,
+      "passes": true
+    }
+  ],
+  "grover_reduced": [
+    {
+      "n": 8,
+      "marked": 1,
+      "k_measured": 12,
+      "k_predicted": 12,
+      "p_measured": 0.9999470421032738,
+      "p_predicted_at_k_pred": 0.9999470421032736,
+      "p_at_k_pred": 0.9999470421032738
+    },
+    {
+      "n": 10,
+      "marked": 1,
+      "k_measured": 25,
+      "k_predicted": 25,
+      "p_measured": 0.9994612447444075,
+      "p_predicted_at_k_pred": 0.9994612447444079,
+      "p_at_k_pred": 0.9994612447444075
+    },
+    {
+      "n": 12,
+      "marked": 4,
+      "k_measured": 25,
+      "k_predicted": 25,
+      "p_measured": 0.9994612447444075,
+      "p_predicted_at_k_pred": 0.9994612447444079,
+      "p_at_k_pred": 0.9994612447444075
+    },
+    {
+      "n": 14,
+      "marked": 4,
+      "k_measured": 50,
+      "k_predicted": 50,
+      "p_measured": 0.9999453461091229,
+      "p_predicted_at_k_pred": 0.9999453461091142,
+      "p_at_k_pred": 0.9999453461091229
+    }
+  ],
+  "untestable_assumptions": [
+    "A-NoExport: the private key state never leaves the hardware module (SP 800-208 \u00a78.1); S1-009 shows the consequence if it does.",
+    "A-Grover: 2^(n/2) queries is optimal for unstructured search (BBBV 1997 lower bound \u2014 a theorem in the query model); the >= 2^18 gates/query floor is an engineering assumption.",
+    "A-SHA256: SHA-256 truncated to n bytes behaves as a random function for (second-)preimage; no structural attack better than generic is known."
+  ]
+}

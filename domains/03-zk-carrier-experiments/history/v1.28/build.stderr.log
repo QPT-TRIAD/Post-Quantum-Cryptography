@@ -1,0 +1,11 @@
+   Compiling ceqs-carrier-v128 v0.1.28 (continuation_v1.28/adapter)
+warning: function `decode` is never used
+   --> src/codec_v1.rs:274:8
+    |
+274 | pub fn decode(v:&ZKVerifier<StdHashSuite>,public:&[Word],encoded:&[u8])->Result<Vec<u8>> {
+    |        ^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `ceqs-carrier-v128` (bin "ceqs-carrier-v128") generated 1 warning
+    Finished `release` profile [optimized] target(s) in 1m 11s

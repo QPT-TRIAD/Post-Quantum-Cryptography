@@ -1,0 +1,5 @@
+C1_intersection_nonempty | rc=124 | 360s | NO-RESULT
+E2_at_threshold_conflict_exists | rc=251 | 266s | NO-RESULT
+A_acceptance_authorized | rc=251 | 198s | NO-RESULT
+C3_evidence_reachable | rc=0 | 156s | C3_evidence_reachable (exists-trace): verified (4 steps)
+LOOP-DONE

@@ -1,0 +1,3 @@
+sanity_honest_certificate | rc=0 | 159s | sanity_honest_certificate (exists-trace): verified (8 steps)
+A1_distinct_signers | rc=0 | 139s | A1_distinct_signers (all-traces): verified (23 steps)
+A2_signer_authorized | rc=251 | 253s | NO-RESULT

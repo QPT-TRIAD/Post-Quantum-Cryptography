@@ -1,0 +1,36 @@
+================================================================
+$ python3 hybrid_sampling_bound_audit.py
+----------------------------------------------------------------
+test_01_marginal_product_counterexample (__main__.AuditTests.test_01_marginal_product_counterexample) ... ok
+test_02_intersection_minimum_for_finite_laws (__main__.AuditTests.test_02_intersection_minimum_for_finite_laws) ... ok
+test_03_public_phase_projector_accepts_reproduction (__main__.AuditTests.test_03_public_phase_projector_accepts_reproduction) ... ok
+test_04_correlated_samples_violate_naive_hoeffding (__main__.AuditTests.test_04_correlated_samples_violate_naive_hoeffding) ... ok
+test_05_dependent_checks_obey_conditional_tail (__main__.AuditTests.test_05_dependent_checks_obey_conditional_tail) ... ok
+test_06_uniform_conditional_bound_has_exact_all_pass_endpoint (__main__.AuditTests.test_06_uniform_conditional_bound_has_exact_all_pass_endpoint) ... ok
+test_07_noise_tolerance_changes_the_budget (__main__.AuditTests.test_07_noise_tolerance_changes_the_budget) ... ok
+test_08_hoeffding_numerical_thresholds (__main__.AuditTests.test_08_hoeffding_numerical_thresholds) ... ok
+test_09_no_gap_and_certain_public_test_give_no_amplification (__main__.AuditTests.test_09_no_gap_and_certain_public_test_give_no_amplification) ... ok
+test_10_square_root_and_quorum_losses_are_not_free (__main__.AuditTests.test_10_square_root_and_quorum_losses_are_not_free) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.028s
+
+OK
+Conditional bounds only; QPT-128 is not established.
+N=128, Delta=1/2: Hoeffding failure exponent = 92.332482617
+N=128, all-pass conditional r=1/2: exact endpoint = 2^-128
+N=128, one failure allowed, r=1/2: failure exponent = 120.988772745
+Public GHZ projector reproduction: state-test acceptance = 1
+target | Hoeffding N at Delta=1/2 | all-pass N at r=1/2
+    32 |                          45 |                    32
+    64 |                          89 |                    64
+    92 |                         128 |                    92
+   127 |                         177 |                   127
+   128 |                         178 |                   128
+   129 |                         179 |                   129
+   134 |                         186 |                   134
+   136 |                         189 |                   136
+No sampling endpoint is substituted for epsilon_SLH.
+----------------------------------------------------------------
+# exit_code: 0
+

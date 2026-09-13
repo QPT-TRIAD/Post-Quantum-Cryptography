@@ -1,0 +1,12 @@
+{
+  "scope": "EXTRACTED_CARRIER_PACKAGE_REPLAY",
+  "manifest_entries_checked": 988,
+  "two_codec_pairs_verified": true,
+  "expanded_proofs_match_originals": true,
+  "final_public_negative_controls": 22,
+  "stored_seed_demonstrations_decoded": 5,
+  "private_member_credential_files": 0,
+  "complete_32KiB_QCs": 0,
+  "qpt_128_qualified": false,
+  "distributed_authorization_implemented": false
+}

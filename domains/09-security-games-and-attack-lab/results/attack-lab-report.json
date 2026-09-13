@@ -1,0 +1,567 @@
+{
+  "module": "ceqs_attack_lab",
+  "A_negative": {
+    "parameters": {
+      "n": 14,
+      "expansion": 8,
+      "seats": 64,
+      "quorum": 43
+    },
+    "attempts": 24,
+    "violations": [],
+    "successful_violations": 0,
+    "results": [
+      {
+        "test": "forged opening (s altered) rejected by the relation",
+        "rejected": true,
+        "detail": "opening does not match the registry key"
+      },
+      {
+        "test": "unregistered credential rejected",
+        "rejected": true,
+        "detail": "opening does not match the registry key"
+      },
+      {
+        "test": "opening claimed under another seat rejected",
+        "rejected": true,
+        "detail": "43 rows with distinct seats required"
+      },
+      {
+        "test": "duplicate validator in the witness rejected",
+        "rejected": true,
+        "detail": "43 rows with distinct seats required"
+      },
+      {
+        "test": "witness replayed under another message rejected",
+        "rejected": true,
+        "detail": "handle is not r^7 XOR L_c(s)"
+      },
+      {
+        "test": "witness replayed in another domain rejected",
+        "rejected": true,
+        "detail": "opening does not match the registry key"
+      },
+      {
+        "test": "witness with fewer than 43 rows rejected",
+        "rejected": true,
+        "detail": "43 rows with distinct seats required"
+      },
+      {
+        "test": "handles out of canonical order rejected",
+        "rejected": true,
+        "detail": "handles must be strictly increasing"
+      },
+      {
+        "test": "duplicate handle rejected",
+        "rejected": true,
+        "detail": "handles must be strictly increasing"
+      },
+      {
+        "test": "truncated frame rejected",
+        "rejected": true,
+        "detail": "payload length mismatch"
+      },
+      {
+        "test": "frame with trailing bytes rejected",
+        "rejected": true,
+        "detail": "payload length mismatch"
+      },
+      {
+        "test": "wrong magic rejected",
+        "rejected": true,
+        "detail": "noncanonical header"
+      },
+      {
+        "test": "wrong version rejected",
+        "rejected": true,
+        "detail": "noncanonical header"
+      },
+      {
+        "test": "wrong suite rejected",
+        "rejected": true,
+        "detail": "noncanonical header"
+      },
+      {
+        "test": "quorum count below 43 rejected",
+        "rejected": true,
+        "detail": "noncanonical header"
+      },
+      {
+        "test": "non-canonical (non-64-byte) message rejected",
+        "rejected": true,
+        "detail": "message must be a 64-byte digest"
+      },
+      {
+        "test": "duplicate registration rejected",
+        "rejected": true,
+        "detail": "handle collision"
+      },
+      {
+        "test": "replay of the same certificate is not a conflict",
+        "rejected": true,
+        "detail": "equal messages are not a conflict"
+      },
+      {
+        "test": "equal messages are not a conflict",
+        "rejected": true,
+        "detail": "equal messages are not a conflict"
+      },
+      {
+        "test": "conflict across different domains rejected",
+        "rejected": true,
+        "detail": "domain mismatch"
+      },
+      {
+        "test": "certificate from another registry rejected",
+        "rejected": true,
+        "detail": "configuration mismatch"
+      },
+      {
+        "test": "framing an honest seat fails",
+        "rejected": true,
+        "detail": "seat 0 not named"
+      },
+      {
+        "test": "fabricated blame fails public verification",
+        "rejected": true,
+        "detail": "returned False"
+      },
+      {
+        "test": "positive control: honest conflict extracts 22 seats",
+        "rejected": true,
+        "detail": "extracted 22"
+      }
+    ]
+  },
+  "B_framing": [
+    {
+      "n": 8,
+      "handle": "power",
+      "space": 256,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 87.83333333333333,
+      "predicted_classical_cost": 128.0,
+      "grover_optimal_iterations": 13,
+      "seconds": 0.1
+    },
+    {
+      "n": 8,
+      "handle": "linear",
+      "space": 256,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 87.83333333333333,
+      "predicted_classical_cost": 128.0,
+      "grover_optimal_iterations": 13,
+      "seconds": 0.1
+    },
+    {
+      "n": 10,
+      "handle": "power",
+      "space": 1024,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 580.5,
+      "predicted_classical_cost": 512.0,
+      "grover_optimal_iterations": 25,
+      "seconds": 0.6
+    },
+    {
+      "n": 10,
+      "handle": "linear",
+      "space": 1024,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 580.5,
+      "predicted_classical_cost": 512.0,
+      "grover_optimal_iterations": 25,
+      "seconds": 0.6
+    },
+    {
+      "n": 11,
+      "handle": "power",
+      "space": 2048,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 968.0,
+      "predicted_classical_cost": 1024.0,
+      "grover_optimal_iterations": 36,
+      "seconds": 1.5
+    },
+    {
+      "n": 11,
+      "handle": "linear",
+      "space": 2048,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 968.0,
+      "predicted_classical_cost": 1024.0,
+      "grover_optimal_iterations": 36,
+      "seconds": 1.2
+    },
+    {
+      "n": 13,
+      "handle": "power",
+      "space": 8192,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 4702.166666666667,
+      "predicted_classical_cost": 4096.0,
+      "grover_optimal_iterations": 71,
+      "seconds": 7.1
+    },
+    {
+      "n": 13,
+      "handle": "linear",
+      "space": 8192,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 4702.166666666667,
+      "predicted_classical_cost": 4096.0,
+      "grover_optimal_iterations": 71,
+      "seconds": 5.6
+    },
+    {
+      "n": 14,
+      "handle": "power",
+      "space": 16384,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 9357.666666666666,
+      "predicted_classical_cost": 8192.0,
+      "grover_optimal_iterations": 101,
+      "seconds": 12.4
+    },
+    {
+      "n": 14,
+      "handle": "linear",
+      "space": 16384,
+      "targets": 6,
+      "marked_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean_marked": 1.0,
+      "mean_classical_cost": 9357.666666666666,
+      "predicted_classical_cost": 8192.0,
+      "grover_optimal_iterations": 101,
+      "seconds": 9.1
+    }
+  ],
+  "B2_no_handle_baseline": {
+    "n": 8,
+    "joint_space": 65536,
+    "log2_joint_space": 16,
+    "log2_space_with_handle": 8,
+    "marked_sizes": [
+      1,
+      1,
+      1
+    ],
+    "predicted_classical_cost_no_handle": 32768.0,
+    "predicted_classical_cost_with_handle": 128.0,
+    "seconds": 6.3
+  },
+  "C_grover": [
+    {
+      "n": 8,
+      "space": 256,
+      "marked": 1,
+      "theta": 0.06254076179649139,
+      "predicted_optimal_iterations": 12,
+      "measured_optimal_iterations": 12,
+      "measured_success_at_optimum": 0.999947,
+      "theory_success_at_optimum": 0.999947,
+      "max_abs_deviation_from_theory": 4.440892098500626e-15,
+      "pi_over_4_sqrt_N_over_M": 12.6,
+      "seconds": 0.0
+    },
+    {
+      "n": 10,
+      "space": 1024,
+      "marked": 1,
+      "theta": 0.031255088499495154,
+      "predicted_optimal_iterations": 25,
+      "measured_optimal_iterations": 25,
+      "measured_success_at_optimum": 0.999461,
+      "theory_success_at_optimum": 0.999461,
+      "max_abs_deviation_from_theory": 5.329070518200751e-15,
+      "pi_over_4_sqrt_N_over_M": 25.1,
+      "seconds": 0.1
+    },
+    {
+      "n": 11,
+      "space": 2048,
+      "marked": 1,
+      "theta": 0.02209888557285766,
+      "predicted_optimal_iterations": 35,
+      "measured_optimal_iterations": 35,
+      "measured_success_at_optimum": 0.999997,
+      "theory_success_at_optimum": 0.999997,
+      "max_abs_deviation_from_theory": 3.219646771412954e-15,
+      "pi_over_4_sqrt_N_over_M": 35.5,
+      "seconds": 0.1
+    },
+    {
+      "n": 13,
+      "space": 8192,
+      "marked": 1,
+      "theta": 0.01104876825158047,
+      "predicted_optimal_iterations": 71,
+      "measured_optimal_iterations": 71,
+      "measured_success_at_optimum": 0.999916,
+      "theory_success_at_optimum": 0.999916,
+      "max_abs_deviation_from_theory": 2.55351295663786e-15,
+      "pi_over_4_sqrt_N_over_M": 71.1,
+      "seconds": 0.8
+    }
+  ],
+  "D_collision": [
+    {
+      "N_unknowns": 16,
+      "expansion": 2,
+      "trials": 8,
+      "deltas_tried": [
+        11,
+        11,
+        17,
+        6,
+        30,
+        2,
+        5,
+        13
+      ],
+      "mean_deltas_tried": 11.875,
+      "predicted_mean_2^E": 4,
+      "measured_log2": 3.57,
+      "quantum_bound_2^(E/2)": 2.0,
+      "seconds": 0.0
+    },
+    {
+      "N_unknowns": 16,
+      "expansion": 4,
+      "trials": 8,
+      "deltas_tried": [
+        62,
+        8,
+        15,
+        31,
+        29,
+        11,
+        35,
+        3
+      ],
+      "mean_deltas_tried": 24.25,
+      "predicted_mean_2^E": 16,
+      "measured_log2": 4.6,
+      "quantum_bound_2^(E/2)": 4.0,
+      "seconds": 0.0
+    },
+    {
+      "N_unknowns": 16,
+      "expansion": 6,
+      "trials": 8,
+      "deltas_tried": [
+        162,
+        6,
+        235,
+        137,
+        29,
+        125,
+        110,
+        319
+      ],
+      "mean_deltas_tried": 140.375,
+      "predicted_mean_2^E": 64,
+      "measured_log2": 7.13,
+      "quantum_bound_2^(E/2)": 8.0,
+      "seconds": 0.1
+    },
+    {
+      "N_unknowns": 16,
+      "expansion": 8,
+      "trials": 8,
+      "deltas_tried": [
+        418,
+        60,
+        90,
+        1016,
+        105,
+        304,
+        940,
+        664
+      ],
+      "mean_deltas_tried": 449.625,
+      "predicted_mean_2^E": 256,
+      "measured_log2": 8.81,
+      "quantum_bound_2^(E/2)": 16.0,
+      "seconds": 0.5
+    },
+    {
+      "N_unknowns": 16,
+      "expansion": 10,
+      "trials": 8,
+      "deltas_tried": [
+        757,
+        2041,
+        1347,
+        6258,
+        363,
+        230,
+        1726,
+        3184
+      ],
+      "mean_deltas_tried": 1988.25,
+      "predicted_mean_2^E": 1024,
+      "measured_log2": 10.96,
+      "quantum_bound_2^(E/2)": 32.0,
+      "seconds": 2.2
+    },
+    {
+      "N_unknowns": 16,
+      "expansion": 12,
+      "trials": 8,
+      "deltas_tried": [
+        2009,
+        3942,
+        8753,
+        12069,
+        36197,
+        4517,
+        42928,
+        14065
+      ],
+      "mean_deltas_tried": 15560.0,
+      "predicted_mean_2^E": 4096,
+      "measured_log2": 13.93,
+      "quantum_bound_2^(E/2)": 64.0,
+      "seconds": 18.1
+    }
+  ],
+  "E_challenge_fix": {
+    "field_bits": 14,
+    "birthday_predicted_tries": 160.4,
+    "v1.46_challenge_collision_found_after": 234,
+    "v1.50_first_coefficient_collision_found_after": 172,
+    "v1.46_extraction": "FAILED: inverse of zero",
+    "v1.46_broken": true,
+    "v1.46_identical_handles_across_the_two_certificates": 22,
+    "v1.50_coefficients_equal": {
+      "c_a": true,
+      "c_b": false,
+      "c_c": false
+    },
+    "v1.50_extraction": "named 22 seats",
+    "v1.50_survives": true,
+    "work_to_suppress_v1.50": "collision on all three coefficients: 3n = 42 bits"
+  },
+  "F_ledger": {
+    "framing_classical": {
+      "measured_slope_bits_per_bit": 1.107,
+      "predicted_slope": 1.0,
+      "extrapolation_n256_log2": 255.0
+    },
+    "framing_quantum_grover": {
+      "measured_slope_bits_per_bit": 0.512,
+      "predicted_slope": 0.5,
+      "extrapolation_n256_log2": 128.0,
+      "note": "iterations; gate cost not modelled"
+    },
+    "binding_collision_classical": {
+      "measured_slope_bits_per_expansion_bit": 1.037,
+      "predicted_slope": 1.0,
+      "extrapolation_E512_log2": 512.0
+    },
+    "binding_collision_quantum": {
+      "predicted_log2_at_E512": 256.0,
+      "basis": "Grover over delta at the measured density 2^-E"
+    },
+    "production_rows_from_the_ledger": {
+      "R1_framing_log2_Pr_over_G": -145.0,
+      "R2_binding": -209.0,
+      "R3_proof_soundness": -138.1,
+      "R4_simulation": -159.4,
+      "R5_false_positive": -181.2,
+      "total": -137.7,
+      "D2_margin_bits": 7.7
+    },
+    "caveat": "Toy parameters. Measured exponents test the SCALING of the real attacks, not the production security level."
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "version": "1.33",
+  "test_groups_passed": 23,
+  "checks": [
+    {
+      "test": "L1 threshold meet",
+      "status": "PASS",
+      "scope": "Finite complete-chain counterexample."
+    },
+    {
+      "test": "L9/L10 majorization",
+      "status": "PASS",
+      "scope": "Both normalized envelopes fail at k=1."
+    },
+    {
+      "test": "L35/L47 order",
+      "status": "PASS",
+      "scope": "Lexicographic second projection fails; product width is two."
+    },
+    {
+      "test": "T7 cycle mean",
+      "status": "PASS",
+      "scope": "Maximum of normalized traces differs from normalization after maximum."
+    },
+    {
+      "test": "T8 eigenvector uniqueness",
+      "status": "PASS",
+      "scope": "Two non-translation-equivalent max-plus eigenvectors."
+    },
+    {
+      "test": "T42 softmin",
+      "status": "PASS",
+      "scope": "Exact Hessian refutes convexity."
+    },
+    {
+      "test": "Q40/D9 signs",
+      "status": "PASS",
+      "scope": "54 commutator cases and an odd-order difference counterexample."
+    },
+    {
+      "test": "I21/I33 entropy corrections",
+      "status": "PASS",
+      "scope": "Uniform interval translation preserves density; swapped support masses differ."
+    },
+    {
+      "test": "Contraction instruments",
+      "status": "PASS",
+      "scope": "Exact K^T K=(1/2)I and robust K^T K=(9/16)I certificates."
+    },
+    {
+      "test": "Spectral-radius substitution rejected",
+      "status": "PASS",
+      "scope": "Nilpotent norm-two map is not a valid failure instrument."
+    },
+    {
+      "test": "Measurement order",
+      "status": "PASS",
+      "scope": "Two projection orders yield probabilities 1/4 and 1/2."
+    },
+    {
+      "test": "Marginals do not multiply",
+      "status": "PASS",
+      "scope": "Perfectly correlated half-probability failures remain probability 1/2."
+    },
+    {
+      "test": "QPT staged component bounds",
+      "status": "PASS",
+      "scope": "Exact minimum-round boundary checks at 32,64,92,128; wrong event substitution remains forbidden."
+    },
+    {
+      "test": "Generalized prefix-box lemma",
+      "status": "PASS",
+      "scope": "490 prefix counts and 156 maximum-box instances checked exhaustively."
+    },
+    {
+      "test": "Deterministic entropy",
+      "status": "PASS",
+      "scope": "32 small maps checked; the quantum-side-information extension is proved in the text."
+    },
+    {
+      "test": "Good events and retry tail",
+      "status": "PASS",
+      "scope": "Tight four-outcome conditioning example; 519/518 exact truncation boundary."
+    },
+    {
+      "test": "Finite-field rank",
+      "status": "PASS",
+      "scope": "673 matrices enumerated; no seeded-module distribution claim follows."
+    },
+    {
+      "test": "Work/depth and reduction composition",
+      "status": "PASS",
+      "scope": "Parallel work 37 vs depth 7; affine resource maps composed explicitly."
+    },
+    {
+      "test": "Fixed-hash versus independent oracle",
+      "status": "PASS",
+      "scope": "Equality test gap is 1-2^-h; no claim about simulator-based indifferentiability."
+    },
+    {
+      "test": "Y1 minimax direction",
+      "status": "PASS",
+      "scope": "Pure-strategy matching-pennies values give -1<1."
+    },
+    {
+      "test": "H20/R36 counterexamples",
+      "status": "PASS",
+      "scope": "Two-feature Wasserstein squared cost two; local-reset Schmidt rank decreases."
+    },
+    {
+      "test": "Quorum set intersection",
+      "status": "PASS",
+      "scope": "441 pairs checked; no signature/authorization premise supplied."
+    },
+    {
+      "test": "Contract negative mutations",
+      "status": "PASS",
+      "scope": "10 mismatches/missing fields rejected; compatible records never self-certify a theorem."
+    }
+  ],
+  "stages": [
+    {
+      "query_exponent": 32,
+      "ideal_half_rounds": 73,
+      "robust_9_16_rounds": 88,
+      "robust_bound_log2_display": -4.724671778189133
+    },
+    {
+      "query_exponent": 64,
+      "ideal_half_rounds": 137,
+      "robust_9_16_rounds": 165,
+      "robust_bound_log2_display": -4.640446667131073
+    },
+    {
+      "query_exponent": 92,
+      "ideal_half_rounds": 193,
+      "robust_9_16_rounds": 233,
+      "robust_bound_log2_display": -5.085546569053804
+    },
+    {
+      "query_exponent": 128,
+      "ideal_half_rounds": 265,
+      "robust_9_16_rounds": 320,
+      "robust_bound_log2_display": -5.302071443572686
+    }
+  ],
+  "robust_128_raw_bound_log2_display": -5.302071443572686,
+  "full_QPT128_established": false,
+  "open_premises": [
+    "actual joint relation decoder",
+    "public conflict extractor without sidecar",
+    "p_star bridge for actual protocol and sampler",
+    "concrete signature hardness at reduction resources",
+    "compatible signature good-key event and standardized algorithm adapter",
+    "deployed-hash game properties",
+    "concrete gate/depth/memory accounting"
+  ],
+  "scope": "Exact arithmetic, finite counterexamples and component-bound checks; no quantum cryptanalysis executed."
+}

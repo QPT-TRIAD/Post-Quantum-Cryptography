@@ -1,0 +1,4 @@
+### E2_at_threshold_conflict_exists  2026-09-13T04:05:59+02:00  -M8000m  timeout 1500 s
+maude tool: 'maude'
+ checking version: 3.5.1. OK.
+ checking installation: OK.

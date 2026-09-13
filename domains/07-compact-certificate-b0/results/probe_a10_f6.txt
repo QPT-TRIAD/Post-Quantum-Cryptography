@@ -1,0 +1,12 @@
+module under probe: domains/07-compact-certificate-b0/src/sidecar_free_certificate.py
+header struct offsets: magic 0-3, version 4-5, suite 6-7, cfg 8-71, domain 72-135, message 136-199, count 200-201, width 202-203, payload_len 204-207; calcsize 208
+
+--- 1. the two mutations of A.10, replayed ---------------------------------------
+misaligned message mutation (writes 144:208): FrameError: count must be 43
+aligned message mutation     (writes 136:200): FrameError: signature for seat 0 does not verify
+misaligned width mutation     (packs u16 at 206): FrameError: payload_len does not match the trailing bytes (truncation or trailing data)
+aligned width mutation        (packs u16 at 202): FrameError: header width does not match the provider width
+
+--- 2. the encode-side size bound (finding F6) ------------------------------------
+encode_b0 width=758: emitted 32810 bytes (gate is 32768); b0_fits(758)=False
+verify_b0 of the oversize frame: FrameError: frame exceeds the 32768-byte portability bound

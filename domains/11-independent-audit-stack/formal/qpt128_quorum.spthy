@@ -1,0 +1,272 @@
+/*
+ * QPT-128 / CE-QS  profile B0  --  quorum-certificate accountability
+ * Tamarin model, SMALL concrete instance:  N = 4 seats, q = 3, 2q-N = 2.
+ *
+ * Abstraction
+ *   - Seats 's0'..'s3', each registered exactly once with a fresh long-term
+ *     signing key (ML-DSA is abstracted by Tamarin's `signing` builtin: an
+ *     EUF-CMA-ideal signature, no message recovery).
+ *   - Corrupt(s): the adversary learns the long-term key of seat s and can
+ *     from then on produce any signature in s's name.  Nothing else leaks keys.
+ *   - Signed(s,K,v): seat s honestly signs the transcript <K,v,s>.  The honest
+ *     rule is restricted to ONE candidate per coordinate K per seat.
+ *   - Accept(c,K,v): a verifier assembled certificate c for (K,v) from three
+ *     signatures that verify (pattern-matched as sign(<K,v,seat>,sk) against
+ *     the registered pk(sk); see the note above the Accept rules) under the
+ *     keys of three pairwise-distinct seats.  With N = 4, q = 3 there are four
+ *     signer sets; each is one explicit rule (Accept_012 .. Accept_123).
+ *     This enumeration is the set of instances of the generic rule
+ *       [ !Pk($a1,..), !Pk($a2,..), !Pk($a3,..), In(<K,v,sig1,sig2,sig3>) ]
+ *       --[ Distinct3($a1,$a2,$a3), ... ]->
+ *     under the 4-seat universe; the generic form is kept in
+ *     qpt128_quorum_generic.spthy (it exhausts memory on this machine).
+ *     Verified(a,K,v) is recorded for every signer a of a certificate.
+ *   - Extract: given two accepted certificates at the same K with candidates
+ *     v1 != v2 and a common signer s, emit Evidence(s,K,v1,v2) and store the
+ *     two conflicting signature terms (slashable evidence).
+ *
+ * Lemmas A..E state:
+ *   A  acceptance implies q distinct signers, each honest-signed or corrupt
+ *   B  a conflicting pair implies >= 2q-N = 2 distinct corrupt seats
+ *   C  a conflicting pair has non-empty signer intersection (in fact >= 2),
+ *      and evidence is extractable
+ *   D  non-frameability: every seat named by extraction is corrupt
+ *   E  threshold boundary: with <= 1 corrupt no conflict; with exactly 2 there is
+ *
+ * Run:  tamarin-prover --prove qpt128_quorum.spthy
+ */
+
+theory QPT128_Quorum_N4_q3
+begin
+
+builtins: signing
+
+/* ------------------------------------------------------------------ */
+/* Seat registration                                                   */
+/* ------------------------------------------------------------------ */
+
+rule Register:
+    [ Fr(~sk) ]
+  --[ Register($s), OnlyOnce(<'reg', $s>) ]->
+    [ !Seat($s, ~sk), !Pk($s, pk(~sk)), Out(pk(~sk)) ]
+
+// The seat universe is exactly N = 4 named seats.
+restriction SeatUniverse:
+  "All s #i. Register(s)@i ==> (s = 's0' | s = 's1' | s = 's2' | s = 's3')"
+
+// Each seat is registered at most once (one long-term key per seat).
+restriction OnlyOnce:
+  "All x #i #j. OnlyOnce(x)@i & OnlyOnce(x)@j ==> #i = #j"
+
+/* ------------------------------------------------------------------ */
+/* Corruption: reveal of a seat's long-term key                        */
+/* ------------------------------------------------------------------ */
+
+rule Corrupt:
+    [ !Seat($s, ~sk) ]
+  --[ Corrupt($s) ]->
+    [ Out(~sk) ]
+
+/* ------------------------------------------------------------------ */
+/* Honest signing: at most one candidate per coordinate                */
+/* ------------------------------------------------------------------ */
+
+rule Sign:
+    [ !Seat($s, ~sk), In(<K, v>) ]
+  --[ Signed($s, K, v) ]->
+    [ Out(sign(<K, v, $s>, ~sk)) ]
+
+restriction HonestSignsOneCandidatePerCoordinate:
+  "All s K v1 v2 #i #j. Signed(s, K, v1)@i & Signed(s, K, v2)@j ==> v1 = v2"
+
+/* ------------------------------------------------------------------ */
+/* Certificate assembly and acceptance (q = 3 distinct verifying sigs) */
+/* One rule per 3-subset of the 4-seat universe.                       */
+/* ------------------------------------------------------------------ */
+
+// Signature verification is expressed by pattern-matching the received
+// signature against sign(<K,v,seat>, sk) with pk(sk) the seat's registered key.
+// Under the `signing` theory this is equivalent to verify(sig,<K,v,seat>,pk(sk))
+// = true (verify(x,m,pk(k)) = true iff x = sign(m,k)), but it avoids the 2^3
+// equational variants per rule that the Eq(verify(..),true) idiom generates
+// (which made every two-certificate lemma exhaust memory).  [no_derivcheck]
+// silences the "sk not derivable from premises" warning that this idiom causes.
+
+rule Accept_012 [no_derivcheck]:
+    let sigA = sign(<K, v, 's0'>, skA)
+        sigB = sign(<K, v, 's1'>, skB)
+        sigC = sign(<K, v, 's2'>, skC)
+    in
+    [ !Pk('s0', pk(skA)), !Pk('s1', pk(skB)), !Pk('s2', pk(skC))
+    , In(<K, v, sigA, sigB, sigC>), Fr(~c) ]
+  --[ Accept(~c, K, v), Signers(~c, 's0', 's1', 's2')
+    , Verified('s0', K, v), Verified('s1', K, v), Verified('s2', K, v) ]->
+    [ !Cert(~c, K, v)
+    , !Signer(~c, 's0', sigA), !Signer(~c, 's1', sigB), !Signer(~c, 's2', sigC) ]
+
+rule Accept_013 [no_derivcheck]:
+    let sigA = sign(<K, v, 's0'>, skA)
+        sigB = sign(<K, v, 's1'>, skB)
+        sigC = sign(<K, v, 's3'>, skC)
+    in
+    [ !Pk('s0', pk(skA)), !Pk('s1', pk(skB)), !Pk('s3', pk(skC))
+    , In(<K, v, sigA, sigB, sigC>), Fr(~c) ]
+  --[ Accept(~c, K, v), Signers(~c, 's0', 's1', 's3')
+    , Verified('s0', K, v), Verified('s1', K, v), Verified('s3', K, v) ]->
+    [ !Cert(~c, K, v)
+    , !Signer(~c, 's0', sigA), !Signer(~c, 's1', sigB), !Signer(~c, 's3', sigC) ]
+
+rule Accept_023 [no_derivcheck]:
+    let sigA = sign(<K, v, 's0'>, skA)
+        sigB = sign(<K, v, 's2'>, skB)
+        sigC = sign(<K, v, 's3'>, skC)
+    in
+    [ !Pk('s0', pk(skA)), !Pk('s2', pk(skB)), !Pk('s3', pk(skC))
+    , In(<K, v, sigA, sigB, sigC>), Fr(~c) ]
+  --[ Accept(~c, K, v), Signers(~c, 's0', 's2', 's3')
+    , Verified('s0', K, v), Verified('s2', K, v), Verified('s3', K, v) ]->
+    [ !Cert(~c, K, v)
+    , !Signer(~c, 's0', sigA), !Signer(~c, 's2', sigB), !Signer(~c, 's3', sigC) ]
+
+rule Accept_123 [no_derivcheck]:
+    let sigA = sign(<K, v, 's1'>, skA)
+        sigB = sign(<K, v, 's2'>, skB)
+        sigC = sign(<K, v, 's3'>, skC)
+    in
+    [ !Pk('s1', pk(skA)), !Pk('s2', pk(skB)), !Pk('s3', pk(skC))
+    , In(<K, v, sigA, sigB, sigC>), Fr(~c) ]
+  --[ Accept(~c, K, v), Signers(~c, 's1', 's2', 's3')
+    , Verified('s1', K, v), Verified('s2', K, v), Verified('s3', K, v) ]->
+    [ !Cert(~c, K, v)
+    , !Signer(~c, 's1', sigA), !Signer(~c, 's2', sigB), !Signer(~c, 's3', sigC) ]
+
+/* ------------------------------------------------------------------ */
+/* Extraction: intersection of two conflicting certificates            */
+/* ------------------------------------------------------------------ */
+
+rule Extract:
+    [ !Cert(c1, K, v1), !Cert(c2, K, v2)
+    , !Signer(c1, s, sig1), !Signer(c2, s, sig2) ]
+  --[ Evidence(s, K, v1, v2), Neq(v1, v2) ]->
+    [ !SlashProof(s, K, v1, v2, sig1, sig2) ]
+
+restriction Neq:
+  "All x y #i. Neq(x, y)@i ==> not(x = y)"
+
+/* ================================================================== */
+/* Sanity (executability)                                              */
+/* ================================================================== */
+
+lemma sanity_honest_certificate:
+  exists-trace
+  "Ex c K v #i. Accept(c, K, v)@i & not(Ex s #k. Corrupt(s)@k)"
+
+/* ================================================================== */
+/* A: unforgeability of acceptance                                     */
+/* ================================================================== */
+
+// A.1 every accepted certificate names three pairwise-distinct signers
+lemma A1_three_distinct_signers:
+  "All c K v #i. Accept(c, K, v)@i ==>
+     Ex a1 a2 a3. Signers(c, a1, a2, a3)@i
+       & Verified(a1, K, v)@i & Verified(a2, K, v)@i & Verified(a3, K, v)@i
+       & not(a1 = a2) & not(a1 = a3) & not(a2 = a3)"
+
+// A.2 every verified signer either honestly signed (K,v) or was corrupt before
+//     acceptance (its signature is then adversary-produced)
+lemma A2_signer_authorized [reuse]:
+  "All s c K v #i. Accept(c, K, v)@i & Verified(s, K, v)@i ==>
+       (Ex #k. Signed(s, K, v)@k & #k < #i)
+     | (Ex #k. Corrupt(s)@k & #k < #i)"
+
+// A  (combined statement)
+lemma A_acceptance_authorized:
+  "All c K v #i. Accept(c, K, v)@i ==>
+     Ex a1 a2 a3. Signers(c, a1, a2, a3)@i
+       & Verified(a1, K, v)@i & Verified(a2, K, v)@i & Verified(a3, K, v)@i
+       & not(a1 = a2) & not(a1 = a3) & not(a2 = a3)
+       & ((Ex #k. Signed(a1, K, v)@k & #k < #i) | (Ex #k. Corrupt(a1)@k & #k < #i))
+       & ((Ex #k. Signed(a2, K, v)@k & #k < #i) | (Ex #k. Corrupt(a2)@k & #k < #i))
+       & ((Ex #k. Signed(a3, K, v)@k & #k < #i) | (Ex #k. Corrupt(a3)@k & #k < #i))"
+
+/* ================================================================== */
+/* D: accountability / non-frameability                                */
+/* (proved before B so that B can reuse the per-seat argument)         */
+/*                                                                     */
+/* Proof-engineering note: A2 is [reuse] so that D2 closes by the      */
+/* per-seat argument on the formula's own action atoms.  A2 is HIDDEN  */
+/* (hide_lemma) in every two-certificate lemma below: otherwise Tamarin */
+/* first case-splits Signed/Corrupt for all six signers of the two     */
+/* certificates (2^6 branches, each resolving fresh nodes) before it   */
+/* resolves the Accept nodes to concrete rules -- this exhausted memory */
+/* (exit 251 / OOM 137) in earlier runs.  With A2 hidden, D2 [reuse]   */
+/* applies to the concrete shared signers and B, C, D1, E1 close       */
+/* without expanding any adversary-knowledge goal.                     */
+/* ================================================================== */
+
+// D.2 every seat in the intersection of two conflicting certificates is corrupt
+//     (an honest seat never has verified signatures on two candidates at one K).
+//     The corruption precedes at least one of the two acceptances: the seat may
+//     have signed v1 honestly and been corrupted only before its v2 signature
+//     was forged, so "#k < #i & #k < #j" would be an over-strong (false) claim.
+lemma D2_intersection_seats_corrupt [reuse]:
+  "All s c1 c2 K v1 v2 #i #j.
+     Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2)
+     & Verified(s, K, v1)@i & Verified(s, K, v2)@j
+     ==> Ex #k. Corrupt(s)@k & (#k < #i | #k < #j)"
+
+// D.1 every seat named by extraction was corrupted before the extraction
+lemma D1_non_frameability [hide_lemma=A2_signer_authorized]:
+  "All s K v1 v2 #i. Evidence(s, K, v1, v2)@i
+     ==> Ex #k. Corrupt(s)@k & #k < #i"
+
+/* ================================================================== */
+/* B: conflicting certificates need >= 2q-N = 2 corrupt seats          */
+/* ================================================================== */
+
+lemma B_conflict_needs_2qN_corrupt [hide_lemma=A2_signer_authorized]:
+  "All c1 c2 K v1 v2 #i #j.
+     Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2)
+     ==> Ex s1 s2 #k #l. Corrupt(s1)@k & Corrupt(s2)@l & not(s1 = s2)"
+
+/* ================================================================== */
+/* C: extraction                                                       */
+/* ================================================================== */
+
+// C.1 the signer intersection of two conflicting certificates is non-empty
+lemma C1_intersection_nonempty [hide_lemma=A2_signer_authorized]:
+  "All c1 c2 K v1 v2 #i #j.
+     Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2)
+     ==> Ex s. Verified(s, K, v1)@i & Verified(s, K, v2)@j"
+
+// C.2 (stronger, the counting bound) the intersection has >= 2q-N = 2 seats
+lemma C2_intersection_at_least_2qN [hide_lemma=A2_signer_authorized]:
+  "All c1 c2 K v1 v2 #i #j.
+     Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2)
+     ==> Ex s t. Verified(s, K, v1)@i & Verified(s, K, v2)@j
+               & Verified(t, K, v1)@i & Verified(t, K, v2)@j & not(s = t)"
+
+// C.3 evidence (two conflicting signatures of one seat) is actually extractable
+lemma C3_evidence_reachable [hide_lemma=A2_signer_authorized, hide_lemma=D2_intersection_seats_corrupt]:
+  exists-trace
+  "Ex s K v1 v2 #i. Evidence(s, K, v1, v2)@i"
+
+/* ================================================================== */
+/* E: threshold boundary  (2q-N-1 = 1 safe, 2q-N = 2 attackable)       */
+/* ================================================================== */
+
+// E.1 with at most one corrupt seat there is no conflicting pair
+lemma E1_below_threshold_no_conflict [hide_lemma=A2_signer_authorized]:
+  "(All s1 s2 #k #l. Corrupt(s1)@k & Corrupt(s2)@l ==> s1 = s2)
+   ==> not(Ex c1 c2 K v1 v2 #i #j.
+             Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2))"
+
+// E.2 with exactly two corrupt seats a conflicting pair exists (attack trace)
+lemma E2_at_threshold_conflict_exists [hide_lemma=A2_signer_authorized, hide_lemma=D2_intersection_seats_corrupt]:
+  exists-trace
+  "Ex c1 c2 K v1 v2 s1 s2 #i #j #k #l.
+     Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2)
+     & Corrupt(s1)@k & Corrupt(s2)@l & not(s1 = s2)
+     & (All s #m. Corrupt(s)@m ==> (s = s1 | s = s2))"
+
+end

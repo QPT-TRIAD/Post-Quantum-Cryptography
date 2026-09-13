@@ -1,0 +1,19 @@
+{
+  "allocator_environment": {
+    "MALLOC_ARENA_MAX": "1",
+    "MALLOC_TRIM_THRESHOLD_": "65536",
+    "RAYON_NUM_THREADS": "4"
+  },
+  "binary": "continuation_v1.27b/bin/ceqs-fixed-pair-v127b",
+  "binary_sha256": "dfa90585c22c692a66b6bc9ab689ec1c44e68cb7b128e9bd883ce265930975c5",
+  "label": "prove_case0",
+  "mode": "prove_native",
+  "case": "case0",
+  "count": 43,
+  "rate": 3,
+  "return_code": 0,
+  "elapsed_seconds": 2.332078994004405,
+  "peak_child_rss_kib": 445980,
+  "address_space_limit_bytes": 21474836480,
+  "timeout_seconds": 1200
+}

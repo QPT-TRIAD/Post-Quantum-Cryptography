@@ -1,0 +1,88 @@
+===== pq_audit_s1_lms_v2.2.py --self-test
+test_S1_001_sizes_from_typecodes (__main__.Tests.test_S1_001_sizes_from_typecodes)
+S1-001 sizes derived from typecode arithmetic match RFC 8554 / SP 800-208. ... ok
+test_S1_002_self_roundtrip_all_ots_types (__main__.Tests.test_S1_002_self_roundtrip_all_ots_types)
+S1-002 RFC-exact sign/verify round trip, tamper rejection, every typecode at H5. ... ok
+test_S1_003_interop_mine_to_hsslms (__main__.Tests.test_S1_003_interop_mine_to_hsslms)
+S1-003 signatures from this implementation verify under hsslms (independent). ... ok
+test_S1_004_interop_hsslms_to_mine (__main__.Tests.test_S1_004_interop_hsslms_to_mine)
+S1-004 signatures from hsslms verify under this implementation; tampering fails. ... ok
+test_S1_005_state_machine_normal_and_exhaustion (__main__.Tests.test_S1_005_state_machine_normal_and_exhaustion)
+S1-005 every leaf used once in order; the 2^h+1-th signature is refused. ... ok
+test_S1_006_crash_injection_never_reuses_a_leaf (__main__.Tests.test_S1_006_crash_injection_never_reuses_a_leaf)
+S1-006 power loss at every step boundary, restart, continue: no q appears twice ... ok
+test_S1_007_rollback_detected_by_hardware_counter (__main__.Tests.test_S1_007_rollback_detected_by_hardware_counter)
+S1-007 restoring an older NVM record cannot reuse leaves (fails closed by skipping). ... ok
+test_S1_008_concurrent_signing_unique_leaves (__main__.Tests.test_S1_008_concurrent_signing_unique_leaves)
+S1-008 16 threads signing concurrently reserve distinct leaves. ... ok
+test_S1_009_clone_shows_why_export_is_forbidden (__main__.Tests.test_S1_009_clone_shows_why_export_is_forbidden)
+S1-009 NEGATIVE DEMONSTRATION: two devices booted from one exported key state ... ok
+test_S1_010_attack_game_ledger (__main__.Tests.test_S1_010_attack_game_ledger)
+S1-010 cheapest counting game is 2^(n/2) queries; n=24 fails QPT-128, n=32 passes. ... ok
+test_S1_011_grover_simulation_matches_law (__main__.Tests.test_S1_011_grover_simulation_matches_law)
+S1-011 exact Grover on the keyed chain oracle: measured optimum == closed form. ... FAIL
+test_S1_012_mixed_typecodes_refused (__main__.AuditFixTests.test_S1_012_mixed_typecodes_refused)
+S1-012 (F3) non-approved m != n pairs are refused at keygen and at verify. ... ok
+
+======================================================================
+FAIL: test_S1_011_grover_simulation_matches_law (__main__.Tests.test_S1_011_grover_simulation_matches_law)
+S1-011 exact Grover on the keyed chain oracle: measured optimum == closed form.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<source-tree>/pq_audit_s1_lms_v2.2.py", line 503, in test_S1_011_grover_simulation_matches_law
+    self.assertAlmostEqual(slope, 0.5, delta=0.06)
+AssertionError: 0.5651768673355566 != 0.5 within 0.06 delta (0.06517686733555661 difference)
+
+----------------------------------------------------------------------
+Ran 12 tests in 8.403s
+
+FAILED (failures=1)
+
+real	0m8.471s
+user	0m9.499s
+sys	0m0.036s
+exit=1
+===== pq_infra_s1s2_hashsig_dnssec_v2.2.py --self-test
+test_s1_merkle_sign_verify_sizes_and_cost (__main__.Tests.test_s1_merkle_sign_verify_sizes_and_cost) ... ok
+test_s1_wots_roundtrip_and_tamper (__main__.Tests.test_s1_wots_roundtrip_and_tamper) ... ok
+test_s2_amortisation_law (__main__.Tests.test_s2_amortisation_law) ... ok
+test_s2_denial_variant_signature_budget (__main__.Tests.test_s2_denial_variant_signature_budget) ... ok
+test_s2_dnssec_classification (__main__.Tests.test_s2_dnssec_classification) ... ok
+test_s2_ladder_rungs_are_binary_decomposition (__main__.Tests.test_s2_ladder_rungs_are_binary_decomposition) ... ok
+test_s2_mtl_every_leaf_verifies_and_tamper_fails (__main__.Tests.test_s2_mtl_every_leaf_verifies_and_tamper_fails) ... ok
+test_s2_multiproof_correct_and_smaller (__main__.Tests.test_s2_multiproof_correct_and_smaller) ... ok
+test_s2_sharded_ladder_answer_independent_of_zone_size (__main__.Tests.test_s2_sharded_ladder_answer_independent_of_zone_size) ... ok
+test_s2_sqisign_v3_and_verify_rate (__main__.Tests.test_s2_sqisign_v3_and_verify_rate) ... ok
+test_f2_empty_proof_rejected (__main__.AuditFixTests.test_f2_empty_proof_rejected) ... ok
+test_f2_extra_and_missing_nodes_rejected (__main__.AuditFixTests.test_f2_extra_and_missing_nodes_rejected) ... ok
+test_f2_malformed_returns_false_never_raises (__main__.AuditFixTests.test_f2_malformed_returns_false_never_raises) ... ok
+test_f2_required_coverage (__main__.AuditFixTests.test_f2_required_coverage) ... ok
+test_f4_merkle_verify_malformed_returns_false (__main__.AuditFixTests.test_f4_merkle_verify_malformed_returns_false) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.197s
+
+OK
+
+real	0m0.240s
+user	0m0.227s
+sys	0m0.012s
+exit=0
+===== hidden_signer_modeB_v1.51.py --self-test
+test_challenge_invertible_and_linear (__main__.V150Tests.test_challenge_invertible_and_linear) ... ok
+test_extraction_all_overlaps (__main__.V150Tests.test_extraction_all_overlaps) ... ok
+test_message_canonicality (__main__.V150Tests.test_message_canonicality) ... ok
+test_partial_extraction_reports_found_seats (__main__.V150Tests.test_partial_extraction_reports_found_seats) ... ok
+test_relation (__main__.V150Tests.test_relation) ... ok
+test_f5_domain_canonicality (__main__.AuditFixTests.test_f5_domain_canonicality) ... ok
+test_f5_parse_requires_bytes (__main__.AuditFixTests.test_f5_parse_requires_bytes) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 8.111s
+
+OK
+
+real	0m8.155s
+user	0m8.135s
+sys	0m0.010s
+exit=0

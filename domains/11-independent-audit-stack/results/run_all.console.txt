@@ -1,0 +1,16 @@
+== MATH + CRYPTANALYSIS (SymPy, galois, exact Grover, multi-target, toy FRAME)
+   exit 0
+== FORMAL: bounded model checker (third model)
+   exit 0
+== FORMAL: Tamarin --prove
+   exit 0
+== FORMAL: ProVerif NOT RUN (proverif not on PATH)
+== PRIMITIVES: liboqs vs dilithium-py/kyber-py vs NIST ACVP
+   exit 0
+== IMPLEMENTATION: sanitizers + libFuzzer (see implementation/IMPLEMENTATION_RESULTS.md)
+   exit 0
+== PROPERTY / DIFFERENTIAL / MALFORMED (Hypothesis)
+   exit 0
+== FAULT INJECTION on the certificate/extraction pipeline
+   exit 0
+== done; see <workdir>/qpt_audit_stack/run_all.log and AUDIT_STACK.md

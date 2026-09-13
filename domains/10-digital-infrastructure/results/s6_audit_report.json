@@ -1,0 +1,577 @@
+{
+  "module": "s6_hybrid_games.py",
+  "version": "2.1",
+  "inputs": [
+    "s6_migration_agility.py",
+    "s4_embedded_broadcast.py"
+  ],
+  "games": [
+    {
+      "id": "S6-A",
+      "game_name": "IND-combined-key, classical component fully compromised",
+      "adversary_capabilities": "knows sk_cl, ss_cl, ct_cl, pk_cl, label; PQ shared secret truncated to n bits",
+      "oracle_access": "64 combiner evaluations per trial (distinct guesses of the n-bit secret)",
+      "winning_condition": "b' == b for K_b (b=0: combine(...), b=1: uniform)",
+      "trials": 10240,
+      "wins": 5250,
+      "expected_win_bound": "IND wins <= 1/2 + Q/2^(n+1); real-world hit rate = Q/2^n (measured, slope vs n fitted)",
+      "mechanism": "combine(): the unknown n-bit ss_pq enters the hash; without it K is a fresh RO output",
+      "assumption_invoked": "H (SHA3-256 in combine()) modelled as a random oracle / PRF (GHP18 Thm 3.1; X-Wing 2024); independence of the two KEM components (keys, randomness, implementation)",
+      "measurements": {
+        "queries_per_trial": 64,
+        "rows": [
+          {
+            "n_bits": 8,
+            "trials": 2048,
+            "real_world_trials": 1058,
+            "query_hits": 248,
+            "hit_rate": 0.23440453686200377,
+            "bound_Q_over_2n": 0.25,
+            "ind_wins": 1154,
+            "ind_advantage_est": 0.126953125
+          },
+          {
+            "n_bits": 10,
+            "trials": 2048,
+            "real_world_trials": 1027,
+            "query_hits": 62,
+            "hit_rate": 0.06037000973709834,
+            "bound_Q_over_2n": 0.0625,
+            "ind_wins": 1074,
+            "ind_advantage_est": 0.048828125
+          },
+          {
+            "n_bits": 12,
+            "trials": 2048,
+            "real_world_trials": 1021,
+            "query_hits": 15,
+            "hit_rate": 0.014691478942213516,
+            "bound_Q_over_2n": 0.015625,
+            "ind_wins": 989,
+            "ind_advantage_est": -0.0341796875
+          },
+          {
+            "n_bits": 14,
+            "trials": 2048,
+            "real_world_trials": 1003,
+            "query_hits": 3,
+            "hit_rate": 0.0029910269192422734,
+            "bound_Q_over_2n": 0.00390625,
+            "ind_wins": 1003,
+            "ind_advantage_est": -0.0205078125
+          },
+          {
+            "n_bits": 16,
+            "trials": 2048,
+            "real_world_trials": 984,
+            "query_hits": 0,
+            "hit_rate": 0.0,
+            "bound_Q_over_2n": 0.0009765625,
+            "ind_wins": 1030,
+            "ind_advantage_est": 0.005859375
+          }
+        ],
+        "fit_points": 3,
+        "fitted_slope_log2_rate_vs_n": -0.998987238385533,
+        "expected_slope": -1.0
+      }
+    },
+    {
+      "id": "S6-B",
+      "game_name": "IND-combined-key, PQ component compromised",
+      "adversary_capabilities": "knows sk_pq, ss_pq, ct_cl, pk_cl, label; classical shared secret truncated to n bits",
+      "oracle_access": "64 combiner evaluations per trial",
+      "winning_condition": "b' == b",
+      "trials": 10240,
+      "wins": 5372,
+      "expected_win_bound": "as S6-A with the roles swapped",
+      "mechanism": "combine() is symmetric in which component survives",
+      "assumption_invoked": "H (SHA3-256 in combine()) modelled as a random oracle / PRF (GHP18 Thm 3.1; X-Wing 2024); independence of the two KEM components (keys, randomness, implementation)",
+      "measurements": {
+        "queries_per_trial": 64,
+        "rows": [
+          {
+            "n_bits": 8,
+            "trials": 2048,
+            "real_world_trials": 1033,
+            "query_hits": 269,
+            "hit_rate": 0.26040658276863504,
+            "bound_Q_over_2n": 0.25,
+            "ind_wins": 1163,
+            "ind_advantage_est": 0.1357421875
+          },
+          {
+            "n_bits": 10,
+            "trials": 2048,
+            "real_world_trials": 1072,
+            "query_hits": 67,
+            "hit_rate": 0.0625,
+            "bound_Q_over_2n": 0.0625,
+            "ind_wins": 1059,
+            "ind_advantage_est": 0.0341796875
+          },
+          {
+            "n_bits": 12,
+            "trials": 2048,
+            "real_world_trials": 1050,
+            "query_hits": 15,
+            "hit_rate": 0.014285714285714285,
+            "bound_Q_over_2n": 0.015625,
+            "ind_wins": 1052,
+            "ind_advantage_est": 0.02734375
+          },
+          {
+            "n_bits": 14,
+            "trials": 2048,
+            "real_world_trials": 1039,
+            "query_hits": 6,
+            "hit_rate": 0.005774783445620789,
+            "bound_Q_over_2n": 0.00390625,
+            "ind_wins": 1063,
+            "ind_advantage_est": 0.0380859375
+          },
+          {
+            "n_bits": 16,
+            "trials": 2048,
+            "real_world_trials": 1056,
+            "query_hits": 1,
+            "hit_rate": 0.000946969696969697,
+            "bound_Q_over_2n": 0.0009765625,
+            "ind_wins": 1035,
+            "ind_advantage_est": 0.0107421875
+          }
+        ],
+        "fit_points": 4,
+        "fitted_slope_log2_rate_vs_n": -0.9306924401284414,
+        "expected_slope": -1.0
+      }
+    },
+    {
+      "id": "S6-C",
+      "game_name": "NEGATIVE: correlated randomness across the two components",
+      "adversary_capabilities": "public data only (pk_cl, ct_cl); knows both components share one n_seed-bit seed",
+      "oracle_access": "offline: 2^n_seed table seed -> ct_cl; online: one lookup + 4 hashes per trial",
+      "winning_condition": "outputs K exactly",
+      "trials": 6144,
+      "wins": 6144,
+      "expected_win_bound": "combiner theorem gives Q/2^256 = 2^(n_seed-256) ONLY IF components are independent; hypothesis violated -> no bound applies; measured 1.0",
+      "mechanism": "none: the combiner cannot manufacture independence; fix is at the RNG/implementation layer",
+      "assumption_invoked": "independence of the two KEM components (keys, randomness, implementation) -- shown NECESSARY, not just sufficient",
+      "measurements": [
+        {
+          "seed_bits": 8,
+          "trials": 2048,
+          "wins": 2048,
+          "win_rate": 1.0,
+          "adversary_work_hashes_log2": 9,
+          "pq_secret_bits": 256,
+          "bound_if_components_were_independent_log2": -248
+        },
+        {
+          "seed_bits": 12,
+          "trials": 2048,
+          "wins": 2048,
+          "win_rate": 1.0,
+          "adversary_work_hashes_log2": 13,
+          "pq_secret_bits": 256,
+          "bound_if_components_were_independent_log2": -244
+        },
+        {
+          "seed_bits": 16,
+          "trials": 2048,
+          "wins": 2048,
+          "win_rate": 1.0,
+          "adversary_work_hashes_log2": 17,
+          "pq_secret_bits": 256,
+          "bound_if_components_were_independent_log2": -240
+        }
+      ]
+    },
+    {
+      "id": "S6-D",
+      "game_name": "TLS group downgrade (offer [Cat5, Cat3, classical])",
+      "adversary_capabilities": "MITM edits the ClientHello group list in transit; may guess a t-bit Finished tag; quantum variant: breaks X25519 online and learns ss_cl",
+      "oracle_access": "network only; no key oracle",
+      "winning_condition": "client completes with a group weaker than its best offer",
+      "trials": 7424,
+      "wins": 850,
+      "expected_win_bound": "bound transcript: 2^-t per Finished guess (t=256 -> 0); unbound: 1 (downgrade succeeds); bound + quantum X25519 break: 1 unless client refuses Cat 0 (policy, not binding)",
+      "mechanism": "key schedule hashes the exact ClientHello bytes as sent; Finished = HMAC(K, transcript hash)",
+      "assumption_invoked": "HMAC-SHA3 is a PRF; the negotiated key is unknown to the adversary",
+      "measurements": {
+        "variants": {
+          "positive_control_bound_no_mitm": {
+            "trials": 256,
+            "client_accepts": 256,
+            "chosen": "X25519MLKEM1024",
+            "chosen_cat": 5,
+            "downgrade_wins": 0
+          },
+          "bound_delete_cat5": {
+            "trials": 256,
+            "client_accepts": 0,
+            "chosen": "X25519MLKEM768",
+            "chosen_cat": 3,
+            "downgrade_wins": 0,
+            "delete": "('X25519MLKEM1024',)"
+          },
+          "UNBOUND_delete_cat5": {
+            "trials": 256,
+            "client_accepts": 256,
+            "chosen": "X25519MLKEM768",
+            "chosen_cat": 3,
+            "downgrade_wins": 256,
+            "delete": "('X25519MLKEM1024',)",
+            "bound": "False"
+          },
+          "bound_delete_all_pq_quantum_adversary": {
+            "trials": 256,
+            "client_accepts": 256,
+            "chosen": "X25519",
+            "chosen_cat": 0,
+            "downgrade_wins": 256,
+            "delete": "('X25519MLKEM1024', 'X25519MLKEM768')",
+            "quantum_forge": "True"
+          },
+          "bound_delete_all_pq_quantum_adversary_client_min_cat3": {
+            "trials": 256,
+            "client_accepts": 0,
+            "chosen": "X25519",
+            "chosen_cat": 0,
+            "downgrade_wins": 0,
+            "delete": "('X25519MLKEM1024', 'X25519MLKEM768')",
+            "quantum_forge": "True",
+            "client_min_cat": "3"
+          }
+        },
+        "finished_tag_guessing": [
+          {
+            "trials": 2048,
+            "client_accepts": 259,
+            "chosen": "X25519MLKEM768",
+            "chosen_cat": 3,
+            "downgrade_wins": 259,
+            "delete": "('X25519MLKEM1024',)",
+            "tag_bits": "3",
+            "bound_2^-t": 0.125
+          },
+          {
+            "trials": 2048,
+            "client_accepts": 59,
+            "chosen": "X25519MLKEM768",
+            "chosen_cat": 3,
+            "downgrade_wins": 59,
+            "delete": "('X25519MLKEM1024',)",
+            "tag_bits": "5",
+            "bound_2^-t": 0.03125
+          },
+          {
+            "trials": 2048,
+            "client_accepts": 20,
+            "chosen": "X25519MLKEM768",
+            "chosen_cat": 3,
+            "downgrade_wins": 20,
+            "delete": "('X25519MLKEM1024',)",
+            "tag_bits": "7",
+            "bound_2^-t": 0.0078125
+          }
+        ],
+        "fitted_slope_log2_rate_vs_tag_bits": -0.9237200481997978
+      }
+    },
+    {
+      "id": "S6-E",
+      "game_name": "ROM root configuration substitution / rollback",
+      "adversary_capabilities": "chooses typecode, root record, signature and version; own key sets under n=24, n=16, toy n=1",
+      "oracle_access": "verifier as a black box; unlimited keygen",
+      "winning_condition": "verifier installs a root record not signed under the pinned parameter set, or an older one",
+      "trials": 3365,
+      "wins": 8,
+      "expected_win_bound": "strict: 2^-256 per keygen (Grover 2^128 x 2^18 gates); lax prefix: 2^-(8n) per keygen -> n=24: 2^114 gates, n=16: 2^82 gates (both below QPT-128); toy n=1: 2^-8 measured",
+      "mechanism": "pinned typecode checked before parsing; full-length root compare; monotonic root version",
+      "assumption_invoked": "ROM immutability (verifier code and pinned typecode/root/counter cannot be changed); second-preimage resistance of the n=32 hash",
+      "measurements": {
+        "pinned_typecode": "0x08",
+        "pinned_root_hex": "b70f20fd06dbaa5d0f41653fbb40893f462b3128e1297eec80df847300a31ff2",
+        "genuine_v1_strict": [
+          true,
+          "accepted"
+        ],
+        "genuine_v2_strict": [
+          true,
+          "accepted"
+        ],
+        "substitution": {
+          "0xd": {
+            "params": "LMS_SHA256_M24_H20 / LMOTS w=8 (SP 800-208, NSA-preferred)",
+            "n_bytes": 24,
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ],
+            "no_typecode_check_full_compare": [
+              false,
+              "root mismatch"
+            ],
+            "lax_prefix_verifier": [
+              false,
+              "root mismatch"
+            ],
+            "lax_forgery_cost_classical_log2": 192,
+            "lax_forgery_gates_quantum_log2": 114,
+            "lax_passes_qpt128": false
+          },
+          "0xf0": {
+            "params": "toy M16 w=8",
+            "n_bytes": 16,
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ],
+            "no_typecode_check_full_compare": [
+              false,
+              "root mismatch"
+            ],
+            "lax_prefix_verifier": [
+              false,
+              "root mismatch"
+            ],
+            "lax_forgery_cost_classical_log2": 128,
+            "lax_forgery_gates_quantum_log2": 82,
+            "lax_passes_qpt128": false
+          }
+        },
+        "toy_prefix_bruteforce": [
+          {
+            "keygen_trials": 657,
+            "lax_prefix_verifier": [
+              true,
+              "accepted"
+            ],
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ]
+          },
+          {
+            "keygen_trials": 41,
+            "lax_prefix_verifier": [
+              true,
+              "accepted"
+            ],
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ]
+          },
+          {
+            "keygen_trials": 288,
+            "lax_prefix_verifier": [
+              true,
+              "accepted"
+            ],
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ]
+          },
+          {
+            "keygen_trials": 532,
+            "lax_prefix_verifier": [
+              true,
+              "accepted"
+            ],
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ]
+          },
+          {
+            "keygen_trials": 461,
+            "lax_prefix_verifier": [
+              true,
+              "accepted"
+            ],
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ]
+          },
+          {
+            "keygen_trials": 169,
+            "lax_prefix_verifier": [
+              true,
+              "accepted"
+            ],
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ]
+          },
+          {
+            "keygen_trials": 753,
+            "lax_prefix_verifier": [
+              true,
+              "accepted"
+            ],
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ]
+          },
+          {
+            "keygen_trials": 464,
+            "lax_prefix_verifier": [
+              true,
+              "accepted"
+            ],
+            "strict_verifier": [
+              false,
+              "typecode mismatch"
+            ]
+          }
+        ],
+        "toy_prefix_mean_trials": 420.625,
+        "toy_prefix_expected_trials": 256,
+        "rollback_replay_v1_monotonic": [
+          false,
+          "rollback"
+        ],
+        "rollback_replay_v1_no_counter": [
+          true,
+          "accepted"
+        ]
+      }
+    },
+    {
+      "id": "S6-F",
+      "game_name": "algorithm agility ledger + QPT-128 gate margins",
+      "adversary_capabilities": "reference attacks of the v1.43 ledger; Grover with 2^18 gates per hash query",
+      "oracle_access": "n/a (accounting)",
+      "winning_condition": "attack gates < 2^128",
+      "trials": 0,
+      "wins": 0,
+      "expected_win_bound": "every target Cat 5; no deployed entry passes; margins n=128: -46, n=192: -14, n=256: +18 bits",
+      "mechanism": "per-layer migration ledger; ROM layer chosen Cat 5 at manufacture because it cannot rotate",
+      "assumption_invoked": "v1.43 gate accounting (2^18 gates/query); category reference attack costs",
+      "measurements": {
+        "ledger": [
+          {
+            "layer": "TLS key exchange",
+            "deployed": "X25519MLKEM768 (Cat 3)",
+            "deployed_passes_qpt128": false,
+            "target": "X25519 + ML-KEM-1024 (Cat 5)",
+            "target_passes_qpt128": true,
+            "rotatable_in_field": "yes: per-handshake negotiation (named group)"
+          },
+          {
+            "layer": "TLS / Web PKI authentication",
+            "deployed": "ECDSA/RSA X.509 (Cat 0)",
+            "deployed_passes_qpt128": false,
+            "target": "MTC + KEMTLS ML-KEM-1024 (Cat 5; no per-handshake signing)",
+            "target_passes_qpt128": true,
+            "rotatable_in_field": "yes: trust-anchor IDs / landmark roll (~weekly)"
+          },
+          {
+            "layer": "DNSSEC",
+            "deployed": "ECDSA P-256 / RSA (Cat 0)",
+            "deployed_passes_qpt128": false,
+            "target": "SLH-DSA-256s-MTL (n=32) ladder, canonical-order shards of 2^12, NSEC + multiproof",
+            "target_passes_qpt128": true,
+            "rotatable_in_field": "yes: RFC 6781 algorithm rollover (double-signing period)"
+          },
+          {
+            "layer": "Firmware / secure boot",
+            "deployed": "RSA/ECDSA; some LMS/XMSS (Cisco, AMD, Microchip, Infineon)",
+            "deployed_passes_qpt128": null,
+            "target": "LMS n=32 w=8 h=20 (Cat 5), NOT the NSA-preferred SHA-256/192",
+            "target_passes_qpt128": true,
+            "rotatable_in_field": "NO: ROM verifier fixed at manufacture -> choose Cat 5 now"
+          },
+          {
+            "layer": "Smart cards / SE / HSM signing",
+            "deployed": "RSA-1984 EMV, ECDSA (Cat 0)",
+            "deployed_passes_qpt128": false,
+            "target": "on-card LMS n=32 w=8 h=20 with BDS (Cat 5) or ML-DSA-87 in 8.1 KiB (2022/323)",
+            "target_passes_qpt128": true,
+            "rotatable_in_field": "partial: applet update via GlobalPlatform; key state never exported"
+          },
+          {
+            "layer": "Constrained broadcast (ICS, satellite, medical)",
+            "deployed": "none / 128-bit TESLA (OSNMA)",
+            "deployed_passes_qpt128": false,
+            "target": "TESLA with 256-bit chain keys anchored by LMS n=32 (Cat 5)",
+            "target_passes_qpt128": true,
+            "rotatable_in_field": "yes: new chain anchor per epoch"
+          }
+        ],
+        "gates_per_query_log2": 18,
+        "gate_margins": {
+          "128": {
+            "grover_gates_log2": 82,
+            "margin_vs_2^128_log2": -46,
+            "qpt128_hash_preimage_ok": false
+          },
+          "192": {
+            "grover_gates_log2": 114,
+            "margin_vs_2^128_log2": -14,
+            "qpt128_hash_preimage_ok": false
+          },
+          "256": {
+            "grover_gates_log2": 146,
+            "margin_vs_2^128_log2": 18,
+            "qpt128_hash_preimage_ok": true
+          }
+        }
+      }
+    }
+  ],
+  "composition": {
+    "same_game_tls_session": [
+      -127.0,
+      "union bound over 2 sub-events of goal 'break TLS session'"
+    ],
+    "independent_layers": [
+      null,
+      "refused: bounds span 2 attacker goals ['forge DNSSEC answer', 'forge firmware root']; a union bound is only defined for sub-events of one game"
+    ],
+    "rule": "Union bound over per-layer advantage bounds (log2 values), returned ONLY when\n    every bound belongs to the same attacker goal inside one security game.\n\n    Why the refusal: Pr[A or B] <= Pr[A] + Pr[B] is a statement about two events in\n    ONE probability space -- one experiment, one adversary, one winning condition.\n    'Break this TLS session' = (break the KEM) or (forge the authentication) is such\n    a pair: same session, same adversary, so their bounds add.  A DNSSEC forger and\n    a firmware forger are different experiments with different adversaries and\n    different winning conditions; the sum of their bounds is not the probability of\n    any event and answers no question (it is neither the system's failure\n    probability nor a per-layer margin).  Independent layers are reported side by\n    side -- the weakest link is the max -- and never added.\n    Returns (log2_bound, reason) or (None, reason)."
+  },
+  "untestable_assumptions": [
+    {
+      "assumption": "random-oracle / PRF modelling of the combiner hash (SHA3-256 in combine())",
+      "used_by": [
+        "S6-A",
+        "S6-B",
+        "S6-D"
+      ],
+      "why_untestable": "the reduction treats H as a random oracle; no experiment on outputs can separate \"SHA3 is a PRF\" from \"SHA3 is a random oracle\" -- the games measure scaling under the model, not the model"
+    },
+    {
+      "assumption": "independence of the two KEM components (key material, randomness, implementation)",
+      "used_by": [
+        "S6-A",
+        "S6-B"
+      ],
+      "why_untestable": "S6-C shows the bound collapses when violated, but whether a deployment shares a DRBG, entropy pool or code path is a property of the implementation, not of the algorithm"
+    },
+    {
+      "assumption": "ROM immutability: verifier code, pinned typecode, root and version counter cannot be altered",
+      "used_by": [
+        "S6-E",
+        "S6-F"
+      ],
+      "why_untestable": "a mask-ROM / OTP property of the silicon; software can only assume the verifier runs as written"
+    },
+    {
+      "assumption": "ToyKEM stands in for ML-KEM-1024 / X25519; IND-CCA of ML-KEM (Module-LWE) and the v1.43 category gate costs",
+      "used_by": [
+        "S6-A",
+        "S6-B",
+        "S6-D",
+        "S6-F"
+      ],
+      "why_untestable": "lattice hardness and the reference attack costs are inputs from the QPT-128 ledger, not re-derived"
+    }
+  ]
+}

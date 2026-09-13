@@ -1,0 +1,13 @@
+test_extraction_all_overlaps_with_public_evidence (__main__.ModeATests.test_extraction_all_overlaps_with_public_evidence) ... ok
+test_faest_formula_reproduces_published_sizes (__main__.ModeATests.test_faest_formula_reproduces_published_sizes) ... ok
+test_field_irreducible_and_inverse (__main__.ModeATests.test_field_irreducible_and_inverse) ... ok
+test_framing_without_opening_fails (__main__.ModeATests.test_framing_without_opening_fails) ... ok
+test_no_conflict_cases_rejected (__main__.ModeATests.test_no_conflict_cases_rejected) ... ok
+test_noncanonical_frames_rejected (__main__.ModeATests.test_noncanonical_frames_rejected) ... ok
+test_relation_and_frame (__main__.ModeATests.test_relation_and_frame) ... ok
+test_sizing_gap (__main__.ModeATests.test_sizing_gap) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 5.130s
+
+OK

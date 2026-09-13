@@ -1,0 +1,65 @@
+{
+  "scope": "SEEDED_DATA_DEMONSTRATION_NOT_A_QUORUM_CERTIFICATE",
+  "cases": [
+    {
+      "hidden_index": 0,
+      "carrier_bytes": 588,
+      "seed_frontier_count": 10,
+      "reconstructed_leaf_seeds": 1023,
+      "equivalent_leaf_seed_bytes": 49104,
+      "expanded_tape_bytes": 1047552,
+      "exact_reconstruction": true,
+      "excluded_leaf_absent_from_decoder_output": true,
+      "negative_controls": 3
+    },
+    {
+      "hidden_index": 1,
+      "carrier_bytes": 588,
+      "seed_frontier_count": 10,
+      "reconstructed_leaf_seeds": 1023,
+      "equivalent_leaf_seed_bytes": 49104,
+      "expanded_tape_bytes": 1047552,
+      "exact_reconstruction": true,
+      "excluded_leaf_absent_from_decoder_output": true,
+      "negative_controls": 3
+    },
+    {
+      "hidden_index": 17,
+      "carrier_bytes": 588,
+      "seed_frontier_count": 10,
+      "reconstructed_leaf_seeds": 1023,
+      "equivalent_leaf_seed_bytes": 49104,
+      "expanded_tape_bytes": 1047552,
+      "exact_reconstruction": true,
+      "excluded_leaf_absent_from_decoder_output": true,
+      "negative_controls": 3
+    },
+    {
+      "hidden_index": 511,
+      "carrier_bytes": 588,
+      "seed_frontier_count": 10,
+      "reconstructed_leaf_seeds": 1023,
+      "equivalent_leaf_seed_bytes": 49104,
+      "expanded_tape_bytes": 1047552,
+      "exact_reconstruction": true,
+      "excluded_leaf_absent_from_decoder_output": true,
+      "negative_controls": 3
+    },
+    {
+      "hidden_index": 1023,
+      "carrier_bytes": 588,
+      "seed_frontier_count": 10,
+      "reconstructed_leaf_seeds": 1023,
+      "equivalent_leaf_seed_bytes": 49104,
+      "expanded_tape_bytes": 1047552,
+      "exact_reconstruction": true,
+      "excluded_leaf_absent_from_decoder_output": true,
+      "negative_controls": 3
+    }
+  ],
+  "seed_source": "fresh OS randomness; no member credentials used",
+  "checksum_is_not_an_authentication_proof": true,
+  "quantum_security_proved": false,
+  "algorithm_is_not_FAEST_implementation": true,
+  "complete_original_goal_QCs": 0
+}

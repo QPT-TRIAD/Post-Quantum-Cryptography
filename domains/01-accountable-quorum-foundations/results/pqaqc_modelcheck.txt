@@ -1,0 +1,33 @@
+PQAQC v0.7 bounded verification record
+======================================
+
+IMPORTANT SCOPE
+---------------
+These are independent finite-state checks, NOT TLC/TLAPS results.
+They check the finite abstractions in pqaqc_finite_state_check_v0_7.py.
+
+The TLA+ artifact was also checked mechanically for CFG/TLA invariant-name
+consistency. Native TLC was not run in this runtime because tla2tools.jar is
+not installed locally.
+
+EXECUTED CHECKER OUTPUT
+-----------------------
+SAFE MODEL RESULTS
+PASS domain_votes_safe      states=729 transitions=2916
+PASS boundary_safe          states=140 transitions=400
+PASS crash_safe             states=23474 transitions=127006
+PASS evidence_safe          states=28 transitions=55
+PASS seal_network_safe      states=1440 transitions=8592
+
+NEGATIVE CONTROL RESULTS
+EXPECTED-FAIL domain_votes_MUTANT property=HonestVoteOncePerDomain path=[('vote', 0, 0, 0), ('vote', 0, 0, 1)]
+EXPECTED-FAIL boundary_MUTANT   property=BoundaryFinalityFork path=[('honest_boundary_vote', 0, 0), ('honest_boundary_vote', 0, 1), ('honest_boundary_vote', 1, 0), ('honest_boundary_vote', 1, 1), ('honest_boundary_vote', 2, 0), ('honest_boundary_vote', 2, 1), ('form_boundary_certificate', 0), ('form_boundary_certificate', 1)]
+EXPECTED-FAIL crash_MUTANT      property=CrashInducedVoteEquivocation path=[('begin_vote', 0, 0), ('UNSAFE_send_volatile_vote', 0, 0), ('crash',), ('restart',), ('begin_vote', 0, 1), ('UNSAFE_send_volatile_vote', 0, 1)]
+
+PARTITION RECOVERY REACHABILITY
+PASS path=[('produce_seal', 0), ('deliver_seal', 0), ('produce_seal', 1), ('deliver_seal', 1), ('partition', 2), ('produce_seal', 2), ('heal', 2), ('deliver_seal', 2), ('form_seal_cert',)]
+
+ARTIFACT CONSISTENCY
+--------------------
+PASS every INVARIANT named in the CFG is defined in the TLA+ module
+PASS Domains and Preps are referenced by the actual TLA+ state/actions

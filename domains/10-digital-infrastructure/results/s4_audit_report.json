@@ -1,0 +1,2924 @@
+{
+ "audited_module": "s4_embedded_broadcast.py",
+ "T_ms": 1000,
+ "boundary": {
+  "derived_granular_S4": "ceil((dt+eps)/T) + ceil(eps/T) <= d-1   (sync = ceil(eps/T))",
+  "derived_continuous_rfc4082": "ceil((dt+2*eps)/T) <= d-1   (RFC 4082 \u00a73.4: d = ceil((dt+2eps)/T)+1)",
+  "grid": {
+   "d": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8
+   ],
+   "dt_ms": [
+    0,
+    250,
+    500,
+    1000,
+    1500,
+    2000,
+    3000,
+    4000,
+    6000
+   ],
+   "eps_ms": [
+    0,
+    250,
+    500,
+    1000,
+    2000
+   ]
+  },
+  "grid_points": 270,
+  "mismatches_granular": [],
+  "mismatches_continuous": [],
+  "forged_accepted_total": 0,
+  "grid_points_where_granularity_costs_an_interval": 13,
+  "sweep_granular": [
+   {
+    "d": 1,
+    "dt": 0,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 1,
+    "dt": 0,
+    "eps": 250,
+    "accepted_frac": 0.0,
+    "late_frac": 0.979,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 0,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 0,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 0,
+    "eps": 2000,
+    "accepted_frac": 0.042,
+    "late_frac": 0.938,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 250,
+    "eps": 0,
+    "accepted_frac": 0.438,
+    "late_frac": 0.542,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 250,
+    "eps": 250,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 250,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 250,
+    "eps": 1000,
+    "accepted_frac": 0.021,
+    "late_frac": 0.938,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 250,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 500,
+    "eps": 0,
+    "accepted_frac": 0.292,
+    "late_frac": 0.625,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 500,
+    "eps": 250,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 500,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 500,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 500,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1000,
+    "eps": 0,
+    "accepted_frac": 0.146,
+    "late_frac": 0.729,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1000,
+    "eps": 250,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1000,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 0.979,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1000,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1500,
+    "eps": 0,
+    "accepted_frac": 0.062,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1500,
+    "eps": 250,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1500,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1500,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 0.979,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 1500,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 2000,
+    "eps": 0,
+    "accepted_frac": 0.042,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 2000,
+    "eps": 250,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 2000,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 0.958,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 2000,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 2000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 3000,
+    "eps": 0,
+    "accepted_frac": 0.042,
+    "late_frac": 0.833,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 3000,
+    "eps": 250,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 3000,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 0.979,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 3000,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 3000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 0.979,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 4000,
+    "eps": 0,
+    "accepted_frac": 0.0,
+    "late_frac": 0.917,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 4000,
+    "eps": 250,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 4000,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 4000,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 0.958,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 4000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 6000,
+    "eps": 0,
+    "accepted_frac": 0.0,
+    "late_frac": 0.958,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 6000,
+    "eps": 250,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 6000,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 6000,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 1,
+    "dt": 6000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 0.979,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 0,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 2,
+    "dt": 0,
+    "eps": 250,
+    "accepted_frac": 0.292,
+    "late_frac": 0.625,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 0,
+    "eps": 500,
+    "accepted_frac": 0.229,
+    "late_frac": 0.688,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 0,
+    "eps": 1000,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 0,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 250,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 2,
+    "dt": 250,
+    "eps": 250,
+    "accepted_frac": 0.25,
+    "late_frac": 0.688,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 250,
+    "eps": 500,
+    "accepted_frac": 0.312,
+    "late_frac": 0.646,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 250,
+    "eps": 1000,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 250,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 500,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 2,
+    "dt": 500,
+    "eps": 250,
+    "accepted_frac": 0.312,
+    "late_frac": 0.625,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 500,
+    "eps": 500,
+    "accepted_frac": 0.104,
+    "late_frac": 0.854,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 500,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 0.958,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 500,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 1000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 2,
+    "dt": 1000,
+    "eps": 250,
+    "accepted_frac": 0.125,
+    "late_frac": 0.792,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 1000,
+    "eps": 500,
+    "accepted_frac": 0.25,
+    "late_frac": 0.708,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 1000,
+    "eps": 1000,
+    "accepted_frac": 0.083,
+    "late_frac": 0.875,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 1000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 1500,
+    "eps": 0,
+    "accepted_frac": 0.417,
+    "late_frac": 0.542,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 1500,
+    "eps": 250,
+    "accepted_frac": 0.125,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 1500,
+    "eps": 500,
+    "accepted_frac": 0.104,
+    "late_frac": 0.875,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 1500,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 1500,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 2000,
+    "eps": 0,
+    "accepted_frac": 0.25,
+    "late_frac": 0.667,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 2000,
+    "eps": 250,
+    "accepted_frac": 0.021,
+    "late_frac": 0.896,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 2000,
+    "eps": 500,
+    "accepted_frac": 0.042,
+    "late_frac": 0.875,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 2000,
+    "eps": 1000,
+    "accepted_frac": 0.042,
+    "late_frac": 0.896,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 2000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 3000,
+    "eps": 0,
+    "accepted_frac": 0.146,
+    "late_frac": 0.75,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 3000,
+    "eps": 250,
+    "accepted_frac": 0.062,
+    "late_frac": 0.875,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 3000,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 3000,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 0.979,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 3000,
+    "eps": 2000,
+    "accepted_frac": 0.021,
+    "late_frac": 0.938,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 4000,
+    "eps": 0,
+    "accepted_frac": 0.083,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 4000,
+    "eps": 250,
+    "accepted_frac": 0.021,
+    "late_frac": 0.958,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 4000,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 0.958,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 4000,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 4000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 6000,
+    "eps": 0,
+    "accepted_frac": 0.021,
+    "late_frac": 0.938,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 6000,
+    "eps": 250,
+    "accepted_frac": 0.021,
+    "late_frac": 0.979,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 6000,
+    "eps": 500,
+    "accepted_frac": 0.0,
+    "late_frac": 0.979,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 6000,
+    "eps": 1000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 2,
+    "dt": 6000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 0,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 0,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 0,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 0,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 0,
+    "eps": 2000,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 250,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 250,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 250,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 250,
+    "eps": 1000,
+    "accepted_frac": 0.438,
+    "late_frac": 0.542,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 250,
+    "eps": 2000,
+    "accepted_frac": 0.042,
+    "late_frac": 0.938,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 500,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 500,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 500,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 500,
+    "eps": 1000,
+    "accepted_frac": 0.396,
+    "late_frac": 0.562,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 500,
+    "eps": 2000,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 1000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 1000,
+    "eps": 250,
+    "accepted_frac": 0.458,
+    "late_frac": 0.521,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 1000,
+    "eps": 500,
+    "accepted_frac": 0.75,
+    "late_frac": 0.25,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 1000,
+    "eps": 1000,
+    "accepted_frac": 0.625,
+    "late_frac": 0.333,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 1000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 1500,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 1500,
+    "eps": 250,
+    "accepted_frac": 0.417,
+    "late_frac": 0.542,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 1500,
+    "eps": 500,
+    "accepted_frac": 0.333,
+    "late_frac": 0.583,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 1500,
+    "eps": 1000,
+    "accepted_frac": 0.104,
+    "late_frac": 0.771,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 1500,
+    "eps": 2000,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 2000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 3,
+    "dt": 2000,
+    "eps": 250,
+    "accepted_frac": 0.312,
+    "late_frac": 0.646,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 2000,
+    "eps": 500,
+    "accepted_frac": 0.271,
+    "late_frac": 0.625,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 2000,
+    "eps": 1000,
+    "accepted_frac": 0.188,
+    "late_frac": 0.75,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 2000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 3000,
+    "eps": 0,
+    "accepted_frac": 0.458,
+    "late_frac": 0.521,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 3000,
+    "eps": 250,
+    "accepted_frac": 0.104,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 3000,
+    "eps": 500,
+    "accepted_frac": 0.125,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 3000,
+    "eps": 1000,
+    "accepted_frac": 0.021,
+    "late_frac": 0.917,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 3000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 4000,
+    "eps": 0,
+    "accepted_frac": 0.146,
+    "late_frac": 0.75,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 4000,
+    "eps": 250,
+    "accepted_frac": 0.083,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 4000,
+    "eps": 500,
+    "accepted_frac": 0.062,
+    "late_frac": 0.833,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 4000,
+    "eps": 1000,
+    "accepted_frac": 0.104,
+    "late_frac": 0.792,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 4000,
+    "eps": 2000,
+    "accepted_frac": 0.062,
+    "late_frac": 0.875,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 6000,
+    "eps": 0,
+    "accepted_frac": 0.25,
+    "late_frac": 0.688,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 6000,
+    "eps": 250,
+    "accepted_frac": 0.021,
+    "late_frac": 0.875,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 6000,
+    "eps": 500,
+    "accepted_frac": 0.042,
+    "late_frac": 0.896,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 6000,
+    "eps": 1000,
+    "accepted_frac": 0.062,
+    "late_frac": 0.896,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 3,
+    "dt": 6000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 0.917,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 0,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 0,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 0,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 0,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 0,
+    "eps": 2000,
+    "accepted_frac": 0.104,
+    "late_frac": 0.854,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 250,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 250,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 250,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 250,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 250,
+    "eps": 2000,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 500,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 500,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 500,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 500,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 500,
+    "eps": 2000,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 1000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 1000,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 1000,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 1000,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 1000,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 1.0,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 1500,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 1500,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 1500,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 1500,
+    "eps": 1000,
+    "accepted_frac": 0.375,
+    "late_frac": 0.562,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 1500,
+    "eps": 2000,
+    "accepted_frac": 0.0,
+    "late_frac": 0.958,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 2000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 2000,
+    "eps": 250,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 2000,
+    "eps": 500,
+    "accepted_frac": 0.729,
+    "late_frac": 0.271,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 2000,
+    "eps": 1000,
+    "accepted_frac": 0.375,
+    "late_frac": 0.562,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 2000,
+    "eps": 2000,
+    "accepted_frac": 0.188,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 3000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 4,
+    "dt": 3000,
+    "eps": 250,
+    "accepted_frac": 0.417,
+    "late_frac": 0.562,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 3000,
+    "eps": 500,
+    "accepted_frac": 0.354,
+    "late_frac": 0.604,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 3000,
+    "eps": 1000,
+    "accepted_frac": 0.438,
+    "late_frac": 0.562,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 3000,
+    "eps": 2000,
+    "accepted_frac": 0.188,
+    "late_frac": 0.792,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 4000,
+    "eps": 0,
+    "accepted_frac": 0.354,
+    "late_frac": 0.604,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 4000,
+    "eps": 250,
+    "accepted_frac": 0.208,
+    "late_frac": 0.708,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 4000,
+    "eps": 500,
+    "accepted_frac": 0.292,
+    "late_frac": 0.688,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 4000,
+    "eps": 1000,
+    "accepted_frac": 0.208,
+    "late_frac": 0.708,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 4000,
+    "eps": 2000,
+    "accepted_frac": 0.167,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 6000,
+    "eps": 0,
+    "accepted_frac": 0.125,
+    "late_frac": 0.771,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 6000,
+    "eps": 250,
+    "accepted_frac": 0.083,
+    "late_frac": 0.875,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 6000,
+    "eps": 500,
+    "accepted_frac": 0.042,
+    "late_frac": 0.833,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 6000,
+    "eps": 1000,
+    "accepted_frac": 0.042,
+    "late_frac": 0.875,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 4,
+    "dt": 6000,
+    "eps": 2000,
+    "accepted_frac": 0.083,
+    "late_frac": 0.854,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 0,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 0,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 0,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 0,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 0,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 250,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 250,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 250,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 250,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 250,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 500,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 500,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 500,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 500,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 500,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1000,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1000,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1000,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1000,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1500,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1500,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1500,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1500,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 1500,
+    "eps": 2000,
+    "accepted_frac": 0.708,
+    "late_frac": 0.271,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 2000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 2000,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 2000,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 2000,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 2000,
+    "eps": 2000,
+    "accepted_frac": 0.583,
+    "late_frac": 0.333,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 3000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 3000,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 3000,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 3000,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 3000,
+    "eps": 2000,
+    "accepted_frac": 0.562,
+    "late_frac": 0.417,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 4000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 6,
+    "dt": 4000,
+    "eps": 250,
+    "accepted_frac": 0.75,
+    "late_frac": 0.25,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 4000,
+    "eps": 500,
+    "accepted_frac": 0.75,
+    "late_frac": 0.25,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 4000,
+    "eps": 1000,
+    "accepted_frac": 0.708,
+    "late_frac": 0.292,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 4000,
+    "eps": 2000,
+    "accepted_frac": 0.25,
+    "late_frac": 0.708,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 6000,
+    "eps": 0,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 6000,
+    "eps": 250,
+    "accepted_frac": 0.292,
+    "late_frac": 0.667,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 6000,
+    "eps": 500,
+    "accepted_frac": 0.354,
+    "late_frac": 0.625,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 6000,
+    "eps": 1000,
+    "accepted_frac": 0.292,
+    "late_frac": 0.667,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 6,
+    "dt": 6000,
+    "eps": 2000,
+    "accepted_frac": 0.083,
+    "late_frac": 0.812,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 8,
+    "dt": 0,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 0,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 0,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 0,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 0,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 250,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 250,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 250,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 250,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 250,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 500,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 500,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 500,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 500,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 500,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1000,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1000,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1000,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1000,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1500,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1500,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1500,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1500,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 1500,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 2000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 2000,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 2000,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 2000,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 2000,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 3000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 3000,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 3000,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 3000,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 3000,
+    "eps": 2000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 4000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 4000,
+    "eps": 250,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 4000,
+    "eps": 500,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 4000,
+    "eps": 1000,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 4000,
+    "eps": 2000,
+    "accepted_frac": 0.708,
+    "late_frac": 0.292,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 8,
+    "dt": 6000,
+    "eps": 0,
+    "accepted_frac": 1.0,
+    "late_frac": 0.0,
+    "forged_accepted": 0,
+    "predicted": true,
+    "measured": true
+   },
+   {
+    "d": 8,
+    "dt": 6000,
+    "eps": 250,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 8,
+    "dt": 6000,
+    "eps": 500,
+    "accepted_frac": 0.75,
+    "late_frac": 0.25,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 8,
+    "dt": 6000,
+    "eps": 1000,
+    "accepted_frac": 0.5,
+    "late_frac": 0.5,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   },
+   {
+    "d": 8,
+    "dt": 6000,
+    "eps": 2000,
+    "accepted_frac": 0.271,
+    "late_frac": 0.667,
+    "forged_accepted": 0,
+    "predicted": false,
+    "measured": false
+   }
+  ]
+ },
+ "games": [
+  {
+   "id": "FORGE",
+   "capabilities": "all disclosed keys K_1..K_{c-d}, full transcript, injection, bit-flips of in-flight packet",
+   "winning_condition": "a packet with adversarial payload appears in accepted",
+   "attempts": 463,
+   "successes": 0,
+   "control": {
+    "attempts": 1,
+    "successes": 1,
+    "with": "true undisclosed K_{c+1}"
+   },
+   "mechanism": "MAC keyed by an undisclosed chain key; disclosed keys verified by chain walk; bit-flips fail MAC/key"
+  },
+  {
+   "id": "REPLAY",
+   "capabilities": "record and re-deliver authenticated packets, any time",
+   "winning_condition": "a replayed packet accepted twice",
+   "attempts": 3,
+   "successes": 0,
+   "control": {
+    "attempts": 1,
+    "successes": 1,
+    "with": "receiver state lost (fresh instance) + immediate replay inside safe window"
+   },
+   "mechanism": "late replay -> 'key may already be disclosed'; immediate replay -> post-auth duplicate (2 replay rejections); S4 original rejects both via (index, body) seen-set (['replay', 'replay'])"
+  },
+  {
+   "id": "LATE",
+   "capabilities": "delay a genuine packet until its key is public (sender ahead of receiver by eps)",
+   "winning_condition": "a packet delivered at/after disclosure of its key is accepted",
+   "attempts": 8,
+   "successes": 0,
+   "control": {
+    "attempts": 1,
+    "successes": 1,
+    "with": "safety test disabled"
+   },
+   "mechanism": "RFC 4082 \u00a73.5 safe-packet test with sync = ceil(eps/T); boundary rows: [{\"eps\": 0, \"sync\": 0, \"late_rejected\": [[\"key may already be disclosed\"], [\"key may already be disclosed\"]], \"edge_interval\": 7, \"edge_accepted\": true, \"past_edge_accepted\": false}, {\"eps\": 250, \"sync\": 1, \"late_rejected\": [[\"key may already be disclosed\"], [\"key may already be disclosed\"]], \"edge_interval\": 6, \"edge_accepted\": true, \"past_edge_accepted\": false}, {\"eps\": 500, \"sync\": 1, \"late_rejected\": [[\"key may already be disclosed\"], [\"key may already be disclosed\"]], \"edge_interval\": 6, \"edge_accepted\": true, \"past_edge_accepted\": false}, {\"eps\": 1000, \"sync\": 1, \"late_rejected\": [[\"key may already be disclosed\"], [\"key may already be disclosed\"]], \"edge_interval\": 6, \"edge_accepted\": true, \"past_edge_accepted\": false}]"
+  },
+  {
+   "id": "REORDER",
+   "capabilities": "reorder, swap, drop disclosure packets; substitute disclosed keys",
+   "winning_condition": "a key not chaining to the anchor is recorded as known",
+   "attempts": 4,
+   "successes": 0,
+   "control": {
+    "attempts": 1,
+    "successes": 1,
+    "with": "genuine out-of-order and gapped disclosures (fixed receiver accepts 1-8 and 12)"
+   },
+   "mechanism": "chain walk to the latest known key handles gaps; S4 original accepted [1, 2, 3, 4, 5, 6, 12], stranded [7, 8] (BUG-1); rejections ['bad disclosed key', 'bad disclosed key', 'bad disclosed key', 'bad disclosed key']"
+  },
+  {
+   "id": "KEY",
+   "capabilities": "all disclosed keys; relabel K_j as K_{j'}; MAC with K_j for interval j'",
+   "winning_condition": "a relabelled key is recorded or a packet MACed under K_j is accepted for j' != j",
+   "attempts": 78,
+   "successes": 0,
+   "control": {
+    "attempts": 1,
+    "successes": 1,
+    "with": "K_5 presented as K_5"
+   },
+   "mechanism": "H^(j'-j0)(K_j) equals the known K_{j0} iff j == j'; MAC key is bound to the packet index via the chain position"
+  },
+  {
+   "id": "ANCHOR",
+   "capabilities": "inject anchors: forged, re-signed with own key, key-substituted, rolled back (validly signed), replayed",
+   "winning_condition": "a non-genuine or non-monotonic anchor is installed",
+   "attempts": 5,
+   "successes": 0,
+   "control": {
+    "attempts": 2,
+    "successes": 2,
+    "with": "genuine chain 3 installs; old chain-1 anchor still VERIFIES (signature alone does not stop rollback)"
+   },
+   "mechanism": "MerkleSigner(h=4) signature over chain_id||anchor||L||T||start (52 B) + monotonic (chain_id, start) rule; log=['anchor installed', 'bad anchor signature', 'bad anchor signature', 'bad anchor signature', 'anchor rollback/replay', 'anchor rollback/replay', 'anchor installed']"
+  }
+ ],
+ "bytes": {
+  "packets": {
+   "payload_0": {
+    "packet_bytes": 52,
+    "packet_bytes_first_d_intervals": 20,
+    "payload": 0,
+    "decomposition": {
+     "index": 4,
+     "payload": 0,
+     "mac": 16,
+     "disclosed_key": 32
+    },
+    "authentication_overhead": 52,
+    "links": {
+     "LoRa SF12 EU868": {
+      "frames": 2,
+      "total_bytes_on_link": 78,
+      "framing_bytes": 26
+     },
+     "Iridium SBD": {
+      "frames": 1,
+      "total_bytes_on_link": 82,
+      "framing_bytes": 30
+     }
+    }
+   },
+   "payload_20": {
+    "packet_bytes": 72,
+    "packet_bytes_first_d_intervals": 40,
+    "payload": 20,
+    "decomposition": {
+     "index": 4,
+     "payload": 20,
+     "mac": 16,
+     "disclosed_key": 32
+    },
+    "authentication_overhead": 52,
+    "links": {
+     "LoRa SF12 EU868": {
+      "frames": 2,
+      "total_bytes_on_link": 98,
+      "framing_bytes": 26
+     },
+     "Iridium SBD": {
+      "frames": 1,
+      "total_bytes_on_link": 102,
+      "framing_bytes": 30
+     }
+    }
+   }
+  },
+  "anchor": {
+   "lms_w8_h20_signature_bytes": 1772,
+   "anchor_message_bytes": 52,
+   "anchor_total_bytes": 1824,
+   "executable_signer_bytes_xmss_w16_h20": 2820,
+   "amortised_per_message": {
+    "2^10": 1.7812,
+    "2^12": 0.4453,
+    "2^16": 0.0278
+   }
+  },
+  "not_included": [
+   "link framing (PHY preamble/header/CRC: LoRa 13 B, Iridium SBD ~30 B) and fragmentation into link frames",
+   "the anchor message (52 B) and its hash-based signature (1,772 B LMS w8 h20 claimed; the executable MerkleSigner here is WOTS w16)",
+   "the first d packets of a chain carry NO disclosed key: they are 20 B, not 52 B (measured)",
+   "time-synchronisation traffic (RFC 4082 \u00a73.5 needs a loose sync bound before any packet can be judged safe)",
+   "retransmissions, chain roll-over, per-receiver state (pending buffers, known keys)"
+  ]
+ },
+ "bugs_found": [
+  {
+   "id": "BUG-1",
+   "severity": "liveness",
+   "where": "TeslaReceiver.receive / _authenticate_key",
+   "summary": "Only pending[i-d] of the packet that carried a key is drained; if the packet disclosing K_i is lost or late, packets buffered for interval i are stranded although K_i = H(K_{i+1}) is derivable from the next disclosure.",
+   "reproduction": "s=TeslaSender(b'x',16,1); r=TeslaReceiver(s.anchor,16,1,0); r.receive(s.send(1,b'one'),1); r.receive(s.send(3,b'three'),3)  # packet 2 lost -> r.accepted == [] , r.pending has 1, r.known has 2",
+   "fix": "FixedTeslaReceiver records intermediate chain keys and drains every pending bucket whose key is known"
+  },
+  {
+   "id": "BUG-2",
+   "severity": "denial of service (pre-injection)",
+   "where": "TeslaReceiver.receive seen-set",
+   "summary": "Replay filter keys on the UNAUTHENTICATED (index, body): an adversary who guesses/observes the payload injects a junk-MAC copy first; the genuine packet is then rejected as replay and never authenticated.",
+   "reproduction": "s=TeslaSender(b'x',16,1); r=TeslaReceiver(s.anchor,16,1,0); r.receive((3).to_bytes(4,'big')+b'STATUS'+bytes(48),3); r.receive(s.send(3,b'STATUS'),3); r.receive(s.send(4,b''),4)  # -> (3,'replay') and accepted == []",
+   "fix": "FixedTeslaReceiver suppresses duplicates after MAC verification on (index, payload)"
+  }
+ ],
+ "untestable_assumptions": [
+  "Loose time synchronisation: the receiver holds a TRUE bound eps on |receiver clock - sender clock|; a violated bound is undetectable from inside the protocol and breaks the safe-packet test.",
+  "PRF security of HMAC-SHA3-256 (truncated to 128 bits): forgery probability 2^-128 per online attempt; no offline advantage.",
+  "One-wayness (preimage resistance) of the SHAKE256-256 chain hash: recovering K_{i+1} from K_i costs 2^256 classically / 2^128 Grover queries.",
+  "Second-preimage resistance of the hash inside the WOTS/Merkle anchor signature and correct one-time-key state management at the signer."
+ ],
+ "model_discrepancies": [
+  "\"52 B per message\" holds for intervals i > d only; packets for i <= d carry no disclosed key and are 20 B (measured).",
+  "TeslaReceiver docstring says the receiver clock \"may lead the sender by at most sync\"; the code (and RFC 4082) bound the SENDER leading the receiver: the dangerous direction is receiver lag.",
+  "The S4 receiver is interval-granular: with sync = ceil(eps/T) it needs ceil((dt+eps)/T)+ceil(eps/T) <= d-1, stricter than RFC 4082 continuous ceil((dt+2eps)/T) <= d-1 whenever eps is not a multiple of T (grid points differing counted in report).",
+  "The 1,772 B anchor figure is the LMS w8 size formula (WOTS(256).sig_bytes); the only executable Merkle signer in the repo is WOTS w16 (2,820 B at h=20 incl. randomiser).",
+  "pending buckets are never pruned: any injected index in the safe window allocates receiver memory (DoS surface, not a forgery)."
+ ]
+}

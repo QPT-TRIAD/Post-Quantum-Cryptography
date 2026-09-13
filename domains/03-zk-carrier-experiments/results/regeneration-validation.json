@@ -1,0 +1,111 @@
+{
+  "command_succeeded": true,
+  "public_verification": {
+    "scope": "ACTUAL_CEQS12B_RELATION_PROOFS_EXPERIMENTAL",
+    "binary_sha256": "dfa90585c22c692a66b6bc9ab689ec1c44e68cb7b128e9bd883ce265930975c5",
+    "only_verification_inputs": "authenticated public configuration and complete inline frame bytes",
+    "frames": [
+      {
+        "sha256": "0cce0aebfd57e71cd6689ad221aa4e1e314a274d6a86f333b9041842fcffeeff",
+        "native_verified": true,
+        "frame_bytes": 285136,
+        "complete_QC_accepted": false,
+        "all_proof_bytes_inline": true,
+        "private_input_opened": false,
+        "native_proof_bytes": 335360,
+        "encoded_proof_bytes": 279424
+      },
+      {
+        "sha256": "77a812c417c39606d98ac50d840088e8255586b3b8cae94f19401180bf4d5cec",
+        "native_verified": true,
+        "frame_bytes": 283184,
+        "complete_QC_accepted": false,
+        "all_proof_bytes_inline": true,
+        "private_input_opened": false,
+        "native_proof_bytes": 335360,
+        "encoded_proof_bytes": 277472
+      }
+    ],
+    "recovered_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    ],
+    "qpt_128_qualified": false,
+    "actual_authorization_or_nonframing_proved": false,
+    "complete_32KiB_QCs_accepted": 0
+  },
+  "public_negative_controls": {
+    "checks_passed": 18,
+    "rejected": [
+      "configuration",
+      "domain",
+      "message",
+      "link",
+      "mask",
+      "proof",
+      "suite",
+      "count",
+      "proof_length",
+      "previous_suite_header",
+      "other_message_proof",
+      "truncated",
+      "trailing",
+      "proof_absent",
+      "duplicate_public_handle",
+      "changed_registry_without_rebinding",
+      "domain_rebound_in_frame_and_config",
+      "registry_rebound_in_frame_and_config"
+    ],
+    "scope": "FINITE_NEGATIVE_CONTROLS_NOT_A_SECURITY_THEOREM"
+  },
+  "in_process_deletion_record": {
+    "deleted_before_public_verification": true,
+    "files": [
+      {
+        "path": "fixture/case0/PRIVATE_TRACE_WITNESS.bin",
+        "bytes": 4472
+      },
+      {
+        "path": "fixture/case1/PRIVATE_TRACE_WITNESS.bin",
+        "bytes": 4472
+      }
+    ],
+    "bytes_deleted": 8944,
+    "secure_erasure_claim": false
+  },
+  "post_process_cleanup": {
+    "files_found_and_removed": [
+      {
+        "path": "continuation_v1.27b_regeneration_check/fixture/case0/PRIVATE_TRACE_WITNESS.bin",
+        "bytes": 4472
+      },
+      {
+        "path": "continuation_v1.27b_regeneration_check/fixture/case1/PRIVATE_TRACE_WITNESS.bin",
+        "bytes": 4472
+      }
+    ],
+    "all_private_paths_absent_after_cleanup": true,
+    "note": "The in-process deletion record did not establish lasting removal: a later workspace audit found these files present. A separate cleanup removed them. Their reappearance is unexplained. The helper now checks absence immediately after removal and at completion."
+  },
+  "retained_as_focused_primary_pair": false
+}

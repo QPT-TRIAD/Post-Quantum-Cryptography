@@ -1,0 +1,102 @@
+# Verification — domain 08 (hidden signers)
+
+Every command below was re-run on 2026-09-13 against the **repository copies** in `src/` and
+`history/`, and compared with the result recorded when each file was written (those records live in
+the programme's build logs and are not shipped with this repository). Where a recorded value did not
+recur, both values are kept below and the reason is given. Raw outputs are in `results/`
+(see `results/README.md` for the normalisation applied to the one sanitizer file).
+
+**Environment.** The programme's pinned verification environment: the activation script puts CPython
+3.12.3, numpy 2.4.6 (optional for these files) and the programme's pinned tool builds on the path.
+Python rows use `python3` from that environment. Compiler rows use the **system compiler**
+`gcc (Ubuntu 14.2.0-4ubuntu2~24.04.1) 14.2.0` with `-O3 -march=native -fopenmp -Wall`; the
+sanitizer rows add `-g -fsanitize=address,undefined -fno-omit-frame-pointer` and were run with
+`ASAN_OPTIONS=detect_leaks=0|1` and `UBSAN_OPTIONS=print_stacktrace=1`. `clang` 18.1.8 is present but
+its compiler runtime is **not installed** (`libclang_rt.asan_static-x86_64.a` absent), so no
+clang sanitizer binary can be built here. Host: Ubuntu 24.04.4, x86_64, kernel 7.0.0-31, 12 threads.
+
+`$D` abbreviates this domain directory. Commands were run from the directory holding the file they
+execute, so that relative paths resolve as the file's own documentation describes.
+
+**How "reproduced" was decided.** A run whose output is a JSON object was not eyeballed: the observed
+JSON and the JSON recorded in the programme's build logs were parsed and compared field by field, and
+the row says what the comparison found — for the report-producing rows the two are equal key for key,
+and for the run-producing rows they are equal in every field except the `seconds` block, which is
+host load. A run whose output is a test transcript was compared on its test count and its OK/FAILED
+verdict. Where a recorded value did not recur, the row is `reproduced-with-difference` and both
+values are given.
+
+| item | command | environment | expected (recorded) | observed | verdict | notes |
+|---|---|---|---|---|---|---|
+| Mode A self-test | `python3 src/hidden_signer_mode_a.py --self-test` | pinned env | `Ran 8 tests`, `OK` | `Ran 8 tests in 3.876s`, `OK`, exit 0 | reproduced | recorded run 2.001 s; the spread is host load — the 8 tests and their names are identical. Raw output `results/mode-a-self-test.txt` |
+| Mode A sizing report | `python3 src/hidden_signer_mode_a.py --report` | pinned env | the §3 table: FAEST-256s/f and FAEST-EM-256s/f reproduced to the byte, the six settings and their bold "fits" marks | **the parsed JSON is equal to the recorded JSON key for key** — same `frame` block, same `faest_v2_reproduction_bytes` (20,696 / 26,548 / 17,984 / 23,476), same six settings (16,0,0), (24,16,16), (32,16,16), (32,32,16), (40,32,16), (44,32,24) and their per-primitive certificate sizes | reproduced | this report has no timing block, so equality is total, not "except for the times". Raw output `results/mode-a-report.json` |
+| Mode B v1.46 self-test | `python3 history/hidden-signer-mode-b-v1.46.py --self-test` | pinned env | `Ran 12 tests`, `OK`, recorded 5.340 s | `Ran 12 tests in 8.046s`, `OK`, exit 0 | reproduced | the v1.46 document's Evidence line says "11 tests" while its own §5 text and this run give 12; the run is authoritative and the document's count is stale (reported to the build) |
+| Mode B v1.46 full-size demo | `python3 history/hidden-signer-mode-b-v1.46.py --demo-256` | pinned env | 64 registry keys, two 1,584-byte frames, all 1,849 candidate openings searched, exactly the 22 common seats, every blame re-verified. **Two records differ in timing**: the v1.46 document claims 22.6 s for the registry and 72.5 s for extraction, while the recorded audit run gives 13.8 s and 53.4 s (wall 72.1 s) for the same work | 64 keys, two 1,584-byte frames, **22 seats**, `all_blames_verified: true`, `proof_slot_bytes: 31184`; **identical to the recorded JSON in every field except `seconds`**; registry 30.3 s, extraction 153.2 s | reproduced-with-difference | the key count, frame size, candidate count, 22 seats and blame verification are identical to both records; only the timings differ. The document's pair and the recorded pair differ from each other by 1.4×, and both are below this host's — this is host load, and it is why no timing here is presented as a measurement of the scheme. Raw output `results/mode-b-v1.46-demo-256.txt` |
+| v1.50 self-test | `python3 history/hidden-signer-mode-b-v1.50.py --self-test` | pinned env | `Ran 5 tests`, `OK`, recorded 6.606 s | `Ran 5 tests in 9.338s`, `OK`, exit 0 | reproduced | raw output `results/mode-b-v1.50-self-test.txt` |
+| v1.51 self-test | `python3 src/hidden_signer_mode_b.py --self-test` | pinned env | `Ran 7 tests`, `OK`, recorded 6.509 s, exit 0 | `Ran 7 tests in 13.427s`, `OK`, exit 0 | reproduced | 5 v1.50 tests + the 2 F5 regressions. Raw output `results/mode-b-v1.51-self-test.txt` |
+| module loads by name from any directory | `python3 $D/src/hidden_signer_mode_b.py --self-test` from an unrelated working directory, and `importlib` load by module name | pinned env | the module must resolve its base module through its own path, so that the name other domains import keeps working after the rename | loads and passes `Ran 7 tests … OK`; loaded by name `hidden_signer_mode_b`, exporting `N_SEATS`, `QUORUM`, `MIN_OVERLAP`, `encode`, `extract`, `check_relation`, `verify_blame` | reproduced | this is the check of the import rewrite registered in `README.md` §6; the same repair is applied to `src/mode_b_voleith_toy.py` and `history/hidden-signer-mode-b-v1.50.py` |
+| ledger self-test | `python3 src/mode_b_rigorous_ledger.py --self-test` | pinned env | `Ran 7 tests`, `OK`, recorded 0.002 s | `Ran 7 tests in 0.004s`, `OK`, exit 0 | reproduced | includes the R5 handle-coincidence row. Raw output `results/ledger-self-test.txt` |
+| ledger report | `python3 src/mode_b_rigorous_ledger.py --report` | pinned env | every row and sweep of the v1.49 §7 table | **the parsed JSON is equal to the recorded JSON key for key**: R1 −145.0, R2 −209.0, R4 −159.415…, R5 −181.181…; totals and D2 margins per setting; expansion sweep {300: +3.0, 400: −97.0, 430: −127.0, 512: −209.0, 600: −297.0}; domains sweep {1: −155.0, 1024: −145.0, 65,536: −139.0, 1,048,576: −135.0}; FAEST-9.39 R3 variants with the (20, 16, 11) total −137.669 / margin 7.669 | reproduced | raw output `results/ledger-report.json`. The default R3 row is DFMS-modelled and **omits the multi-round loss**; only the FAEST-9.39 variant carries it |
+| toy self-test | `python3 src/mode_b_voleith_toy.py --self-test` | pinned env | `Ran 7 tests`, `OK`, 58.665 s | `Ran 7 tests in 101.046s` and `in 133.436s` on two runs, `OK`, exit 0 | reproduced-with-difference | 7/7 both times; the time is host load. Raw output `results/toy-self-test.txt` |
+| toy measured size | `python3 src/mode_b_voleith_toy.py --run` | pinned env | measured proof **6,696 B** vs formula-256-bit-node **6,924 B** and λ-bit-node 5,260 B; both frames verified; 22 seats | **identical to the recorded JSON in every field except `seconds`**: 6,696 B vs 6,924 B / 5,260 B, `frame_bytes: 6990`, `verified: [true,true]`, `all_blames_verified: true`, 22 seats, and the same five-line byte breakdown (3,780 + 540 + 16 + 24 + 32 + 2,304) | reproduced | raw output `results/toy-run.json`. Toy-width only — not a production result. The recorded `prove_one` was 16.3 s against 52.8 s here |
+| C provers build ×3 | `gcc -O3 -march=native -fopenmp -Wall -o <bin> <file>.c` | gcc 14.2.0 | exit 0, **0 warnings**, on all three | exit 0, 0 warnings, all three | reproduced | compiler banner and flags recorded in `results/prover-v1.51-build.txt` |
+| C provers `--vectors` ×3 | `<bin> --vectors` | gcc 14.2.0 | SHAKE256("abc"), the GF(2^256) product, `x_times_x255_low64`, `root7_ok = 1`, `inv_ok = 1` | identical JSON on all three | reproduced | raw outputs `results/prover-v1.*-vectors.json` |
+| C reduced smoke run ×3 | `<bin> --run --b 12 --tau 20 --wg 8 --rho 1024` | gcc 14.2.0, 12 threads | proof 47,524 B, frame 49,108 B, `verified: [true,true]`, tampering rejected, 22 seats, `fits_32768: false`; recorded walls 11.9 / 7.4 / 6.4 s | **identical to the recorded JSON in every field except `seconds`**, on all three: proof 47,524 B, frame 49,108 B, `fits_32768: false`, `verified: [true,true]`, `tampered_rejected: true`, `extracted_count: 22`, `tau_b_plus_wg: 248`, `degree: 6`; 6.8–11.9 s | reproduced | this setting does **not** fit 32 KiB (the proof alone is 47,524 B); it is a fast smoke setting, not a size claim. Raw outputs `results/prover-v1.*-run.json` |
+| C sanitizer build + reduced run | `gcc -O3 -march=native -fopenmp -g -fsanitize=address,undefined -fno-omit-frame-pointer -o <bin> src/mode_b_prover.c`, then `ASAN_OPTIONS=detect_leaks=1 <bin> --run --b 12 --tau 20 --wg 8 --rho 1024` | gcc 14.2.0 + libasan/liblsan | recorded **clang** baseline for the same source at the same setting: `33,656,168 byte(s) leaked in 9 allocation(s)`, no frame inside `verify()` | `AddressSanitizer: 33,732,200 byte(s) leaked in 9 allocation(s)`; **no frame inside `verify()`**; no out-of-bounds/use-after-free report; no UBSan runtime diagnostic | reproduced-with-difference | **different compiler**: the record was built with the audit stack's clang-based sanitizer toolchain, which cannot be built here (compiler runtime absent). Same leak count and same absence of a `verify()` frame, i.e. the F1 fix is visible; the byte total differs because allocation sizes do. Raw output `results/prover-v1.51-asan-lsan-reduced.txt`; the functional JSON of the same sanitizer build is `results/prover-v1.51-asan-run.json` |
+| **C production-parameter run (v1.51) — the 30,684-byte certificate** | `gcc -O3 -march=native -fopenmp -Wall -o modeB_prover src/mode_b_prover.c`, then `./modeB_prover --run --b 20 --tau 11 --wg 16 --rho 4096` | gcc 14.2.0, 12 threads, 236.84 s wall | `docs/mode-b-security.md` §8's table: proof **29,100 B**, frame **30,684 B**, `fits_32768: true`, `verified: [true, true]`, tampering rejected, 22 seats | proof **29,100 B**, frame **30,684 B**, `fits_32768: true`, `verified: [true,true]`, `tampered_rejected: true`, `extracted_count: 22` (seats 0–21), `tau_b_plus_wg: 236`, `ell_hat: 15,296`, `degree: 6`; prove 59.08 s, verify 45.31 s, extract 1.85 s | reproduced | raw output `results/prover-v1.51-production-run.json`, which is where this number now lives. **Provenance, stated exactly:** the figure stood in the v1.49 document as a **size-formula entry**, not as a measured run — the production-parameter run had not been performed in the rounds that produced these sources, and the work package says so. This build performed it once, and it agrees with the table to the byte |
+| recorded clang sanitizer runs (production ASan+UBSan on v1.50; reduced LSan on v1.51) | — | — | production: `33,714,488 byte(s) leaked in 11 allocation(s)`, two of them (19,136 B) inside `verify()`, exit 1, wall 2,194 s | not run | not-run | clang's sanitizer runtime is not installed in this environment, and production parameters were not re-run under a sanitizer here. The runs are recorded in the verification environment's audit stack; this domain reports them and archives their shape in the row above |
+| property layer — Mode B (`test_props_modeB_fixed.py`) | `python3 -m pytest -q test_props_modeB_fixed.py` | pinned env, audit-stack module | **16 passed**, 90.82 s | **16 passed**, 268.22 s | reproduced | the module is the programme's audit-stack property suite, not a file of this domain; it is re-run here because `docs/validation-status.md` §4 reports its count. Raw output `results/property-layer-modeb.txt` |
+| property layer — hash signature (`test_props_hashsig_fixed.py`) | `python3 -m pytest -q test_props_hashsig_fixed.py` | pinned env, audit-stack module | **collection error, 0 tests executed**: the module builds an `LmsPrivate` with a mixed m ≠ n typecode pair at import, which the F3 fix refuses | the same collection error: `ValueError: F3: LMS m and LM-OTS n must match …`, `1 error in 1.91s` | reproduced | this is the documented behaviour of the F3 fix, recorded as entry **A28**. The fix-stage record's "16/16" reading is **withdrawn** and is not restated anywhere in this domain. Raw output `results/property-layer-hashsig.txt` |
+| reviewer selector-parity probe | — | — | dossier probe: corrupt keys `Y[k] = F(x*) ⊕ Y[a₁] ⊕ Y[a₂]` with a weight-3 selector are accepted by the toy prover, and the pair search then names only the two honest anchors | not run | not-run | the probe script was not shipped with these sources — it was written in the working context of the reading pass, and no copy of it exists in the source tree or here. Its result is carried as an open item (`docs/validation-status.md` §5 item 6) and is **not** re-asserted as a fresh observation. Re-implementing it would be a new experiment, not a reproduction |
+| production-parameter run **in the rounds that produced these sources** | — | — | no such run is recorded for those rounds | not run | not-run | this is the row the work package means by "the production-parameter run was not performed", and it stays `not-run`. In those rounds the 30,684-byte figure was a size-formula table entry in `docs/mode-b-security.md` §8. The single run this build performed, and the file it is archived in, are the row above; nothing in `docs/` claims a run that did not happen |
+| **Mode B claim — non-frameability and safety (Theorems 1 and 2)** | — | — | **theorem with proof**, written out in `docs/construction.md` §4 and `docs/mode-b-security.md` §4–5 | not run | not-run | *label:* **theorem with proof.** No command reproduces a proof; what was checked is that the statement as used here matches the statement in the source document, and that its hypotheses (A-F1, A-F2, A-P, A-Reg) are the ones the ledger actually uses. Theorem 2 is conditional on Theorem 3 |
+| **Mode B claim — proof soundness (Theorem 3)** | — | — | a **transplant**, not a re-derivation | not run | not-run | *label:* **reduction sketch / transplant.** FAEST v2 Lemma 9.39, carried over with the sources' own words "not re-derived line by line"; only its numerical consequence (τ·b + w_g ≥ 230) is used. There is no proof of it in this domain |
+| **Mode B claim — privacy (Theorem 4)** | — | — | a **transplant with a named simulation error** | not run | not-run | *label:* **reduction sketch.** GHHM21 Theorem 3, cited with its simulation-error term; not re-proved here |
+| **Mode B claim — the 30,810 B / 32 KiB size and the 7.7-bit margin** | `python3 src/mode_b_rigorous_ledger.py --report` | pinned env | the ledger's settings table | reproduced (see the ledger report row above) | reproduced | *label:* **ledger estimate — a model, not a theorem.** The default proof-soundness row is DFMS22-modelled and **omits the multi-round loss**; the 30,810 B figure belongs to the DFMS-modelled form. The production setting's 7.7-bit margin is the *other* form of R3. Neither is a proven bound |
+
+## Digests
+
+Twelve files were mapped into this domain. **Six were placed byte-identical to their source** — the
+`cmp` comparison and the two sha256 columns agree below — and **six carry the rewrites registered in
+`README.md` §6**, so their repository digest differs from the source digest by design; the difference
+is the rewrite, not drift. Every digest in this table was computed on the file as it stands, in both
+trees, at the time of writing; the full manifest for this domain is `SHA256SUMS.txt`.
+
+| repository file | repository sha256 | source file (read-only tree) | source sha256 | placed |
+|---|---|---|---|---|
+| `src/hidden_signer_mode_a.py` | `1aef787f4096c8647cf3af0a19e723e6dabcc4bef675739c059f51022f54ac94` | `hidden_signer_modeA_v1.45.py` | `1aef787f4096c8647cf3af0a19e723e6dabcc4bef675739c059f51022f54ac94` | byte-identical |
+| `src/mode_b_rigorous_ledger.py` | `074f06454a4aaf11d4a801683194485211cc0bc4c31bf2433195ab3de96541ac` | `modeB_rigorous_ledger_v1.47.py` | `074f06454a4aaf11d4a801683194485211cc0bc4c31bf2433195ab3de96541ac` | byte-identical |
+| `src/mode_b_prover.c` | `c1fe7a2f763561afaa7a313b356b35530a63f9a7e917ae2578a8c5e0e8cd1a8a` | `modeB_prover_v1.51.c` | `c1fe7a2f763561afaa7a313b356b35530a63f9a7e917ae2578a8c5e0e8cd1a8a` | byte-identical |
+| `history/hidden-signer-mode-b-v1.46.py` | `04df0b357f4671ab7d168e5c6daedf647f0f88bfc77f1ecb853491e8d96bd633` | `hidden_signer_modeB_v1.46.py` | `04df0b357f4671ab7d168e5c6daedf647f0f88bfc77f1ecb853491e8d96bd633` | byte-identical |
+| `history/mode-b-prover-v1.49.c` | `8e7c0befe009774a994a238afb843f64a8879cc0409cef133f8ed05675b72baf` | `modeB_prover_v1.49.c` | `8e7c0befe009774a994a238afb843f64a8879cc0409cef133f8ed05675b72baf` | byte-identical |
+| `history/mode-b-prover-v1.50.c` | `ff8e5cd9f5c84cde3d0ac6e654b7bfc5a26e21b7331b8098649b36f0fe6adb92` | `modeB_prover_v1.50.c` | `ff8e5cd9f5c84cde3d0ac6e654b7bfc5a26e21b7331b8098649b36f0fe6adb92` | byte-identical |
+| `src/hidden_signer_mode_b.py` | `f0803a89bb3c6a7cb6c37e5c95d5b4f0655d957067fd22315d7c580f4062654a` | `hidden_signer_modeB_v1.51.py` | `9e5ba5b2f14826906fea455a119dea4f3590f104f802e26f2bef92e506f94987` | rewritten (import + docstring, README §6) |
+| `src/mode_b_voleith_toy.py` | `df340eef52b8bc87b702110768ba544f63e1f0bc3797892d51daddf2ac4301d2` | `modeB_voleith_toy_v1.48.py` | `9fef036b837ab41fc9b110c08b51ffed9d5474287a63d555386f8d3f54b19e20` | rewritten (import + docstring) |
+| `history/hidden-signer-mode-b-v1.50.py` | `97a3821a4235bd2a8db1c4ce6717edf9b5541d1f6758b1995c8670745888f75d` | `hidden_signer_modeB_v1.50.py` | `e094a605f4e5ffa8b70f71f178c415ad64b23b315c0a44c26f477ec1dcc82bf1` | rewritten (import + docstring) |
+| `docs/hidden-signer-32kib.md` | `e8a07b66f5ffb8d01b19e9cd959124b0fbcb327ef29caaa11ec7f7c19e9ad4fd` | `hidden_signer_32KiB_v1.46.md` | `87c9fc0535e430472f7d945f18e6a743d9be8c04005d12b102852c9ce0cfb2ee` | rewritten (lines 13, 85, 189) |
+| `history/hidden-signer-32kib-v1.45.md` | `fb9965d88116f67e3c303d5e2116fbf73b6cd0f3c67ac6c6619098741136e290` | `hidden_signer_32KiB_v1.45.md` | `6f5d64a7593b7172d644db14acf14dcd9efc9af9b5d1fa0b8b94bcabcbef361a` | rewritten (line 39) |
+| `docs/mode-b-security.md` | `af7a171a595c68a8c2bc122abe186af0d32e2cd9775df29a1db9f5aa277ccf78` | `modeB_security_v1.49.md` | `32620529be4c1a1fe56c69553e4e510bef191e28443a3d5ccfd4823748252006` | rewritten (lines 21, 167, 182) |
+
+`README.md`, `VERIFICATION.md`, the six documents this build wrote under `docs/`, and the contents of
+`results/` are not copies of anything and are listed only in `SHA256SUMS.txt`.
+
+**Repository-check result for these six rows — superseded, kept as observed.** *As observed at 19:06
+on 2026-09-13, and true when written:* `python3 tooling/checks/verify-repository.py` printed the six
+rewritten rows above among its `HASH` lines, because the table it read (`records/rewrites.tsv`) keyed
+its entries by the *source* file name while the check looks the destination path up. The check's own
+comment states the intended convention — "rewrites.tsv names the destination path, which is what the
+repository holds" — and a destination-keyed intermediate of the build (`rewrites.bydest.tsv`, a
+build-side file, not the table the gate reads) listed all six paths, so the rows were registered and
+the difference was in which table the check read, not in the files. The same cause produced the other
+`HASH` lines across domains 03, 06, 07 and 11 in that run (132 rows in total, 0 explained by
+`records/rewrites.tsv` at the time).
+
+*Re-run at 19:23 on 2026-09-13, after `records/rewrites.tsv` was regenerated destination-keyed at
+19:20:38:* the gate now reports `sha256 differences: 0 (explained by rewrites: 132)`,
+`UNEXPLAINED files: 0`, `malformed map rows: 0`, `empty files: 0`, `RESULT: PASS`, and **no row of
+this domain appears as a `HASH` line**. The six rows are therefore accounted for by the gate as
+rewrites, not as differences, and the cause named in the paragraph above no longer exists. That
+paragraph is superseded; it is kept rather than deleted, because the observation and its cause are
+part of the record. **The digests in the table above and in `SHA256SUMS.txt` are unaffected** — those
+files were rewritten either way, and only the gate's accounting changed. Nothing in this domain was
+ever affected beyond the six rows.

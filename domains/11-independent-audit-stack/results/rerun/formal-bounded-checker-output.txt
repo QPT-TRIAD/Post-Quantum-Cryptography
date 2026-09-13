@@ -1,0 +1,50 @@
+QPT-128 / CE-QS profile B0 -- bounded exhaustive checker
+q = floor(2N/3)+1 ; threshold 2q-N ; two candidates per K
+
+  N   q  2q-N   C | conflicting_pair_exists extraction_nonempty honest_named |     certs     pairs    A    C |    csets   E_ok
+------------------------------------------------------------------------------------------------------------------------------
+  4   3     2   0 |                  False                 n/a        False |        26         0   ok   ok |        1     ok
+  4   3     2   1 |                  False                 n/a        False |        88         0   ok   ok |        4     ok
+  4   3     2   2 |                   True       yes(min|I|=2)        False |       108        12   ok   ok |        6     ok
+  4   3     2   3 |                   True       yes(min|I|=2)        False |        56        44   ok   ok |        4     ok
+  4   3     2   4 |                   True       yes(min|I|=2)        False |        10        25   ok   ok |        1     ok
+   boundary N=4 q=3 2q-N=2: C=1 -> no conflicting pair; C=2 -> pair exists, witness cert(v0)=[0, 1, 2] cert(v1)=[0, 1, 3] intersection=[0, 1] (all corrupt: True)
+
+  5   4     3   0 |                  False                 n/a        False |        32         0   ok   ok |        1     ok
+  5   4     3   1 |                  False                 n/a        False |       140         0   ok   ok |        5     ok
+  5   4     3   2 |                  False                 n/a        False |       240         0   ok   ok |       10     ok
+  5   4     3   3 |                   True       yes(min|I|=3)        False |       200        20   ok   ok |       10     ok
+  5   4     3   4 |                   True       yes(min|I|=3)        False |        80        65   ok   ok |        5     ok
+  5   4     3   5 |                   True       yes(min|I|=3)        False |        12        36   ok   ok |        1     ok
+   boundary N=5 q=4 2q-N=3: C=2 -> no conflicting pair; C=3 -> pair exists, witness cert(v0)=[0, 1, 2, 3] cert(v1)=[0, 1, 2, 4] intersection=[0, 1, 2] (all corrupt: True)
+
+  7   5     3   0 |                  False                 n/a        False |       422         0   ok   ok |        1     ok
+  7   5     3   1 |                  False                 n/a        False |      2422         0   ok   ok |        7     ok
+  7   5     3   2 |                  False                 n/a        False |      5838         0   ok   ok |       21     ok
+  7   5     3   3 |                   True       yes(min|I|=3)        False |      7630       210   ok   ok |       35     ok
+  7   5     3   4 |                   True       yes(min|I|=3)        False |      5810      1680   ok   ok |       35     ok
+  7   5     3   5 |                   True       yes(min|I|=3)        False |      2562      3885   ok   ok |       21     ok
+  7   5     3   6 |                   True       yes(min|I|=3)        False |       602      3185   ok   ok |        7     ok
+  7   5     3   7 |                   True       yes(min|I|=3)        False |        58       841   ok   ok |        1     ok
+   boundary N=7 q=5 2q-N=3: C=2 -> no conflicting pair; C=3 -> pair exists, witness cert(v0)=[0, 1, 2, 3, 4] cert(v1)=[0, 1, 2, 5, 6] intersection=[0, 1, 2] (all corrupt: True)
+
+ 10   7     4   0 |                  False                 n/a        False |      7352         0   ok   ok |        1     ok
+ 10   7     4   1 |                  False                 n/a        False |      5944         0   ok   ok |        1     ok
+ 10   7     4   2 |                  False                 n/a        False |      4736         0   ok   ok |        1     ok
+ 10   7     4   3 |                  False                 n/a        False |      3712         0   ok   ok |        1     ok
+ 10   7     4   4 |                   True       yes(min|I|=4)        False |      2856        20   ok   ok |        1     ok
+ 10   7     4   5 |                   True       yes(min|I|=4)        False |      2152       210   ok   ok |        1     ok
+ 10   7     4   6 |                   True       yes(min|I|=4)        False |      1584      1082   ok   ok |        1     ok
+ 10   7     4   7 |                   True       yes(min|I|=4)        False |      1136      3653   ok   ok |        1     ok
+ 10   7     4   8 |                   True       yes(min|I|=4)        False |       792      9137   ok   ok |        1     ok
+ 10   7     4   9 |                   True       yes(min|I|=4)        False |       536     18308   ok   ok |        1     ok
+ 10   7     4  10 |                   True       yes(min|I|=4)        False |       352     30976   ok   ok |        1     ok
+   boundary N=10 q=7 2q-N=4: C=3 -> no conflicting pair; C=4 -> pair exists, witness cert(v0)=[0, 1, 2, 3, 4, 5, 6] cert(v1)=[0, 1, 2, 3, 7, 8, 9] intersection=[0, 1, 2, 3] (all corrupt: True)
+
+three-candidate sanity (N<=5, every corrupt subset): boundary and D re-checked
+   N=4 q=3 2q-N=2: ok for all C in 0..4 and all corrupt subsets
+   N=5 q=4 2q-N=3: ok for all C in 0..5 and all corrupt subsets
+
+ratified parameters: N=64 q=43 2q-N=22 (any two q-subsets of an N-set share >= 22 seats; with C < 22 corrupt no two conflicting certificates can exist)
+
+RESULT: all rows ok; boundary C = 2q-N confirmed for N in [4, 5, 7, 10]

@@ -1,0 +1,12 @@
+fuzz_verify: params b=6 tau=4 wg=8 rho=64 seed=49; cert = m(64)||handles(1376)||proof(8996) = 10436 bytes; init 36.8s (prove 24.17s, verify 9.70s, genuine ok=1 'ok')
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1957337711
+INFO: Loaded 1 modules   (2052 inline 8-bit counters): 2052 [0x5c66bea328a8, 0x5c66bea330ac), 
+INFO: Loaded 1 PC tables (2052 PCs): 2052 [0x5c66bea330b0,0x5c66bea3b0f0), 
+INFO:       42 files found in corpus/
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 20872 bytes
+INFO: seed corpus: files: 42 min: 1b max: 20872b total: 424907b rss: 71Mb
+#32	pulse  cov: 314 ft: 430 corp: 9/67Kb exec/s: 16 rss: 76Mb
+#43	INITED cov: 455 ft: 586 corp: 13/108Kb exec/s: 3 rss: 79Mb
+#43	DONE   cov: 455 ft: 586 corp: 13/108Kb lim: 10436 exec/s: 3 rss: 79Mb
+Done 43 runs in 12 second(s)

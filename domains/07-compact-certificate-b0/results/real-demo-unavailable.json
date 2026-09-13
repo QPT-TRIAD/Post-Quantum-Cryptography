@@ -1,0 +1,4 @@
+{
+  "real_demo": "unavailable",
+  "reason": "neither pqcrypto nor an installed liboqs-python imports"
+}

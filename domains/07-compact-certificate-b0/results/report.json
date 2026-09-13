@@ -1,0 +1,207 @@
+{
+  "module": "sidecar_free_certificate",
+  "constants": {
+    "N": 64,
+    "QUORUM": 43,
+    "FAULT_BOUND": 21,
+    "MIN_OVERLAP": 22,
+    "MAX_FRAME_BYTES": 32768,
+    "HEADER_BYTES": 208,
+    "B0_MAX_SIGNATURE_BYTES": 757,
+    "HANDLE_BYTES": 128,
+    "registry_key_bytes": 128,
+    "B1_PREFIX_BYTES": 5712,
+    "B1_PROOF_MAX": 27056,
+    "SUITE_B0": "0x44b0",
+    "SUITE_B1": "0x44b1",
+    "field_poly_hex": "0x100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000125"
+  },
+  "b0_size_table": [
+    {
+      "name": "ML-DSA-87",
+      "nist_category": 5,
+      "signature_bytes": 4627,
+      "source": "FIPS 204, Table 2; measured liboqs 0.16.0",
+      "b0_frame_bytes": 199177,
+      "b0_fits": false
+    },
+    {
+      "name": "SLH-DSA-SHAKE-256s",
+      "nist_category": 5,
+      "signature_bytes": 29792,
+      "source": "FIPS 205, Table 2; measured liboqs 0.16.0",
+      "b0_frame_bytes": 1281272,
+      "b0_fits": false
+    },
+    {
+      "name": "Falcon-padded-1024",
+      "nist_category": 5,
+      "signature_bytes": 1280,
+      "source": "Falcon round-3 padded signature size; measured liboqs 0.16.0",
+      "b0_frame_bytes": 55256,
+      "b0_fits": false
+    },
+    {
+      "name": "Falcon-padded-512",
+      "nist_category": 1,
+      "signature_bytes": 666,
+      "source": "Falcon round-3 padded signature size",
+      "b0_frame_bytes": 28854,
+      "b0_fits": true
+    },
+    {
+      "name": "OV-V",
+      "nist_category": 5,
+      "signature_bytes": 260,
+      "public_key_bytes": 2869440,
+      "public_key_bytes_pkc": 446992,
+      "source": "UOV, NIST additional signatures; measured liboqs 0.16.0",
+      "b0_frame_bytes": 11396,
+      "b0_fits": true
+    },
+    {
+      "name": "SNOVA_29_6_5",
+      "nist_category": 5,
+      "signature_bytes": 454,
+      "public_key_bytes": 2716,
+      "source": "SNOVA, NIST additional signatures; measured liboqs 0.16.0",
+      "b0_frame_bytes": 19738,
+      "b0_fits": true
+    },
+    {
+      "name": "SNOVA_60_10_4",
+      "nist_category": 5,
+      "signature_bytes": 576,
+      "public_key_bytes": 8016,
+      "source": "SNOVA, NIST additional signatures; measured liboqs 0.16.0",
+      "b0_frame_bytes": 24984,
+      "b0_fits": true
+    },
+    {
+      "name": "OV-V||SNOVA_29_6_5",
+      "nist_category": 5,
+      "signature_bytes": 714,
+      "source": "AND-hybrid of the two measured entries above",
+      "b0_frame_bytes": 30918,
+      "b0_fits": true
+    },
+    {
+      "name": "MAYO-5",
+      "nist_category": 5,
+      "signature_bytes": 964,
+      "public_key_bytes": 5554,
+      "source": "MAYO, NIST additional signatures; measured liboqs 0.16.0",
+      "b0_frame_bytes": 41668,
+      "b0_fits": false
+    },
+    {
+      "name": "SQIsign-V",
+      "nist_category": 5,
+      "signature_bytes": 292,
+      "source": "SQIsign round-2 specification; not executed here",
+      "b0_frame_bytes": 12772,
+      "b0_fits": true
+    },
+    {
+      "name": "HAWK-1024",
+      "nist_category": 5,
+      "signature_bytes": 1221,
+      "source": "HAWK round-2 specification; not executed here",
+      "b0_frame_bytes": 52719,
+      "b0_fits": false
+    }
+  ],
+  "b0_size_gate": {
+    "sig_bytes_757_fits": true,
+    "sig_bytes_758_fits": false,
+    "frame_bytes_at_757": 32767
+  },
+  "b1_budgets": {
+    "proof_max_bytes": 27056,
+    "per_seat_witness_bit_budget_fixed_0": 5033,
+    "body_bytes_header_plus_handles": 5712
+  },
+  "lower_bounds": {
+    "keccak_f1600_and_gates": 38400,
+    "binius64_and_per_keccak_permutation": 600,
+    "mode_s_keccak_permutations": 86,
+    "mode_s_linear_lower_bound_bytes": 412800,
+    "mode_s_committed_words_min": 51600,
+    "mode_s_committed_log2_ceiling": 16,
+    "binius64_pcs_floor_bytes": 109856,
+    "proof_budget_bytes": 27056,
+    "linear_floor_exceeds_budget": true,
+    "binius64_floor_exceeds_budget": true
+  },
+  "theorem_c_witness_committing": {
+    "attack_gates_per_hash_log2_upper_bound": 24,
+    "grover_iterations_log2": 104,
+    "challenge_bits_required": 212,
+    "credential_bits_required_64_targets": 218,
+    "tau": {
+      "8": 27,
+      "12": 18,
+      "16": 14,
+      "20": 11,
+      "24": 9,
+      "32": 7,
+      "40": 6,
+      "48": 5
+    },
+    "per_seat_budget_bits": {
+      "8": 186,
+      "12": 279,
+      "16": 359,
+      "20": 457,
+      "24": 559,
+      "32": 719,
+      "40": 838,
+      "48": 1006
+    },
+    "per_seat_budget_bits_32_grinding": {
+      "8": 218,
+      "12": 335,
+      "16": 419,
+      "20": 559,
+      "24": 629,
+      "32": 838,
+      "40": 1006,
+      "48": 1258
+    },
+    "per_seat_budget_bits_2^16_hash_chain_and_32_grinding": {
+      "8": 264,
+      "12": 387,
+      "16": 503,
+      "20": 629,
+      "24": 719,
+      "32": 1006,
+      "40": 1258,
+      "48": 1258
+    },
+    "per_seat_budget_bits_with_ggm_seed_term": {
+      "8": 146,
+      "12": 220,
+      "16": 280,
+      "20": 359,
+      "24": 440,
+      "32": 561,
+      "40": 641,
+      "48": 770
+    },
+    "per_seat_budget_bits_if_2^18_gates_per_hash": {
+      "8": 179,
+      "12": 264,
+      "16": 359,
+      "20": 419,
+      "24": 503,
+      "32": 719,
+      "40": 838,
+      "48": 1006
+    }
+  },
+  "flags": {
+    "hidden_signer_compact_qc_produced": false,
+    "qualified_zero_knowledge_backend_available": false,
+    "b0_public_signer_profile": "executable reference; security requires a category-5 signature of at most 757 bytes; OV-V (260), SNOVA_29_6_5 (454) and SNOVA_60_10_4 (576) are measured via liboqs 0.16.0; the signer bitmap is public"
+  }
+}

@@ -1,0 +1,19 @@
+=== [ref_gcc_O3] gcc -O3 -march=native -fopenmp -o bin/ref_gcc_O3 src/modeB_prover_v1.50.c
+    OK  (exit 0)
+=== [asan_ubsan] clang -resource-dir=<workdir>/qpt_audit_stack/implementation/rt/18 -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -march=native -fopenmp -o bin/asan_ubsan src/modeB_prover_v1.50.c
+    OK  (exit 0)
+=== [ubsan_strict] clang -resource-dir=<workdir>/qpt_audit_stack/implementation/rt/18 -O1 -g -fsanitize=undefined,integer,implicit-conversion -fno-sanitize-recover=all -fno-omit-frame-pointer -march=native -fopenmp -o bin/ubsan_strict src/modeB_prover_v1.50.c
+    OK  (exit 0)
+=== [ubsan_recover] clang -resource-dir=<workdir>/qpt_audit_stack/implementation/rt/18 -O1 -g -fsanitize=undefined,integer,implicit-conversion -fsanitize-recover=all -fno-omit-frame-pointer -march=native -fopenmp -o bin/ubsan_recover src/modeB_prover_v1.50.c
+    OK  (exit 0)
+=== [msan] clang -resource-dir=<workdir>/qpt_audit_stack/implementation/rt/18 -O1 -g -fsanitize=memory -fno-omit-frame-pointer -march=native -o bin/msan src/modeB_prover_v1.50.c
+    OK  (exit 0)
+=== [fuzz_verify] clang -resource-dir=rt/18 -O1 -g -fsanitize=fuzzer,address,undefined -fno-omit-frame-pointer -march=native -DFUZZ_NO_MAIN -o bin/fuzz_verify fuzz_verify.c
+fuzz_verify.c:31:9: warning: 'FUZZ_NO_MAIN' macro redefined [-Wmacro-redefined]
+   31 | #define FUZZ_NO_MAIN
+      |         ^
+<command line>:1:9: note: previous definition is here
+    1 | #define FUZZ_NO_MAIN 1
+      |         ^
+1 warning generated.
+    build exit 0

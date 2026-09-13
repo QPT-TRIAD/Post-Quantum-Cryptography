@@ -1,0 +1,40 @@
+================================================================
+$ python3 ceqs29_extractor.py
+----------------------------------------------------------------
+usage: ceqs29_extractor.py [-h] --body0 BODY0 --body1 BODY1 --configuration
+                           CONFIGURATION
+ceqs29_extractor.py: error: the following arguments are required: --body0, --body1, --configuration
+----------------------------------------------------------------
+# exit_code: 2
+
+================================================================
+$ python3 ceqs29_extractor.py --self-test
+----------------------------------------------------------------
+test_01_field_certificate (__main__.ExtractorTests.test_01_field_certificate) ... ok
+test_02_reducible_polynomial_rejected (__main__.ExtractorTests.test_02_reducible_polynomial_rejected) ... ok
+test_03_all_basis_vectors_and_identities (__main__.ExtractorTests.test_03_all_basis_vectors_and_identities) ... ok
+test_04_reference_inverse_and_random_differences (__main__.ExtractorTests.test_04_reference_inverse_and_random_differences) ... ok
+test_05_all_possible_overlap_counts (__main__.ExtractorTests.test_05_all_possible_overlap_counts) ... ok
+test_06_both_boundary_seats (__main__.ExtractorTests.test_06_both_boundary_seats) ... ok
+test_07_swap_symmetry (__main__.ExtractorTests.test_07_swap_symmetry) ... ok
+test_08_replay_public_v29_bodies (__main__.ExtractorTests.test_08_replay_public_v29_bodies) ... ok
+test_09_exact_framing_and_types (__main__.ExtractorTests.test_09_exact_framing_and_types) ... ok
+test_10_suite_configuration_domain (__main__.ExtractorTests.test_10_suite_configuration_domain) ... ok
+test_11_equal_messages (__main__.ExtractorTests.test_11_equal_messages) ... ok
+test_12_unsorted_and_duplicate_links (__main__.ExtractorTests.test_12_unsorted_and_duplicate_links) ... ok
+test_13_zero_and_out_of_range_identity (__main__.ExtractorTests.test_13_zero_and_out_of_range_identity) ... ok
+test_14_duplicate_recovered_seat (__main__.ExtractorTests.test_14_duplicate_recovered_seat) ... ok
+test_15_insufficient_matches (__main__.ExtractorTests.test_15_insufficient_matches) ... ok
+test_16_evidence_completeness_and_canonical_order (__main__.ExtractorTests.test_16_evidence_completeness_and_canonical_order) ... ok
+test_17_evidence_tampering (__main__.ExtractorTests.test_17_evidence_tampering) ... ok
+test_18_noncanonical_table_input (__main__.ExtractorTests.test_18_noncanonical_table_input) ... ok
+test_19_algebra_acceptance_is_not_authorization (__main__.ExtractorTests.test_19_algebra_acceptance_is_not_authorization) ... ok
+test_20_cli_success_and_rejection (__main__.ExtractorTests.test_20_cli_success_and_rejection) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 1.141s
+
+OK
+----------------------------------------------------------------
+# exit_code: 0
+

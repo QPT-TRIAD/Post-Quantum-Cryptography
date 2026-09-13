@@ -1,0 +1,12 @@
+# ACVP vector digest check for this repository (2026-09-13)
+# SOURCE.txt records the commit and sha256 of each of the five files; the files themselves are
+# not redistributed (docs/inputs-and-provenance.md section 3).
+# The five files were fetched from that commit for the verification run and digested against SOURCE.txt:
+
+MATCH   ML-DSA-keyGen-FIPS204.internalProjection.json  e67ee6540d40e11506c3c4e3b1f79fc1cefcd49820db99fc61f87cc8ba463baf
+MATCH   ML-DSA-sigGen-FIPS204.internalProjection.json  72dcaf5f69853ca267ccd16af9cb40949786aca0fcfbf05d1ebeba132b93af22
+MATCH   ML-DSA-sigVer-FIPS204.internalProjection.json  47cdd6314c7f746d02421ffcba89d4dbc7bb875ac49e07a029fdfc26fba55437
+MATCH   ML-KEM-encapDecap-FIPS203.internalProjection.json  a556952ce869bb89c3a3196a701dad89647c193a34c86eafb61a9d710d5b810f
+MATCH   ML-KEM-keyGen-FIPS203.internalProjection.json  d7a62a2c3476957f56dd8d24f9004ea6776ccfe995ffe71a65bb9506dc9c7b1b
+
+result: 5 of 5 files match SOURCE.txt

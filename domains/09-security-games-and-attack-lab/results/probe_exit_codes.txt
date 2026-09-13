@@ -1,0 +1,28 @@
+probe: harness exit codes                     (linux)
+interpreter: 3.12.3
+source directory: domains/09-security-games-and-attack-lab/src   (relative to the repository root)
+
+1. shipped files, read-only input to this probe
+   ceqs_attack_lab.py     7df54f12adb92b9a...  34708 bytes
+   ceqs_games.py          6af0bd2ccfd80eb7...  29038 bytes
+
+2. --self-test on the shipped files (the mode that carries assertions)
+   ceqs_attack_lab.py     exit=0  Ran 5 tests in 5.330s  OK
+   ceqs_games.py          exit=0  Ran 4 tests in 9.230s  OK
+
+3. --self-test on a copy with one injected failing test (in a temporary directory)
+   ceqs_attack_lab.py     exit=1  Ran 6 tests in 4.486s  (expect exit=1)
+   ceqs_games.py          exit=1  Ran 5 tests in 8.012s  (expect exit=1)
+
+4. the failure path, quoted from the shipped sources
+   ceqs_attack_lab.py     return 0 if r.wasSuccessful() else 1
+   ceqs_games.py          return 0 if r.wasSuccessful() else 1
+   report modes, by construction (no verdict in the exit code):
+   ceqs_attack_lab.py     line 728: return 0
+   ceqs_games.py          line 569: return 0
+
+5. shipped files after the probe
+   ceqs_attack_lab.py     7df54f12adb92b9a...  unchanged
+   ceqs_games.py          6af0bd2ccfd80eb7...  unchanged
+
+RESULT: PASS -- exit codes carry the verdict, and the failure path exits 1

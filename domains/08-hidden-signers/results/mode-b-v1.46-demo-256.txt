@@ -1,0 +1,41 @@
+{
+  "n": 256,
+  "m": 812,
+  "registry_seats": 64,
+  "key_bytes": 102,
+  "frame_bytes_without_proof": 1584,
+  "prefix_bytes": 1584,
+  "proof_slot_bytes": 31184,
+  "extracted_seats": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "extracted_count": 22,
+  "all_blames_verified": true,
+  "evaluator": "numpy",
+  "seconds": {
+    "keymap_and_registry_64_keys": 30.3,
+    "two_frames": 0.0,
+    "extraction_1849_candidates": 153.2
+  }
+}

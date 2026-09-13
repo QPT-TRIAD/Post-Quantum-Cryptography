@@ -1,0 +1,18 @@
+test_attack_A0_generic_bound_and_ledgers (__main__.ModeBTests.test_attack_A0_generic_bound_and_ledgers) ... ok
+test_attack_A1_linear_handle_eliminates_r (__main__.ModeBTests.test_attack_A1_linear_handle_eliminates_r)
+Toy brute force: with a linear handle, r = Z ^ c*s, so 2^n candidates ... ok
+test_attack_A2_linear_trick_collisions (__main__.ModeBTests.test_attack_A2_linear_trick_collisions) ... ok
+test_conflict_preconditions_and_framing (__main__.ModeBTests.test_conflict_preconditions_and_framing) ... ok
+test_cross_domain_handles_do_not_leak (__main__.ModeBTests.test_cross_domain_handles_do_not_leak) ... ok
+test_faest_formula (__main__.ModeBTests.test_faest_formula) ... ok
+test_production_field_and_permutation (__main__.ModeBTests.test_production_field_and_permutation) ... ok
+test_relation_and_extraction_all_overlaps (__main__.ModeBTests.test_relation_and_extraction_all_overlaps) ... ok
+test_relation_rejects (__main__.ModeBTests.test_relation_rejects) ... ok
+test_security_estimator_small_case (__main__.ModeBTests.test_security_estimator_small_case) ... ok
+test_sizes (__main__.ModeBTests.test_sizes) ... ok
+test_toy_field (__main__.ModeBTests.test_toy_field) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 10.725s
+
+OK

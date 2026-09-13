@@ -1,0 +1,2 @@
+$ gcc -O3 -march=native -fopenmp -Wall -o modeB_prover_v150 mode-b-prover-v1.50.c
+exit 0, no warnings

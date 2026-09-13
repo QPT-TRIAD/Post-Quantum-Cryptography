@@ -1,0 +1,5 @@
+### C2_intersection_at_least_2qN  2026-09-13T04:02:30+02:00  -M8000m  timeout 1500 s
+maude tool: 'maude'
+ checking version: 3.5.1. OK.
+ checking installation: OK.
+### exit 137 wall 209 s

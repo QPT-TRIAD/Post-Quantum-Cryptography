@@ -1,0 +1,161 @@
+=== (b) ubsan_strict: -fsanitize=undefined,integer,implicit-conversion -fno-sanitize-recover=all (aborts at the first diagnostic)
+################################################################
+### 2026-09-11T20:39:07+02:00  cmd: taskset -c 0-3 timeout 1200 bin/ubsan_strict --vectors
+### env: OMP_NUM_THREADS=4 ASAN_OPTIONS=detect_leaks=1:abort_on_error=0 UBSAN_OPTIONS=print_stacktrace=1 MSAN_OPTIONS=
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35: runtime error: left shift of 9223372036854775808 by 1 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x6058b50eb994 in keccakf <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35
+    #1 0x6058b50e8329 in shake_squeeze <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:122:9
+    #2 0x6058b50e6e80 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:954:81
+    #3 0x70cd4ae2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x70cd4ae2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x6058b50bc504 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_strict+0x9504) (BuildId: adea195c3b5985abb12bf2db12d91d855965506b)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35 
+### exit code: 1   (124 = killed by the 20-minute timeout)   wall time: .372930285 s
+
+################################################################
+### 2026-09-11T20:39:07+02:00  cmd: taskset -c 0-3 timeout 1200 bin/ubsan_strict --run --b 10 --tau 4 --wg 8 --rho 256 --threads 4
+### env: OMP_NUM_THREADS=4 ASAN_OPTIONS=detect_leaks=1:abort_on_error=0 UBSAN_OPTIONS=print_stacktrace=1 MSAN_OPTIONS=
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35: runtime error: left shift of 11470949725889393508 by 1 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5731f5539994 in keccakf <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35
+    #1 0x5731f5536329 in shake_squeeze <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:122:9
+    #2 0x5731f5535447 in shake2 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:137:5
+    #3 0x5731f5535447 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:972:38
+    #4 0x7d5cbd22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #5 0x7d5cbd22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #6 0x5731f550a504 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_strict+0x9504) (BuildId: adea195c3b5985abb12bf2db12d91d855965506b)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35 
+### exit code: 1   (124 = killed by the 20-minute timeout)   wall time: .346094846 s
+
+=== (b') ubsan_recover: same checks with -fsanitize-recover=all (UBSan reports each source location once; enumerates all distinct sites)
+################################################################
+### 2026-09-11T20:39:07+02:00  cmd: taskset -c 0-3 timeout 1200 bin/ubsan_recover --vectors
+### env: OMP_NUM_THREADS=4 ASAN_OPTIONS=detect_leaks=1:abort_on_error=0 UBSAN_OPTIONS=print_stacktrace=1 MSAN_OPTIONS=
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35: runtime error: left shift of 9223372036854775808 by 1 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5b4d36c9858a in keccakf <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35
+    #1 0x5b4d36c903f8 in shake_squeeze <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:122:9
+    #2 0x5b4d36c8d637 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:954:81
+    #3 0x783cada2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x783cada2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5b4d36c62534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:95:21: runtime error: left shift of 9223372036854775808 by 6 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5b4d36c987aa in keccakf <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:95:21
+    #1 0x5b4d36c903f8 in shake_squeeze <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:122:9
+    #2 0x5b4d36c8d637 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:954:81
+    #3 0x783cada2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x783cada2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5b4d36c62534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:95:21 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:35: runtime error: left shift of 883547652938774704 by 5 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5b4d36c90a1d in gf_reduce512 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:35
+    #1 0x5b4d36c90a1d in gf_mul <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:181:12
+    #2 0x5b4d36c8d7c7 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:962:62
+    #3 0x783cada2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x783cada2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5b4d36c62534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:35 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:46: runtime error: left shift of 883547652938774704 by 10 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5b4d36c90a4b in gf_reduce512 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:46
+    #1 0x5b4d36c90a4b in gf_mul <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:181:12
+    #2 0x5b4d36c8d7c7 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:962:62
+    #3 0x783cada2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x783cada2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5b4d36c62534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:46 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:24: runtime error: left shift of 8576448721555373037 by 2 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5b4d36c909f4 in gf_reduce512 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:24
+    #1 0x5b4d36c909f4 in gf_mul <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:181:12
+    #2 0x5b4d36c8d7c7 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:962:62
+    #3 0x783cada2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x783cada2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5b4d36c62534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:24 
+{"shake256_abc":"483366601360a8771c6863080cc4114d8db44530f8f1e1ee4f94ea37e78b5739","x_times_x255_low64":"0000000000000425","a_times_b":"13acf0785755f6e08fbe50276bb4f1a1789ab0b5c8755bb4d1c561d44af883da","root7_ok":1,"inv_ok":1}
+### exit code: 0   (124 = killed by the 20-minute timeout)   wall time: .396033252 s
+
+################################################################
+### 2026-09-11T20:39:08+02:00  cmd: taskset -c 0-3 timeout 1200 bin/ubsan_recover --run --b 10 --tau 4 --wg 8 --rho 256 --threads 4
+### env: OMP_NUM_THREADS=4 ASAN_OPTIONS=detect_leaks=1:abort_on_error=0 UBSAN_OPTIONS=print_stacktrace=1 MSAN_OPTIONS=
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35: runtime error: left shift of 11470949725889393508 by 1 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5dfa35bdf58a in keccakf <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35
+    #1 0x5dfa35bd73f8 in shake_squeeze <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:122:9
+    #2 0x5dfa35bd4c6d in shake2 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:137:5
+    #3 0x5dfa35bd4c6d in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:972:38
+    #4 0x780debc2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #5 0x780debc2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #6 0x5dfa35ba9534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:88:35 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:95:21: runtime error: left shift of 4495155378069235401 by 3 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5dfa35bdf7aa in keccakf <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:95:21
+    #1 0x5dfa35bd73f8 in shake_squeeze <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:122:9
+    #2 0x5dfa35bd4c6d in shake2 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:137:5
+    #3 0x5dfa35bd4c6d in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:972:38
+    #4 0x780debc2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #5 0x780debc2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #6 0x5dfa35ba9534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:95:21 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:46: runtime error: left shift of 67297694843702032 by 10 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5dfa35bd7a4b in gf_reduce512 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:46
+    #1 0x5dfa35bd7a4b in gf_mul <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:181:12
+    #2 0x5dfa35be1ec0 in lin_apply <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:329:64
+    #3 0x5dfa35be1316 in challenge_c <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:359:53
+    #4 0x5dfa35bd8008 in frame_prepare <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:410:38
+    #5 0x5dfa35bd5c0e in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:983:5
+    #6 0x780debc2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #7 0x780debc2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #8 0x5dfa35ba9534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:46 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:35: runtime error: left shift of 1076763117499232512 by 5 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5dfa35bd7a1d in gf_reduce512 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:35
+    #1 0x5dfa35bd7a1d in gf_mul <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:181:12
+    #2 0x5dfa35be1ec0 in lin_apply <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:329:64
+    #3 0x5dfa35be1316 in challenge_c <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:359:53
+    #4 0x5dfa35bd8008 in frame_prepare <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:410:38
+    #5 0x5dfa35bd5c0e in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:983:5
+    #6 0x780debc2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #7 0x780debc2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #8 0x5dfa35ba9534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:35 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:24: runtime error: left shift of 17228209879987720199 by 2 places cannot be represented in type 'uint64_t' (aka 'unsigned long')
+    #0 0x5dfa35bd79f4 in gf_reduce512 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:24
+    #1 0x5dfa35bd79f4 in gf_mul <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:181:12
+    #2 0x5dfa35be1ec0 in lin_apply <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:329:64
+    #3 0x5dfa35be1316 in challenge_c <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:359:53
+    #4 0x5dfa35bd8008 in frame_prepare <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:410:38
+    #5 0x5dfa35bd5c0e in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:983:5
+    #6 0x780debc2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #7 0x780debc2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #8 0x5dfa35ba9534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:169:24 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:239:66: runtime error: implicit conversion from type 'unsigned int' of value 20656 (32-bit, unsigned) to type 'uint8_t' (aka 'unsigned char') changed the value to 176 (8-bit, unsigned)
+    #0 0x5dfa35bdc8ba in be16 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:239:66
+    #1 0x5dfa35bdc8ba in frame_header <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:423:44
+    #2 0x5dfa35bd5ce6 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:987:5
+    #3 0x780debc2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x780debc2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5dfa35ba9534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:239:66 
+<workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:240:98: runtime error: implicit conversion from type 'uint32_t' (aka 'unsigned int') of value 10884 (32-bit, unsigned) to type 'uint8_t' (aka 'unsigned char') changed the value to 132 (8-bit, unsigned)
+    #0 0x5dfa35bd7f84 in be32 <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:240:98
+    #1 0x5dfa35bd5ce6 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:987:5
+    #2 0x780debc2a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #3 0x780debc2a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #4 0x5dfa35ba9534 in _start (<workdir>/qpt_audit_stack/implementation/bin/ubsan_recover+0x10534) (BuildId: b4b2664d5c0511b145f14837f2eb9504059ab6db)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:240:98 
+{"params":{"handle":"r^7 + c_a s + c_b s^2 + c_c s^4 (v1.50)","b":10,"tau":4,"wg":8,"rho":256,"tau_b_plus_wg":48,"n_bits":256,"keymap_equations":1024,"keymap_monomials_per_eq":255,"ell":13760,"ell_hat":15296,"degree":6,"threads":4},"sizes":{"proof_bytes":9508,"frame_bytes":11092,"fits_32768":true,"prefix_bytes":1584,"breakdown":{"h_com":64,"corrections":5736,"witness_correction":1912,"vole_hash":64,"quicksilver":192,"grind_ctr":4,"openings":1536}},"verified":[true,true],"reasons":["ok","ok"],"tampered_rejected":true,"extracted_count":22,"extracted_seats":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],"seconds":{"setup_keymap_registry":1.16,"prove_tree":2.13,"prove_vole_hash":0.01,"prove_quicksilver":2.26,"prove_grind":0.00,"prove_total":4.40,"verify":2.58,"extract":4.36,"total":21.41}}
+### exit code: 0   (124 = killed by the 20-minute timeout)   wall time: 21.422921769 s
+

@@ -1,0 +1,9 @@
+PASS valid_qcs
+PASS exact_conflict_trace identities=[0, 1, 2]
+PASS public_verify_blame
+EXPECTED-FAIL false_identity_blame
+EXPECTED-FAIL handle_not_bound_to_qc_signer_set
+EXPECTED-FAIL duplicate_identity_threshold_evasion
+PASS same_message_link_without_conflict_blame
+EXPECTED-FAIL cross_key_false_trace
+NOTE: ideal SCCH only; no lattice/ROM/QROM cryptography implemented.

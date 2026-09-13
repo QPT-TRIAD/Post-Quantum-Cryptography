@@ -1,0 +1,125 @@
+(*
+ * QPT-128 / CE-QS profile B0 -- quorum-certificate accountability
+ * ProVerif model, N = 4 seats, q = 3, 2q-N = 2.      VARIANT: C = 1 corrupt seat
+ *
+ * STATUS: UNEXECUTED (ProVerif not installed; syntax-checked by reading only).
+ * Identical to qpt128_quorum.pv except that only sk0 is published.
+ *
+ * Expected results for THIS variant (C = 1 = 2q-N-1):
+ *   A, A'  (authorized)                 true
+ *   C      (intersection non-empty)     true (vacuously: no conflicting pair)
+ *   D, D'  (non-frameability)           true (evidence is unreachable here)
+ *   E1     (no conflicting pair)        TRUE  -- this is the meaningful test
+ *          of lemma B: with fewer than 2q-N corrupt seats no two certificates
+ *          for different candidates at one coordinate are derivable.
+ *   sanity: Accept reachable (query result "false" = reachable);
+ *           Evidence NOT reachable (query result "true").
+ *)
+
+set ignoreTypes = false.
+
+free c: channel.
+
+type seat.
+type skey.
+type pkey.
+
+fun pk(skey): pkey.
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, k: skey; getmess(sign(m, k)) = m.
+reduc forall m: bitstring, k: skey; checksign(sign(m, k), pk(k)) = m.
+
+free s0, s1, s2, s3: seat.
+
+table keys(seat, pkey).
+
+event Corrupt(seat).
+event Signed(seat, bitstring, bitstring).
+event Verified(seat, bitstring, bitstring).
+event Accept(bitstring, bitstring, seat, seat, seat).
+event Evidence(seat, bitstring, bitstring, bitstring).
+
+restriction s: seat, K: bitstring, v1: bitstring, v2: bitstring;
+  event(Signed(s, K, v1)) && event(Signed(s, K, v2)) ==> v1 = v2.
+
+let Seat(s: seat, sk: skey) =
+  ! ( in(c, (K: bitstring, v: bitstring));
+      event Signed(s, K, v);
+      out(c, sign((K, v, s), sk)) ).
+
+let Verifier =
+  ! ( in(c, (K: bitstring, v: bitstring, sigA: bitstring, sigB: bitstring, sigC: bitstring));
+      let (=K, =v, a1: seat) = getmess(sigA) in
+      let (=K, =v, a2: seat) = getmess(sigB) in
+      let (=K, =v, a3: seat) = getmess(sigC) in
+      get keys(=a1, pkA: pkey) in
+      get keys(=a2, pkB: pkey) in
+      get keys(=a3, pkC: pkey) in
+      if checksign(sigA, pkA) = (K, v, a1) then
+      if checksign(sigB, pkB) = (K, v, a2) then
+      if checksign(sigC, pkC) = (K, v, a3) then
+      if a1 <> a2 && a1 <> a3 && a2 <> a3 then
+      event Verified(a1, K, v);
+      event Verified(a2, K, v);
+      event Verified(a3, K, v);
+      event Accept(K, v, a1, a2, a3) ).
+
+let Extractor =
+  ! ( in(c, (K: bitstring, v1: bitstring, v2: bitstring, sig1: bitstring, sig2: bitstring));
+      let (=K, =v1, s: seat) = getmess(sig1) in
+      let (=K, =v2, =s) = getmess(sig2) in
+      get keys(=s, pks: pkey) in
+      if checksign(sig1, pks) = (K, v1, s) then
+      if checksign(sig2, pks) = (K, v2, s) then
+      if v1 <> v2 then
+      event Evidence(s, K, v1, v2);
+      out(c, (s, K, v1, v2, sig1, sig2)) ).
+
+(* A *)
+query K: bitstring, v: bitstring, a1: seat, a2: seat, a3: seat;
+  event(Accept(K, v, a1, a2, a3)) ==>
+       (event(Signed(a1, K, v)) || event(Corrupt(a1)))
+    && (event(Signed(a2, K, v)) || event(Corrupt(a2)))
+    && (event(Signed(a3, K, v)) || event(Corrupt(a3))).
+
+(* A' *)
+query s: seat, K: bitstring, v: bitstring;
+  event(Verified(s, K, v)) ==> event(Signed(s, K, v)) || event(Corrupt(s)).
+
+(* C *)
+query K: bitstring, v1: bitstring, v2: bitstring,
+      a1: seat, a2: seat, a3: seat, b1: seat, b2: seat, b3: seat;
+  event(Accept(K, v1, a1, a2, a3)) && event(Accept(K, v2, b1, b2, b3)) ==>
+       v1 = v2
+    || a1 = b1 || a1 = b2 || a1 = b3
+    || a2 = b1 || a2 = b2 || a2 = b3
+    || a3 = b1 || a3 = b2 || a3 = b3.
+
+(* D *)
+query s: seat, K: bitstring, v1: bitstring, v2: bitstring;
+  event(Evidence(s, K, v1, v2)) ==> event(Corrupt(s)).
+
+(* D' *)
+query s: seat, K: bitstring, v1: bitstring, v2: bitstring;
+  event(Verified(s, K, v1)) && event(Verified(s, K, v2)) ==> v1 = v2 || event(Corrupt(s)).
+
+(* E1 / B (C = 1 < 2q-N): no conflicting pair -- expected TRUE *)
+query K: bitstring, v1: bitstring, v2: bitstring,
+      a1: seat, a2: seat, a3: seat, b1: seat, b2: seat, b3: seat;
+  event(Accept(K, v1, a1, a2, a3)) && event(Accept(K, v2, b1, b2, b3)) ==> v1 = v2.
+
+(* reachability sanity *)
+query K: bitstring, v: bitstring, a1: seat, a2: seat, a3: seat;
+  event(Accept(K, v, a1, a2, a3)).
+query s: seat, K: bitstring, v1: bitstring, v2: bitstring;
+  event(Evidence(s, K, v1, v2)).
+
+process
+  new sk0: skey; new sk1: skey; new sk2: skey; new sk3: skey;
+  insert keys(s0, pk(sk0)); insert keys(s1, pk(sk1));
+  insert keys(s2, pk(sk2)); insert keys(s3, pk(sk3));
+  out(c, (pk(sk0), pk(sk1), pk(sk2), pk(sk3)));
+  (* corruption: exactly C = 1 seat *)
+  event Corrupt(s0); out(c, sk0);
+  ( Seat(s0, sk0) | Seat(s1, sk1) | Seat(s2, sk2) | Seat(s3, sk3)
+  | Verifier | Extractor )

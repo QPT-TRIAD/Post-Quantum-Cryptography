@@ -1,0 +1,107 @@
+/*
+ * QPT-128 / CE-QS profile B0 -- N = 4, q = 3 -- GENERIC-RULE VARIANT.
+ *
+ * Same abstraction as qpt128_quorum.spthy, but certificate assembly is ONE
+ * rule over three seat variables $a1,$a2,$a3 constrained by Distinct3 and the
+ * 4-seat universe, instead of four explicit subset rules.  Semantically the
+ * two theories have the same traces (the explicit rules are exactly the
+ * instances of this rule).  This variant is kept for reference: on the audit
+ * machine (approx. 4 GB free) the first run of this encoding was OOM-killed
+ * (exit 137 after 133 s) before finishing its first lemma, because Tamarin
+ * case-splits the 4-way seat-name disjunction for each of the six signer
+ * variables of a certificate pair.  Only the lemma set is duplicated here;
+ * results are reported for qpt128_quorum.spthy.
+ */
+
+theory QPT128_Quorum_N4_q3_Generic
+begin
+
+builtins: signing
+
+rule Register:
+    [ Fr(~sk) ]
+  --[ Register($s), OnlyOnce(<'reg', $s>) ]->
+    [ !Seat($s, ~sk), !Pk($s, pk(~sk)), Out(pk(~sk)) ]
+
+restriction SeatUniverse:
+  "All s #i. Register(s)@i ==> (s = 's0' | s = 's1' | s = 's2' | s = 's3')"
+
+restriction OnlyOnce:
+  "All x #i #j. OnlyOnce(x)@i & OnlyOnce(x)@j ==> #i = #j"
+
+rule Corrupt:
+    [ !Seat($s, ~sk) ] --[ Corrupt($s) ]-> [ Out(~sk) ]
+
+rule Sign:
+    [ !Seat($s, ~sk), In(<K, v>) ]
+  --[ Signed($s, K, v) ]->
+    [ Out(sign(<K, v, $s>, ~sk)) ]
+
+restriction HonestSignsOneCandidatePerCoordinate:
+  "All s K v1 v2 #i #j. Signed(s, K, v1)@i & Signed(s, K, v2)@j ==> v1 = v2"
+
+restriction Eq:
+  "All x y #i. Eq(x, y)@i ==> x = y"
+
+rule Accept:
+    [ !Pk($a1, pkA), !Pk($a2, pkB), !Pk($a3, pkC)
+    , In(<K, v, sigA, sigB, sigC>), Fr(~c) ]
+  --[ Accept(~c, K, v), Distinct3($a1, $a2, $a3)
+    , Eq(verify(sigA, <K, v, $a1>, pkA), true)
+    , Eq(verify(sigB, <K, v, $a2>, pkB), true)
+    , Eq(verify(sigC, <K, v, $a3>, pkC), true)
+    , Verified($a1, K, v), Verified($a2, K, v), Verified($a3, K, v) ]->
+    [ !Cert(~c, K, v)
+    , !Signer(~c, $a1, sigA), !Signer(~c, $a2, sigB), !Signer(~c, $a3, sigC) ]
+
+restriction Distinct3:
+  "All a b c #i. Distinct3(a, b, c)@i ==> not(a = b) & not(a = c) & not(b = c)"
+
+rule Extract:
+    [ !Cert(c1, K, v1), !Cert(c2, K, v2), !Signer(c1, s, sig1), !Signer(c2, s, sig2) ]
+  --[ Evidence(s, K, v1, v2), Neq(v1, v2) ]->
+    [ !SlashProof(s, K, v1, v2, sig1, sig2) ]
+
+restriction Neq:
+  "All x y #i. Neq(x, y)@i ==> not(x = y)"
+
+lemma sanity_honest_certificate:
+  exists-trace
+  "Ex c K v #i. Accept(c, K, v)@i & not(Ex s #k. Corrupt(s)@k)"
+
+lemma A2_signer_authorized [reuse]:
+  "All s c K v #i. Accept(c, K, v)@i & Verified(s, K, v)@i ==>
+       (Ex #k. Signed(s, K, v)@k & #k < #i) | (Ex #k. Corrupt(s)@k & #k < #i)"
+
+lemma D2_intersection_seats_corrupt [reuse]:
+  "All s c1 c2 K v1 v2 #i #j.
+     Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2)
+     & Verified(s, K, v1)@i & Verified(s, K, v2)@j
+     ==> Ex #k. Corrupt(s)@k & #k < #i & #k < #j"
+
+lemma D1_non_frameability:
+  "All s K v1 v2 #i. Evidence(s, K, v1, v2)@i ==> Ex #k. Corrupt(s)@k & #k < #i"
+
+lemma B_conflict_needs_2qN_corrupt:
+  "All c1 c2 K v1 v2 #i #j.
+     Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2)
+     ==> Ex s1 s2 #k #l. Corrupt(s1)@k & Corrupt(s2)@l & not(s1 = s2)"
+
+lemma C1_intersection_nonempty:
+  "All c1 c2 K v1 v2 #i #j.
+     Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2)
+     ==> Ex s. Verified(s, K, v1)@i & Verified(s, K, v2)@j"
+
+lemma E1_below_threshold_no_conflict:
+  "(All s1 s2 #k #l. Corrupt(s1)@k & Corrupt(s2)@l ==> s1 = s2)
+   ==> not(Ex c1 c2 K v1 v2 #i #j.
+             Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2))"
+
+lemma E2_at_threshold_conflict_exists:
+  exists-trace
+  "Ex c1 c2 K v1 v2 s1 s2 #i #j #k #l.
+     Accept(c1, K, v1)@i & Accept(c2, K, v2)@j & not(v1 = v2)
+     & Corrupt(s1)@k & Corrupt(s2)@l & not(s1 = s2)
+     & (All s #m. Corrupt(s)@m ==> (s = s1 | s = s2))"
+
+end

@@ -1,0 +1,256 @@
+{
+  "sweeps": {
+    "h=8": {
+      "h": 8,
+      "k": 2,
+      "signatures": 256,
+      "keygen_leaf_computations": 256,
+      "leaf_per_sig": {
+        "mean": 3.0078125,
+        "median": 3.0,
+        "p95": 4,
+        "max": 4,
+        "bound": 4
+      },
+      "node_hashes_per_sig": {
+        "mean": 2.06640625,
+        "max": 6
+      },
+      "peak_state_bytes": 828,
+      "hashes_per_sig_w256_composed": {
+        "mean": 30555.07421875,
+        "max": 43531
+      },
+      "hashes_per_sig_w16_composed": {
+        "mean": 3799.94921875,
+        "max": 5371
+      }
+    },
+    "h=10": {
+      "h": 10,
+      "k": 2,
+      "signatures": 1024,
+      "keygen_leaf_computations": 1024,
+      "leaf_per_sig": {
+        "mean": 4.001953125,
+        "median": 4.0,
+        "p95": 5,
+        "max": 5,
+        "bound": 5
+      },
+      "node_hashes_per_sig": {
+        "mean": 3.0205078125,
+        "max": 8
+      },
+      "peak_state_bytes": 1037,
+      "hashes_per_sig_w256_composed": {
+        "mean": 39210.0224609375,
+        "max": 52238
+      },
+      "hashes_per_sig_w16_composed": {
+        "mean": 4867.6162109375,
+        "max": 6446
+      }
+    },
+    "h=12": {
+      "h": 12,
+      "k": 2,
+      "signatures": 4096,
+      "keygen_leaf_computations": 4096,
+      "leaf_per_sig": {
+        "mean": 5.00048828125,
+        "median": 5.0,
+        "p95": 6,
+        "max": 6,
+        "bound": 6
+      },
+      "node_hashes_per_sig": {
+        "mean": 4.006103515625,
+        "max": 12
+      },
+      "peak_state_bytes": 1312,
+      "hashes_per_sig_w256_composed": {
+        "mean": 47903.256591796875,
+        "max": 60947
+      },
+      "hashes_per_sig_w16_composed": {
+        "mean": 5940.030029296875,
+        "max": 7523
+      }
+    },
+    "h=14": {
+      "h": 14,
+      "k": 2,
+      "signatures": 16384,
+      "keygen_leaf_computations": 16384,
+      "leaf_per_sig": {
+        "mean": 6.0001220703125,
+        "median": 6.0,
+        "p95": 7,
+        "max": 7,
+        "bound": 7
+      },
+      "node_hashes_per_sig": {
+        "mean": 5.00177001953125,
+        "max": 14
+      },
+      "peak_state_bytes": 1554,
+      "hashes_per_sig_w256_composed": {
+        "mean": 56606.064392089844,
+        "max": 69654
+      },
+      "hashes_per_sig_w16_composed": {
+        "mean": 7013.632751464844,
+        "max": 8598
+      }
+    },
+    "h=16": {
+      "h": 16,
+      "k": 2,
+      "signatures": 65536,
+      "keygen_leaf_computations": 65536,
+      "leaf_per_sig": {
+        "mean": 7.000030517578125,
+        "median": 7.0,
+        "p95": 8,
+        "max": 8,
+        "bound": 8
+      },
+      "node_hashes_per_sig": {
+        "mean": 6.0005035400390625,
+        "max": 17
+      },
+      "peak_state_bytes": 1763,
+      "hashes_per_sig_w256_composed": {
+        "mean": 65311.26615905762,
+        "max": 78362
+      },
+      "hashes_per_sig_w16_composed": {
+        "mean": 8087.533248901367,
+        "max": 9674
+      }
+    },
+    "h=18": {
+      "h": 18,
+      "k": 2,
+      "signatures": 32768,
+      "keygen_leaf_computations": 262144,
+      "leaf_per_sig": {
+        "mean": 7.000274658203125,
+        "median": 8.0,
+        "p95": 9,
+        "max": 9,
+        "bound": 9
+      },
+      "node_hashes_per_sig": {
+        "mean": 6.000640869140625,
+        "max": 17
+      },
+      "peak_state_bytes": 1939,
+      "hashes_per_sig_w256_composed": {
+        "mean": 65313.391540527344,
+        "max": 87067
+      },
+      "hashes_per_sig_w16_composed": {
+        "mean": 8087.795349121094,
+        "max": 10747
+      }
+    },
+    "h=20": {
+      "h": 20,
+      "k": 2,
+      "signatures": 32768,
+      "keygen_leaf_computations": 1048576,
+      "leaf_per_sig": {
+        "mean": 7.00030517578125,
+        "median": 9.0,
+        "p95": 10,
+        "max": 10,
+        "bound": 10
+      },
+      "node_hashes_per_sig": {
+        "mean": 6.00067138671875,
+        "max": 20
+      },
+      "peak_state_bytes": 2148,
+      "hashes_per_sig_w256_composed": {
+        "mean": 65313.6572265625,
+        "max": 95775
+      },
+      "hashes_per_sig_w16_composed": {
+        "mean": 8087.828125,
+        "max": 11823
+      }
+    }
+  },
+  "composition_check": {
+    "h=8": {
+      "measured_mean": 30445.50390625,
+      "composed_mean": 30555.07421875
+    },
+    "h=10": {
+      "measured_mean": 39109.9150390625,
+      "composed_mean": 39210.0224609375
+    }
+  },
+  "mean_formula_check": {
+    "h=8": {
+      "measured": 3.0078125,
+      "formula": 3.0
+    },
+    "h=10": {
+      "measured": 4.001953125,
+      "formula": 4.0
+    },
+    "h=12": {
+      "measured": 5.00048828125,
+      "formula": 5.0
+    },
+    "h=14": {
+      "measured": 6.0001220703125,
+      "formula": 6.0
+    },
+    "h=16": {
+      "measured": 7.000030517578125,
+      "formula": 7.0
+    }
+  },
+  "h20_steady_state_w256": {
+    "leaf_mean_formula": 9,
+    "hashes_mean": 82727.0,
+    "leaf_max_measured": 10,
+    "hashes_max": 95775,
+    "peak_state_bytes": 2148
+  },
+  "v2_0_claims_remeasured": {
+    "state_664_B_h8": {
+      "claimed": 664,
+      "measured_peak": 828,
+      "verdict": "claim was the END state; peak during the run is higher"
+    },
+    "hashes_30466_h8": {
+      "claimed": 30466,
+      "measured": 30445.50390625,
+      "verdict": "confirmed"
+    },
+    "max_86720_h20": {
+      "claimed": 86720,
+      "measured_max": 95775,
+      "verdict": "claim too low: BDS needs (h-k)/2 + 1 leaf computations in the worst round, not (h-k)/2"
+    },
+    "state_under_2KB": {
+      "claimed": "< 2 KB",
+      "measured_h20": 2148,
+      "verdict": "2.1 KB at h=20"
+    }
+  },
+  "working_memory_bytes_estimate": {
+    "ots_signature_buffer_w256": 1088,
+    "leaf_chain_temp": 64,
+    "note": "plus the persistent state; no heap allocation is required by the algorithm"
+  },
+  "untestable_assumptions": [
+    "atomic persistence of the {q, bds} record (a real card must use a journaling NVM write)",
+    "hardware SHA-256 throughput (~1 us/hash) used to convert hash counts to time"
+  ]
+}

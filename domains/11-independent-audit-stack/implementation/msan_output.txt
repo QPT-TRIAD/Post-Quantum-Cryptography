@@ -1,0 +1,13 @@
+=== (c) msan: -fsanitize=memory, built WITHOUT -fopenmp (libomp is uninstrumented); single-threaded
+################################################################
+### 2026-09-11T20:39:29+02:00  cmd: taskset -c 0-3 timeout 1200 bin/msan --vectors
+### env: OMP_NUM_THREADS=4 ASAN_OPTIONS=detect_leaks=1:abort_on_error=0 UBSAN_OPTIONS=print_stacktrace=1 MSAN_OPTIONS=print_stats=0
+{"shake256_abc":"483366601360a8771c6863080cc4114d8db44530f8f1e1ee4f94ea37e78b5739","x_times_x255_low64":"0000000000000425","a_times_b":"13acf0785755f6e08fbe50276bb4f1a1789ab0b5c8755bb4d1c561d44af883da","root7_ok":1,"inv_ok":1}
+### exit code: 0   (124 = killed by the 20-minute timeout)   wall time: .024446569 s
+
+################################################################
+### 2026-09-11T20:39:29+02:00  cmd: taskset -c 0-3 timeout 1200 bin/msan --run --b 10 --tau 4 --wg 8 --rho 256
+### env: OMP_NUM_THREADS=4 ASAN_OPTIONS=detect_leaks=1:abort_on_error=0 UBSAN_OPTIONS=print_stacktrace=1 MSAN_OPTIONS=print_stats=0
+{"params":{"handle":"r^7 + c_a s + c_b s^2 + c_c s^4 (v1.50)","b":10,"tau":4,"wg":8,"rho":256,"tau_b_plus_wg":48,"n_bits":256,"keymap_equations":1024,"keymap_monomials_per_eq":255,"ell":13760,"ell_hat":15296,"degree":6,"threads":1},"sizes":{"proof_bytes":9508,"frame_bytes":11092,"fits_32768":true,"prefix_bytes":1584,"breakdown":{"h_com":64,"corrections":5736,"witness_correction":1912,"vole_hash":64,"quicksilver":192,"grind_ctr":4,"openings":1536}},"verified":[true,true],"reasons":["ok","ok"],"tampered_rejected":true,"extracted_count":22,"extracted_seats":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],"seconds":{"setup_keymap_registry":0.68,"prove_tree":0.70,"prove_vole_hash":0.00,"prove_quicksilver":15.37,"prove_grind":0.00,"prove_total":16.08,"verify":3.59,"extract":16.52,"total":53.80}}
+### exit code: 0   (124 = killed by the 20-minute timeout)   wall time: 53.827048736 s
+

@@ -1,0 +1,162 @@
+{
+  "scope": "MEASUREMENTS_NOT_ENTROPY_OR_IMPOSSIBILITY_PROOF",
+  "cases": [
+    {
+      "case": "case0",
+      "frame_sha256": "dd77def56fe25a11e265a759053070f93a3e6bc8d25028e25ecaf23267706a40",
+      "frame_bytes": 283680,
+      "lossless_codecs": [
+        {
+          "algorithm": "deflate9",
+          "compressed_bytes": 283746,
+          "roundtrip_exact": true,
+          "is_a_new_QC_format": false
+        },
+        {
+          "algorithm": "bzip2",
+          "compressed_bytes": 285250,
+          "roundtrip_exact": true,
+          "is_a_new_QC_format": false
+        },
+        {
+          "algorithm": "xz",
+          "compressed_bytes": 283752,
+          "roundtrip_exact": true,
+          "is_a_new_QC_format": false
+        }
+      ],
+      "sections": [
+        {
+          "opening": 0,
+          "field_values": 232,
+          "field_binary_span_rank": 128,
+          "hash_values": 742,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 1,
+          "field_values": 232,
+          "field_binary_span_rank": 128,
+          "hash_values": 1322,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 2,
+          "field_values": 232,
+          "field_binary_span_rank": 128,
+          "hash_values": 1438,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 3,
+          "field_values": 224,
+          "field_binary_span_rank": 128,
+          "hash_values": 406,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 4,
+          "field_values": 1740,
+          "field_binary_span_rank": 128,
+          "hash_values": 974,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 5,
+          "field_values": 1708,
+          "field_binary_span_rank": 128,
+          "hash_values": 516,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 6,
+          "field_values": 718,
+          "field_binary_span_rank": 128,
+          "hash_values": 201,
+          "hash_binary_span_rank": 201
+        }
+      ],
+      "all_field_span_rank": 128,
+      "all_hash_span_rank": 256
+    },
+    {
+      "case": "case1",
+      "frame_sha256": "fb1ac2ef59e6147e50d87410aed96c74c52d766c163c3d7baf4e57832c602a2c",
+      "frame_bytes": 279600,
+      "lossless_codecs": [
+        {
+          "algorithm": "deflate9",
+          "compressed_bytes": 279671,
+          "roundtrip_exact": true,
+          "is_a_new_QC_format": false
+        },
+        {
+          "algorithm": "bzip2",
+          "compressed_bytes": 281232,
+          "roundtrip_exact": true,
+          "is_a_new_QC_format": false
+        },
+        {
+          "algorithm": "xz",
+          "compressed_bytes": 279672,
+          "roundtrip_exact": true,
+          "is_a_new_QC_format": false
+        }
+      ],
+      "sections": [
+        {
+          "opening": 0,
+          "field_values": 226,
+          "field_binary_span_rank": 128,
+          "hash_values": 733,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 1,
+          "field_values": 232,
+          "field_binary_span_rank": 128,
+          "hash_values": 1300,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 2,
+          "field_values": 232,
+          "field_binary_span_rank": 128,
+          "hash_values": 1416,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 3,
+          "field_values": 224,
+          "field_binary_span_rank": 128,
+          "hash_values": 396,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 4,
+          "field_values": 1708,
+          "field_binary_span_rank": 128,
+          "hash_values": 958,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 5,
+          "field_values": 1694,
+          "field_binary_span_rank": 128,
+          "hash_values": 507,
+          "hash_binary_span_rank": 256
+        },
+        {
+          "opening": 6,
+          "field_values": 703,
+          "field_binary_span_rank": 128,
+          "hash_values": 195,
+          "hash_binary_span_rank": 195
+        }
+      ],
+      "all_field_span_rank": 128,
+      "all_hash_span_rank": 256
+    }
+  ],
+  "binary_basis_scope": "A linear subspace of raw serialized blocks only; this does not test all algorithms, field relations, or new proof protocols."
+}

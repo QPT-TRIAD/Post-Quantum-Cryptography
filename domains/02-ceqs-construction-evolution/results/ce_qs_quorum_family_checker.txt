@@ -1,0 +1,8 @@
+PASS n=4 f=1 q=3 required_family=4 min_quorum_intersection=2
+EXPECTED-FAIL omitted_required_quorum uncovered_fault_set=[0]
+PASS n=7 f=2 q=5 required_family=21 min_quorum_intersection=3
+EXPECTED-FAIL omitted_required_quorum uncovered_fault_set=[2, 3]
+PASS n=10 f=3 q=7 required_family=120 min_quorum_intersection=4
+EXPECTED-FAIL omitted_required_quorum uncovered_fault_set=[1, 5, 7]
+PASS n=64 f=21 q=43 combinatorial_required_columns=41107996877935680 log2=55.190269
+PASS public_bitmap_bytes=8

@@ -1,0 +1,15 @@
+{
+  "files": [
+    {
+      "path": "fixture/case0/PRIVATE_TRACE_WITNESS.bin",
+      "bytes": 4472
+    },
+    {
+      "path": "fixture/case1/PRIVATE_TRACE_WITNESS.bin",
+      "bytes": 4472
+    }
+  ],
+  "total_bytes": 8944,
+  "private_files_remaining": 0,
+  "secure_erasure_claim": false
+}

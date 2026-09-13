@@ -1,0 +1,861 @@
+maude tool: 'maude'
+ checking version: 3.5.1. OK.
+ checking installation: OK.
+[Theory QPT128_Quorum_N7_q5_Votes] Theory loaded
+[Theory QPT128_Quorum_N7_q5_Votes] Theory translated
+[Theory QPT128_Quorum_N7_q5_Votes] Derivation checks started
+[Theory QPT128_Quorum_N7_q5_Votes] Derivation checks ended
+[Theory QPT128_Quorum_N7_q5_Votes] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+theory QPT128_Quorum_N7_q5_Votes
+
+begin
+
+// Function signature and definition of the equational theory E
+
+functions: fst/1, pair/2, snd/1
+equations: fst(<x.1, x.2>) = x.1, snd(<x.1, x.2>) = x.2
+
+rule (modulo E) Register_0:
+   [ ] --[ Register( 's0' ), OnlyOnce( <'reg', 's0'> ) ]-> [ !Seat( 's0' ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Register_1:
+   [ ] --[ Register( 's1' ), OnlyOnce( <'reg', 's1'> ) ]-> [ !Seat( 's1' ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Register_2:
+   [ ] --[ Register( 's2' ), OnlyOnce( <'reg', 's2'> ) ]-> [ !Seat( 's2' ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Register_3:
+   [ ] --[ Register( 's3' ), OnlyOnce( <'reg', 's3'> ) ]-> [ !Seat( 's3' ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Register_4:
+   [ ] --[ Register( 's4' ), OnlyOnce( <'reg', 's4'> ) ]-> [ !Seat( 's4' ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Register_5:
+   [ ] --[ Register( 's5' ), OnlyOnce( <'reg', 's5'> ) ]-> [ !Seat( 's5' ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Register_6:
+   [ ] --[ Register( 's6' ), OnlyOnce( <'reg', 's6'> ) ]-> [ !Seat( 's6' ) ]
+
+  /* has exactly the trivial AC variant */
+
+restriction OnlyOnce:
+  "∀ x #i #j. ((OnlyOnce( x ) @ #i) ∧ (OnlyOnce( x ) @ #j)) ⇒ (#i = #j)"
+  // safety formula
+
+  /*
+  expanded formula:
+  "∀ x #i #j. ((OnlyOnce( x ) @ #i) ∧ (OnlyOnce( x ) @ #j)) ⇒ (#i = #j)"
+  */
+
+rule (modulo E) Corrupt:
+   [ !Seat( $s ) ] --[ Corrupt( $s ) ]-> [ !Corrupted( $s ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Vote_honest:
+   [ !Seat( $s ), In( <K, v> ) ]
+  --[ Signed( $s, K, v ) ]->
+   [ !Vote( $s, K, v ) ]
+
+  /* has exactly the trivial AC variant */
+
+restriction HonestSignsOneCandidatePerCoordinate:
+  "∀ s K v1 v2 #i #j.
+    ((Signed( s, K, v1 ) @ #i) ∧ (Signed( s, K, v2 ) @ #j)) ⇒ (v1 = v2)"
+  // safety formula
+
+  /*
+  expanded formula:
+  "∀ s K v1 v2 #i #j.
+    ((Signed( s, K, v1 ) @ #i) ∧ (Signed( s, K, v2 ) @ #j)) ⇒ (v1 = v2)"
+  */
+
+rule (modulo E) Vote_adversary:
+   [ !Corrupted( $s ), In( <K, v> ) ]
+  --[ AdvSigned( $s, K, v ) ]->
+   [ !Vote( $s, K, v ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01234:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's2', K, v ),
+   !Vote( 's3', K, v ), !Vote( 's4', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's2', 's3', 's4' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's2', K, v ),
+  Verified( 's3', K, v ), Verified( 's4', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's2' ), !CertSig( ~c, K, v, 's3' ),
+   !CertSig( ~c, K, v, 's4' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01235:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's2', K, v ),
+   !Vote( 's3', K, v ), !Vote( 's5', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's2', 's3', 's5' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's2', K, v ),
+  Verified( 's3', K, v ), Verified( 's5', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's2' ), !CertSig( ~c, K, v, 's3' ),
+   !CertSig( ~c, K, v, 's5' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01236:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's2', K, v ),
+   !Vote( 's3', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's2', 's3', 's6' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's2', K, v ),
+  Verified( 's3', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's2' ), !CertSig( ~c, K, v, 's3' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01245:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's2', K, v ),
+   !Vote( 's4', K, v ), !Vote( 's5', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's2', 's4', 's5' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's2', K, v ),
+  Verified( 's4', K, v ), Verified( 's5', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's2' ), !CertSig( ~c, K, v, 's4' ),
+   !CertSig( ~c, K, v, 's5' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01246:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's2', K, v ),
+   !Vote( 's4', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's2', 's4', 's6' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's2', K, v ),
+  Verified( 's4', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's2' ), !CertSig( ~c, K, v, 's4' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01256:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's2', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's2', 's5', 's6' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's2', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's2' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01345:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's3', K, v ),
+   !Vote( 's4', K, v ), !Vote( 's5', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's3', 's4', 's5' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's3', K, v ),
+  Verified( 's4', K, v ), Verified( 's5', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's3' ), !CertSig( ~c, K, v, 's4' ),
+   !CertSig( ~c, K, v, 's5' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01346:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's3', K, v ),
+   !Vote( 's4', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's3', 's4', 's6' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's3', K, v ),
+  Verified( 's4', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's3' ), !CertSig( ~c, K, v, 's4' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01356:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's3', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's3', 's5', 's6' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's3', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's3' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_01456:
+   [
+   !Vote( 's0', K, v ), !Vote( 's1', K, v ), !Vote( 's4', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's1', 's4', 's5', 's6' ),
+  Verified( 's0', K, v ), Verified( 's1', K, v ), Verified( 's4', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's1' ),
+   !CertSig( ~c, K, v, 's4' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_02345:
+   [
+   !Vote( 's0', K, v ), !Vote( 's2', K, v ), !Vote( 's3', K, v ),
+   !Vote( 's4', K, v ), !Vote( 's5', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's2', 's3', 's4', 's5' ),
+  Verified( 's0', K, v ), Verified( 's2', K, v ), Verified( 's3', K, v ),
+  Verified( 's4', K, v ), Verified( 's5', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's2' ),
+   !CertSig( ~c, K, v, 's3' ), !CertSig( ~c, K, v, 's4' ),
+   !CertSig( ~c, K, v, 's5' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_02346:
+   [
+   !Vote( 's0', K, v ), !Vote( 's2', K, v ), !Vote( 's3', K, v ),
+   !Vote( 's4', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's2', 's3', 's4', 's6' ),
+  Verified( 's0', K, v ), Verified( 's2', K, v ), Verified( 's3', K, v ),
+  Verified( 's4', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's2' ),
+   !CertSig( ~c, K, v, 's3' ), !CertSig( ~c, K, v, 's4' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_02356:
+   [
+   !Vote( 's0', K, v ), !Vote( 's2', K, v ), !Vote( 's3', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's2', 's3', 's5', 's6' ),
+  Verified( 's0', K, v ), Verified( 's2', K, v ), Verified( 's3', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's2' ),
+   !CertSig( ~c, K, v, 's3' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_02456:
+   [
+   !Vote( 's0', K, v ), !Vote( 's2', K, v ), !Vote( 's4', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's2', 's4', 's5', 's6' ),
+  Verified( 's0', K, v ), Verified( 's2', K, v ), Verified( 's4', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's2' ),
+   !CertSig( ~c, K, v, 's4' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_03456:
+   [
+   !Vote( 's0', K, v ), !Vote( 's3', K, v ), !Vote( 's4', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's0', 's3', 's4', 's5', 's6' ),
+  Verified( 's0', K, v ), Verified( 's3', K, v ), Verified( 's4', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's0' ), !CertSig( ~c, K, v, 's3' ),
+   !CertSig( ~c, K, v, 's4' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_12345:
+   [
+   !Vote( 's1', K, v ), !Vote( 's2', K, v ), !Vote( 's3', K, v ),
+   !Vote( 's4', K, v ), !Vote( 's5', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's1', 's2', 's3', 's4', 's5' ),
+  Verified( 's1', K, v ), Verified( 's2', K, v ), Verified( 's3', K, v ),
+  Verified( 's4', K, v ), Verified( 's5', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's1' ), !CertSig( ~c, K, v, 's2' ),
+   !CertSig( ~c, K, v, 's3' ), !CertSig( ~c, K, v, 's4' ),
+   !CertSig( ~c, K, v, 's5' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_12346:
+   [
+   !Vote( 's1', K, v ), !Vote( 's2', K, v ), !Vote( 's3', K, v ),
+   !Vote( 's4', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's1', 's2', 's3', 's4', 's6' ),
+  Verified( 's1', K, v ), Verified( 's2', K, v ), Verified( 's3', K, v ),
+  Verified( 's4', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's1' ), !CertSig( ~c, K, v, 's2' ),
+   !CertSig( ~c, K, v, 's3' ), !CertSig( ~c, K, v, 's4' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_12356:
+   [
+   !Vote( 's1', K, v ), !Vote( 's2', K, v ), !Vote( 's3', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's1', 's2', 's3', 's5', 's6' ),
+  Verified( 's1', K, v ), Verified( 's2', K, v ), Verified( 's3', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's1' ), !CertSig( ~c, K, v, 's2' ),
+   !CertSig( ~c, K, v, 's3' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_12456:
+   [
+   !Vote( 's1', K, v ), !Vote( 's2', K, v ), !Vote( 's4', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's1', 's2', 's4', 's5', 's6' ),
+  Verified( 's1', K, v ), Verified( 's2', K, v ), Verified( 's4', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's1' ), !CertSig( ~c, K, v, 's2' ),
+   !CertSig( ~c, K, v, 's4' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_13456:
+   [
+   !Vote( 's1', K, v ), !Vote( 's3', K, v ), !Vote( 's4', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's1', 's3', 's4', 's5', 's6' ),
+  Verified( 's1', K, v ), Verified( 's3', K, v ), Verified( 's4', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's1' ), !CertSig( ~c, K, v, 's3' ),
+   !CertSig( ~c, K, v, 's4' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Accept_23456:
+   [
+   !Vote( 's2', K, v ), !Vote( 's3', K, v ), !Vote( 's4', K, v ),
+   !Vote( 's5', K, v ), !Vote( 's6', K, v ), Fr( ~c )
+   ]
+  --[
+  Accept( ~c, K, v ), Signers( ~c, 's2', 's3', 's4', 's5', 's6' ),
+  Verified( 's2', K, v ), Verified( 's3', K, v ), Verified( 's4', K, v ),
+  Verified( 's5', K, v ), Verified( 's6', K, v )
+  ]->
+   [
+   !CertSig( ~c, K, v, 's2' ), !CertSig( ~c, K, v, 's3' ),
+   !CertSig( ~c, K, v, 's4' ), !CertSig( ~c, K, v, 's5' ),
+   !CertSig( ~c, K, v, 's6' )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Extract:
+   [
+   !CertSig( c1, K, v1, s )[no_precomp],
+   !CertSig( c2, K, v2, s )[no_precomp]
+   ]
+  --[ Evidence( s, K, v1, v2 ), Neq( v1, v2 ) ]->
+   [ ]
+
+  /* has exactly the trivial AC variant */
+
+restriction Neq:
+  "∀ x y #i. (Neq( x, y ) @ #i) ⇒ (¬(x = y))"
+  // safety formula
+
+  /*
+  expanded formula:
+  "∀ x y #i. (Neq( x, y ) @ #i) ⇒ (¬(x = y))"
+  */
+
+lemma sanity_honest_certificate:
+  exists-trace
+  "∃ c K v #i. (Accept( c, K, v ) @ #i) ∧ (¬(∃ s #k. Corrupt( s ) @ #k))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ c K v #i. (Accept( c, K, v ) @ #i) ∧ ∀ s #k. (Corrupt( s ) @ #k) ⇒ ⊥"
+*/
+by sorry
+
+lemma A1_distinct_signers:
+  all-traces
+  "∀ c K v #i.
+    (Accept( c, K, v ) @ #i) ⇒
+    (∃ a1 a2 a3 a4 a5.
+      (((((((((((((((Signers( c, a1, a2, a3, a4, a5 ) @ #i) ∧
+                    (Verified( a1, K, v ) @ #i)) ∧
+                   (Verified( a2, K, v ) @ #i)) ∧
+                  (Verified( a3, K, v ) @ #i)) ∧
+                 (Verified( a4, K, v ) @ #i)) ∧
+                (Verified( a5, K, v ) @ #i)) ∧
+               (¬(a1 = a2))) ∧
+              (¬(a1 = a3))) ∧
+             (¬(a1 = a4))) ∧
+            (¬(a1 = a5))) ∧
+           (¬(a2 = a3))) ∧
+          (¬(a2 = a4))) ∧
+         (¬(a2 = a5))) ∧
+        (¬(a3 = a4))) ∧
+       (¬(a3 = a5))) ∧
+      (¬(a4 = a5)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ c K v #i.
+  (Accept( c, K, v ) @ #i)
+ ∧
+  ∀ a1 a2 a3 a4 a5.
+   (Signers( c, a1, a2, a3, a4, a5 ) @ #i) ∧
+   (Verified( a1, K, v ) @ #i) ∧
+   (Verified( a2, K, v ) @ #i) ∧
+   (Verified( a3, K, v ) @ #i) ∧
+   (Verified( a4, K, v ) @ #i) ∧
+   (Verified( a5, K, v ) @ #i)
+  ⇒
+   ((a1 = a2) ∨
+    (a1 = a3) ∨
+    (a1 = a4) ∨
+    (a1 = a5) ∨
+    (a2 = a3) ∨
+    (a2 = a4) ∨
+    (a2 = a5) ∨
+    (a3 = a4) ∨
+    (a3 = a5) ∨
+    (a4 = a5))"
+*/
+by sorry
+
+lemma A2_signer_authorized [reuse]:
+  all-traces
+  "∀ s c K v #i.
+    ((Accept( c, K, v ) @ #i) ∧ (Verified( s, K, v ) @ #i)) ⇒
+    ((∃ #k. (Signed( s, K, v ) @ #k) ∧ (#k < #i)) ∨
+     (∃ #k. (Corrupt( s ) @ #k) ∧ (#k < #i)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ s c K v #i.
+  (Accept( c, K, v ) @ #i) ∧ (Verified( s, K, v ) @ #i)
+ ∧
+  (∀ #k. (Signed( s, K, v ) @ #k) ⇒ ¬(#k < #i)) ∧
+  (∀ #k. (Corrupt( s ) @ #k) ⇒ ¬(#k < #i))"
+*/
+by sorry
+
+lemma A_acceptance_authorized:
+  all-traces
+  "∀ c K v #i.
+    (Accept( c, K, v ) @ #i) ⇒
+    (∃ a1 a2 a3 a4 a5.
+      ((((((((((((((((((((Signers( c, a1, a2, a3, a4, a5 ) @ #i) ∧
+                         (Verified( a1, K, v ) @ #i)) ∧
+                        (Verified( a2, K, v ) @ #i)) ∧
+                       (Verified( a3, K, v ) @ #i)) ∧
+                      (Verified( a4, K, v ) @ #i)) ∧
+                     (Verified( a5, K, v ) @ #i)) ∧
+                    (¬(a1 = a2))) ∧
+                   (¬(a1 = a3))) ∧
+                  (¬(a1 = a4))) ∧
+                 (¬(a1 = a5))) ∧
+                (¬(a2 = a3))) ∧
+               (¬(a2 = a4))) ∧
+              (¬(a2 = a5))) ∧
+             (¬(a3 = a4))) ∧
+            (¬(a3 = a5))) ∧
+           (¬(a4 = a5))) ∧
+          ((∃ #k. (Signed( a1, K, v ) @ #k) ∧ (#k < #i)) ∨
+           (∃ #k. (Corrupt( a1 ) @ #k) ∧ (#k < #i)))) ∧
+         ((∃ #k. (Signed( a2, K, v ) @ #k) ∧ (#k < #i)) ∨
+          (∃ #k. (Corrupt( a2 ) @ #k) ∧ (#k < #i)))) ∧
+        ((∃ #k. (Signed( a3, K, v ) @ #k) ∧ (#k < #i)) ∨
+         (∃ #k. (Corrupt( a3 ) @ #k) ∧ (#k < #i)))) ∧
+       ((∃ #k. (Signed( a4, K, v ) @ #k) ∧ (#k < #i)) ∨
+        (∃ #k. (Corrupt( a4 ) @ #k) ∧ (#k < #i)))) ∧
+      ((∃ #k. (Signed( a5, K, v ) @ #k) ∧ (#k < #i)) ∨
+       (∃ #k. (Corrupt( a5 ) @ #k) ∧ (#k < #i))))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ c K v #i.
+  (Accept( c, K, v ) @ #i)
+ ∧
+  ∀ a1 a2 a3 a4 a5.
+   (Signers( c, a1, a2, a3, a4, a5 ) @ #i) ∧
+   (Verified( a1, K, v ) @ #i) ∧
+   (Verified( a2, K, v ) @ #i) ∧
+   (Verified( a3, K, v ) @ #i) ∧
+   (Verified( a4, K, v ) @ #i) ∧
+   (Verified( a5, K, v ) @ #i)
+  ⇒
+   ((a1 = a2) ∨
+    (a1 = a3) ∨
+    (a1 = a4) ∨
+    (a1 = a5) ∨
+    (a2 = a3) ∨
+    (a2 = a4) ∨
+    (a2 = a5) ∨
+    (a3 = a4) ∨
+    (a3 = a5) ∨
+    (a4 = a5) ∨
+    ((∀ #k. (Signed( a1, K, v ) @ #k) ⇒ ¬(#k < #i)) ∧
+     (∀ #k. (Corrupt( a1 ) @ #k) ⇒ ¬(#k < #i))) ∨
+    ((∀ #k. (Signed( a2, K, v ) @ #k) ⇒ ¬(#k < #i)) ∧
+     (∀ #k. (Corrupt( a2 ) @ #k) ⇒ ¬(#k < #i))) ∨
+    ((∀ #k. (Signed( a3, K, v ) @ #k) ⇒ ¬(#k < #i)) ∧
+     (∀ #k. (Corrupt( a3 ) @ #k) ⇒ ¬(#k < #i))) ∨
+    ((∀ #k. (Signed( a4, K, v ) @ #k) ⇒ ¬(#k < #i)) ∧
+     (∀ #k. (Corrupt( a4 ) @ #k) ⇒ ¬(#k < #i))) ∨
+    ((∀ #k. (Signed( a5, K, v ) @ #k) ⇒ ¬(#k < #i)) ∧
+     (∀ #k. (Corrupt( a5 ) @ #k) ⇒ ¬(#k < #i))))"
+*/
+by sorry
+
+lemma D2_intersection_seats_corrupt [reuse]:
+  all-traces
+  "∀ s c1 c2 K v1 v2 #i #j.
+    (((((Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j)) ∧
+       (¬(v1 = v2))) ∧
+      (Verified( s, K, v1 ) @ #i)) ∧
+     (Verified( s, K, v2 ) @ #j)) ⇒
+    (∃ #k. (Corrupt( s ) @ #k) ∧ ((#k < #i) ∨ (#k < #j)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ s c1 c2 K v1 v2 #i #j.
+  (Accept( c1, K, v1 ) @ #i) ∧
+  (Accept( c2, K, v2 ) @ #j) ∧
+  (Verified( s, K, v1 ) @ #i) ∧
+  (Verified( s, K, v2 ) @ #j)
+ ∧
+  (¬(v1 = v2)) ∧ (∀ #k. (Corrupt( s ) @ #k) ⇒ (¬(#k < #i)) ∧ (¬(#k < #j)))"
+*/
+by sorry
+
+lemma D2b_intersection_seats_corrupt_unordered [reuse]:
+  all-traces
+  "∀ s c1 c2 K v1 v2 #i #j.
+    (((((Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j)) ∧
+       (¬(v1 = v2))) ∧
+      (Verified( s, K, v1 ) @ #i)) ∧
+     (Verified( s, K, v2 ) @ #j)) ⇒
+    (∃ #k. Corrupt( s ) @ #k)"
+/*
+guarded formula characterizing all counter-examples:
+"∃ s c1 c2 K v1 v2 #i #j.
+  (Accept( c1, K, v1 ) @ #i) ∧
+  (Accept( c2, K, v2 ) @ #j) ∧
+  (Verified( s, K, v1 ) @ #i) ∧
+  (Verified( s, K, v2 ) @ #j)
+ ∧
+  (¬(v1 = v2)) ∧ (∀ #k. (Corrupt( s ) @ #k) ⇒ ⊥)"
+*/
+simplify
+solve( (∃ #k. (Signed( s, K, v1 ) @ #k) ∧ #k < #i)  ∥
+       (∃ #k. (Corrupt( s ) @ #k) ∧ #k < #i) )
+  case case_1
+  solve( (∃ #k. (Signed( $s, K, v2 ) @ #k) ∧ #k < #j)  ∥
+         (∃ #k. (Corrupt( $s ) @ #k) ∧ #k < #j) )
+    case case_1
+    by contradiction /* from formulas */
+  next
+    case case_2
+    by contradiction /* from formulas */
+  qed
+next
+  case case_2
+  by contradiction /* from formulas */
+qed
+
+lemma D1_non_frameability [hide_lemma=A2_signer_authorized]:
+  all-traces
+  "∀ s K v1 v2 #i.
+    (Evidence( s, K, v1, v2 ) @ #i) ⇒
+    (∃ #k. (Corrupt( s ) @ #k) ∧ (#k < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ s K v1 v2 #i.
+  (Evidence( s, K, v1, v2 ) @ #i) ∧ ∀ #k. (Corrupt( s ) @ #k) ⇒ ¬(#k < #i)"
+*/
+by sorry
+
+lemma B_conflict_needs_2qN_corrupt [hide_lemma=A2_signer_authorized,
+                                    hide_lemma=D2_intersection_seats_corrupt]:
+  all-traces
+  "∀ c1 c2 K v1 v2 #i #j.
+    (((Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j)) ∧
+     (¬(v1 = v2))) ⇒
+    (∃ s1 s2 s3 #k #l #m.
+      (((((Corrupt( s1 ) @ #k) ∧ (Corrupt( s2 ) @ #l)) ∧
+         (Corrupt( s3 ) @ #m)) ∧
+        (¬(s1 = s2))) ∧
+       (¬(s1 = s3))) ∧
+      (¬(s2 = s3)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ c1 c2 K v1 v2 #i #j.
+  (Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j)
+ ∧
+  (¬(v1 = v2)) ∧
+  (∀ s1 s2 s3 #k #l #m.
+    (Corrupt( s1 ) @ #k) ∧ (Corrupt( s2 ) @ #l) ∧ (Corrupt( s3 ) @ #m)
+   ⇒
+    ((s1 = s2) ∨ (s1 = s3) ∨ (s2 = s3)))"
+*/
+by sorry
+
+lemma C1_intersection_nonempty [hide_lemma=A2_signer_authorized,
+                                hide_lemma=D2_intersection_seats_corrupt]:
+  all-traces
+  "∀ c1 c2 K v1 v2 #i #j.
+    (((Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j)) ∧
+     (¬(v1 = v2))) ⇒
+    (∃ s. (Verified( s, K, v1 ) @ #i) ∧ (Verified( s, K, v2 ) @ #j))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ c1 c2 K v1 v2 #i #j.
+  (Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j)
+ ∧
+  (¬(v1 = v2)) ∧
+  (∀ s. (Verified( s, K, v1 ) @ #i) ∧ (Verified( s, K, v2 ) @ #j) ⇒ ⊥)"
+*/
+by sorry
+
+lemma C3_evidence_reachable [hide_lemma=A2_signer_authorized,
+                             hide_lemma=D2_intersection_seats_corrupt,
+                             hide_lemma=D2b_intersection_seats_corrupt_unordered]:
+  exists-trace "∃ s K v1 v2 #i. Evidence( s, K, v1, v2 ) @ #i"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ s K v1 v2 #i. (Evidence( s, K, v1, v2 ) @ #i)"
+*/
+by sorry
+
+lemma E1_below_threshold_no_conflict [hide_lemma=A2_signer_authorized,
+                                      hide_lemma=D2_intersection_seats_corrupt]:
+  all-traces
+  "(∀ s1 s2 s3 #k #l #m.
+     (((Corrupt( s1 ) @ #k) ∧ (Corrupt( s2 ) @ #l)) ∧ (Corrupt( s3 ) @ #m)) ⇒
+     (((s1 = s2) ∨ (s1 = s3)) ∨ (s2 = s3))) ⇒
+   (¬(∃ c1 c2 K v1 v2 #i #j.
+       ((Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j)) ∧
+       (¬(v1 = v2))))"
+/*
+guarded formula characterizing all counter-examples:
+"(∀ s1 s2 s3 #k #l #m.
+   (Corrupt( s1 ) @ #k) ∧ (Corrupt( s2 ) @ #l) ∧ (Corrupt( s3 ) @ #m)
+  ⇒
+   ((s1 = s2) ∨ (s1 = s3) ∨ (s2 = s3))) ∧
+ (∃ c1 c2 K v1 v2 #i #j.
+   (Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j) ∧ ¬(v1 = v2))"
+*/
+by sorry
+
+lemma E2_at_threshold_conflict_exists [hide_lemma=A2_signer_authorized,
+                                       hide_lemma=D2_intersection_seats_corrupt,
+                                       hide_lemma=D2b_intersection_seats_corrupt_unordered]:
+  exists-trace
+  "∃ c1 c2 K v1 v2 s1 s2 s3 #i #j #k #l #m.
+    (((((((((Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j)) ∧
+           (¬(v1 = v2))) ∧
+          (Corrupt( s1 ) @ #k)) ∧
+         (Corrupt( s2 ) @ #l)) ∧
+        (Corrupt( s3 ) @ #m)) ∧
+       (¬(s1 = s2))) ∧
+      (¬(s1 = s3))) ∧
+     (¬(s2 = s3))) ∧
+    (∀ s #n. (Corrupt( s ) @ #n) ⇒ (((s = s1) ∨ (s = s2)) ∨ (s = s3)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ c1 c2 K v1 v2 s1 s2 s3 #i #j #k #l #m.
+  (Accept( c1, K, v1 ) @ #i) ∧
+  (Accept( c2, K, v2 ) @ #j) ∧
+  (Corrupt( s1 ) @ #k) ∧
+  (Corrupt( s2 ) @ #l) ∧
+  (Corrupt( s3 ) @ #m)
+ ∧
+  (¬(v1 = v2)) ∧
+  (¬(s1 = s2)) ∧
+  (¬(s1 = s3)) ∧
+  (¬(s2 = s3)) ∧
+  (∀ s #n. (Corrupt( s ) @ #n) ⇒ ((s = s1) ∨ (s = s2) ∨ (s = s3)))"
+*/
+by sorry
+
+lemma C2_intersection_at_least_2qN [hide_lemma=A2_signer_authorized,
+                                    hide_lemma=D2_intersection_seats_corrupt]:
+  all-traces
+  "∀ c1 c2 K v1 v2 s t #i #j.
+    (((((Accept( c1, K, v1 ) @ #i) ∧ (Accept( c2, K, v2 ) @ #j)) ∧
+       (¬(v1 = v2))) ∧
+      (Verified( s, K, v1 ) @ #i)) ∧
+     (Verified( t, K, v1 ) @ #i)) ⇒
+    (∃ u.
+      (((Verified( u, K, v1 ) @ #i) ∧ (Verified( u, K, v2 ) @ #j)) ∧
+       (¬(u = s))) ∧
+      (¬(u = t)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ c1 c2 K v1 v2 s t #i #j.
+  (Accept( c1, K, v1 ) @ #i) ∧
+  (Accept( c2, K, v2 ) @ #j) ∧
+  (Verified( s, K, v1 ) @ #i) ∧
+  (Verified( t, K, v1 ) @ #i)
+ ∧
+  (¬(v1 = v2)) ∧
+  (∀ u.
+    (Verified( u, K, v1 ) @ #i) ∧ (Verified( u, K, v2 ) @ #j)
+   ⇒
+    ((u = s) ∨ (u = t)))"
+*/
+by sorry
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.12.0
+Maude version 3.5.1
+Git revision: 82780bbaf3328a45f624ddb41e51bf75425f851c (with uncommited changes), branch: master
+Compiled at: 2026-03-07 14:22:39.174278293 UTC
+*/
+
+end
+
+==============================================================================
+summary of summaries:
+
+analyzed: qpt128_quorum_n7.spthy
+
+  processing time: 115.52s
+  
+  sanity_honest_certificate (exists-trace): analysis incomplete (1 steps)
+  A1_distinct_signers (all-traces): analysis incomplete (1 steps)
+  A2_signer_authorized (all-traces): analysis incomplete (1 steps)
+  A_acceptance_authorized (all-traces): analysis incomplete (1 steps)
+  D2_intersection_seats_corrupt (all-traces): analysis incomplete (1 steps)
+  D2b_intersection_seats_corrupt_unordered (all-traces): verified (6 steps)
+  D1_non_frameability (all-traces): analysis incomplete (1 steps)
+  B_conflict_needs_2qN_corrupt (all-traces): analysis incomplete (1 steps)
+  C1_intersection_nonempty (all-traces): analysis incomplete (1 steps)
+  C3_evidence_reachable (exists-trace): analysis incomplete (1 steps)
+  E1_below_threshold_no_conflict (all-traces): analysis incomplete (1 steps)
+  E2_at_threshold_conflict_exists (exists-trace): analysis incomplete (1 steps)
+  C2_intersection_at_least_2qN (all-traces): analysis incomplete (1 steps)
+
+==============================================================================

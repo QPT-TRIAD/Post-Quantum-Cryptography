@@ -1,0 +1,54 @@
+{
+  "scope": "ACTUAL_CEQS124_RELATION_PROOFS_EXPERIMENTAL",
+  "binary_sha256": "5a212125c67105e66bde6b59232fceba6402f9535bf8df3f3e490d7cdf38367b",
+  "only_verification_inputs": "authenticated public configuration and complete inline frame bytes",
+  "frames": [
+    {
+      "sha256": "17c29be18fd3e97e967f47cc1f0e2e79739168b43afdfa2f57f6eb7ef6983908",
+      "native_verified": true,
+      "frame_bytes": 289664,
+      "complete_QC_accepted": false,
+      "all_proof_bytes_inline": true,
+      "private_input_opened": false,
+      "native_proof_bytes": 339200,
+      "encoded_proof_bytes": 283952
+    },
+    {
+      "sha256": "87b63f90eccdcf3e8b5aee93d8ea8b6bc87e76be08163e40464c18e3fe157f4b",
+      "native_verified": true,
+      "frame_bytes": 287712,
+      "complete_QC_accepted": false,
+      "all_proof_bytes_inline": true,
+      "private_input_opened": false,
+      "native_proof_bytes": 339200,
+      "encoded_proof_bytes": 282000
+    }
+  ],
+  "recovered_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "qpt_128_qualified": false,
+  "actual_authorization_or_nonframing_proved": false,
+  "complete_32KiB_QCs_accepted": 0
+}

@@ -1,0 +1,101 @@
+===== COMMAND: python3 ceqs_attack_lab.py --all
+===== cwd: domains/09-security-games-and-attack-lab/src   PYTHONDONTWRITEBYTECODE=1
+===== environment: pinned Python (Python 3.12.3; numpy 2.4.6)
+===== start: 2026-09-13T18:42:35+02:00
+
+A. Negative tests (Mode B v1.50, n=14):
+  PASS  forged opening (s altered) rejected by the relation   [opening does not match the registry key]
+  PASS  unregistered credential rejected   [opening does not match the registry key]
+  PASS  opening claimed under another seat rejected   [43 rows with distinct seats required]
+  PASS  duplicate validator in the witness rejected   [43 rows with distinct seats required]
+  PASS  witness replayed under another message rejected   [handle is not r^7 XOR L_c(s)]
+  PASS  witness replayed in another domain rejected   [opening does not match the registry key]
+  PASS  witness with fewer than 43 rows rejected   [43 rows with distinct seats required]
+  PASS  handles out of canonical order rejected   [handles must be strictly increasing]
+  PASS  duplicate handle rejected   [handles must be strictly increasing]
+  PASS  truncated frame rejected   [payload length mismatch]
+  PASS  frame with trailing bytes rejected   [payload length mismatch]
+  PASS  wrong magic rejected   [noncanonical header]
+  PASS  wrong version rejected   [noncanonical header]
+  PASS  wrong suite rejected   [noncanonical header]
+  PASS  quorum count below 43 rejected   [noncanonical header]
+  PASS  non-canonical (non-64-byte) message rejected   [message must be a 64-byte digest]
+  PASS  duplicate registration rejected   [handle collision]
+  PASS  replay of the same certificate is not a conflict   [equal messages are not a conflict]
+  PASS  equal messages are not a conflict   [equal messages are not a conflict]
+  PASS  conflict across different domains rejected   [domain mismatch]
+  PASS  certificate from another registry rejected   [configuration mismatch]
+  PASS  framing an honest seat fails
+  PASS  fabricated blame fails public verification   [returned False]
+  PASS  positive control: 22 seats extracted
+
+B. Framing scaling (real key map, full enumeration):
+  n= 8 power  space=2^8  M=[1, 1, 1, 1, 1, 1]  classical mean 88 (pred 128)  0.1s
+  n= 8 linear space=2^8  M=[1, 1, 1, 1, 1, 1]  classical mean 88 (pred 128)  0.1s
+  n=10 power  space=2^10  M=[1, 1, 1, 1, 1, 1]  classical mean 580 (pred 512)  0.7s
+  n=10 linear space=2^10  M=[1, 1, 1, 1, 1, 1]  classical mean 580 (pred 512)  1.1s
+  n=11 power  space=2^11  M=[1, 1, 1, 1, 1, 1]  classical mean 968 (pred 1024)  1.7s
+  n=11 linear space=2^11  M=[1, 1, 1, 1, 1, 1]  classical mean 968 (pred 1024)  2.9s
+  n=13 power  space=2^13  M=[1, 1, 1, 1, 1, 1]  classical mean 4702 (pred 4096)  12.3s
+  n=13 linear space=2^13  M=[1, 1, 1, 1, 1, 1]  classical mean 4702 (pred 4096)  8.1s
+  n=14 power  space=2^14  M=[1, 1, 1, 1, 1, 1]  classical mean 9358 (pred 8192)  14.7s
+  n=14 linear space=2^14  M=[1, 1, 1, 1, 1, 1]  classical mean 9358 (pred 8192)  12.4s
+
+B2. No-handle baseline (joint (s,r) enumeration):
+  n=8  no handle: space 2^16, M=[1, 1, 1]   with handle: space 2^8   -> the handle costs the defender n bits of search space  (16.9s)
+
+C. Grover simulation (exact state vector, real oracle):
+  n= 8 N=2^8 M=1  k*: measured 12 vs predicted 12 (pi/4 sqrt(N/M)=12.6)  p=0.9999  max|sim-theory|=4.44e-15  0.0s
+  n=10 N=2^10 M=1  k*: measured 25 vs predicted 25 (pi/4 sqrt(N/M)=25.1)  p=0.9995  max|sim-theory|=5.33e-15  0.1s
+  n=11 N=2^11 M=1  k*: measured 35 vs predicted 35 (pi/4 sqrt(N/M)=35.5)  p=1.0000  max|sim-theory|=3.22e-15  0.3s
+  n=13 N=2^13 M=1  k*: measured 71 vs predicted 71 (pi/4 sqrt(N/M)=71.1)  p=0.9999  max|sim-theory|=2.55e-15  2.3s
+
+D. Collision scaling (real linear-trick attack):
+  E= 2  deltas tried [11, 11, 17, 6, 30, 2, 5, 13]  mean 11.875 (pred 2^2=4)  log2 3.57  0.0s
+  E= 4  deltas tried [62, 8, 15, 31, 29, 11, 35, 3]  mean 24.25 (pred 2^4=16)  log2 4.6  0.1s
+  E= 6  deltas tried [162, 6, 235, 137, 29, 125, 110, 319]  mean 140.375 (pred 2^6=64)  log2 7.13  0.4s
+  E= 8  deltas tried [418, 60, 90, 1016, 105, 304, 940, 664]  mean 449.625 (pred 2^8=256)  log2 8.81  1.0s
+  E=10  deltas tried [757, 2041, 1347, 6258, 363, 230, 1726, 3184]  mean 1988.25 (pred 2^10=1024)  log2 10.96  4.2s
+  E=12  deltas tried [2009, 3942, 8753, 12069, 36197, 4517, 42928, 14065]  mean 15560.0 (pred 2^12=4096)  log2 13.93  29.4s
+
+E. Challenge-collision attack, v1.46 vs v1.50:
+  v1.46: challenge collision after 234 messages -> extraction FAILED: inverse of zero
+  v1.50: first-coefficient collision after 172 messages -> extraction named 22 seats
+
+F. Ledger:
+{
+  "framing_classical": {
+    "measured_slope_bits_per_bit": 1.107,
+    "predicted_slope": 1.0,
+    "extrapolation_n256_log2": 255.0
+  },
+  "framing_quantum_grover": {
+    "measured_slope_bits_per_bit": 0.512,
+    "predicted_slope": 0.5,
+    "extrapolation_n256_log2": 128.0,
+    "note": "iterations; gate cost not modelled"
+  },
+  "binding_collision_classical": {
+    "measured_slope_bits_per_expansion_bit": 1.037,
+    "predicted_slope": 1.0,
+    "extrapolation_E512_log2": 512.0
+  },
+  "binding_collision_quantum": {
+    "predicted_log2_at_E512": 256.0,
+    "basis": "Grover over delta at the measured density 2^-E"
+  },
+  "production_rows_from_the_ledger": {
+    "R1_framing_log2_Pr_over_G": -145.0,
+    "R2_binding": -209.0,
+    "R3_proof_soundness": -138.1,
+    "R4_simulation": -159.4,
+    "R5_false_positive": -181.2,
+    "total": -137.7,
+    "D2_margin_bits": 7.7
+  },
+  "caveat": "Toy parameters. Measured exponents test the SCALING of the real attacks, not the production security level."
+}
+
+Successful violations: 0 of 24 attempts
+
+===== end: 2026-09-13T18:44:29+02:00  exit_code=0  wall_seconds=113.51

@@ -1,0 +1,21 @@
+{
+  "scope": "Fresh archive extraction with offline wheel install, retained public audit, and new synthetic component tests",
+  "exit_code": 0,
+  "checks_passed": 51,
+  "complete_QCs": 0,
+  "tested_archive_sha256": "27756b5b5fecd7f58b441d3b9c0dc9d4c0b310e5bb8b65cb29368e6ae81f5138",
+  "tested_payload_members": {
+    "continuation_v1.29/assessment.md": "c7f9e583d697ce6fc875fbcd6505247db757b3c545f7915bd4fd62d76c962dd4",
+    "continuation_v1.29/authorization.py": "cec05e5837f1f4a00a1da2a0e2881475918698bb71fe137d10562797496ef71d",
+    "continuation_v1.29/dependencies/pqcrypto-0.3.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "b2f9bad43a1e3970f55e6f68fc1864595c9b0c6e53638aa8393b1d01216a6ebb",
+    "continuation_v1.29/dependency_provenance.json": "9e5b3c790462344df0e882992bfaf3bc942b28e07afbe9c2496f04a3fd49c5ec",
+    "continuation_v1.29/evidence/public_approval_audit.json": "1152a3b1bf3bcb4767507357a0da1660dc1fd47d7422c2be1f24651e4a3aad36",
+    "continuation_v1.29/evidence/results.json": "97025e1851296bd0a93d97b58a3a5d86c2248a04987dc40d117f769691f492f5",
+    "continuation_v1.29/install_dependency.py": "8fe3ba111f2b2f3ab9857e6b81d257a91cd67dfb7a8f456aff9fbb900d9ee0b7",
+    "continuation_v1.29/package_update.py": "4560ec8ea9e1811d5892c54a197fc18e5688d75820780e0f47ca2ecc75ede883",
+    "continuation_v1.29/reproduce.sh": "14d8e80b0d7b9c338842fec039ba223b357a802949e706f165e337429e7d00f2",
+    "continuation_v1.29/test_authorization.py": "e2634e017fdcb93c24d9defd8667fdefbe98a1d2c8a63363b7ff631014b1f716",
+    "continuation_v1.29/verify_audit.py": "652f158c8477fa76bc989348cb1bc5df7eaa627510e3230d3ec7f1327deb58c5",
+    "reproduce.sh": "14d8e80b0d7b9c338842fec039ba223b357a802949e706f165e337429e7d00f2"
+  }
+}

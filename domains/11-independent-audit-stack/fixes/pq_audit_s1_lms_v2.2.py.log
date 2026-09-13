@@ -1,0 +1,29 @@
+test_S1_001_sizes_from_typecodes (__main__.Tests.test_S1_001_sizes_from_typecodes)
+S1-001 sizes derived from typecode arithmetic match RFC 8554 / SP 800-208. ... ok
+test_S1_002_self_roundtrip_all_ots_types (__main__.Tests.test_S1_002_self_roundtrip_all_ots_types)
+S1-002 RFC-exact sign/verify round trip, tamper rejection, every typecode at H5. ... ok
+test_S1_003_interop_mine_to_hsslms (__main__.Tests.test_S1_003_interop_mine_to_hsslms)
+S1-003 signatures from this implementation verify under hsslms (independent). ... ok
+test_S1_004_interop_hsslms_to_mine (__main__.Tests.test_S1_004_interop_hsslms_to_mine)
+S1-004 signatures from hsslms verify under this implementation; tampering fails. ... ok
+test_S1_005_state_machine_normal_and_exhaustion (__main__.Tests.test_S1_005_state_machine_normal_and_exhaustion)
+S1-005 every leaf used once in order; the 2^h+1-th signature is refused. ... ok
+test_S1_006_crash_injection_never_reuses_a_leaf (__main__.Tests.test_S1_006_crash_injection_never_reuses_a_leaf)
+S1-006 power loss at every step boundary, restart, continue: no q appears twice ... ok
+test_S1_007_rollback_detected_by_hardware_counter (__main__.Tests.test_S1_007_rollback_detected_by_hardware_counter)
+S1-007 restoring an older NVM record cannot reuse leaves (fails closed by skipping). ... ok
+test_S1_008_concurrent_signing_unique_leaves (__main__.Tests.test_S1_008_concurrent_signing_unique_leaves)
+S1-008 16 threads signing concurrently reserve distinct leaves. ... ok
+test_S1_009_clone_shows_why_export_is_forbidden (__main__.Tests.test_S1_009_clone_shows_why_export_is_forbidden)
+S1-009 NEGATIVE DEMONSTRATION: two devices booted from one exported key state ... ok
+test_S1_010_attack_game_ledger (__main__.Tests.test_S1_010_attack_game_ledger)
+S1-010 cheapest counting game is 2^(n/2) queries; n=24 fails QPT-128, n=32 passes. ... ok
+test_S1_011_grover_simulation_matches_law (__main__.Tests.test_S1_011_grover_simulation_matches_law)
+S1-011 exact Grover on the keyed chain oracle: measured optimum == closed form. ... ok
+test_S1_012_mixed_typecodes_refused (__main__.AuditFixTests.test_S1_012_mixed_typecodes_refused)
+S1-012 (F3) non-approved m != n pairs are refused at keygen and at verify. ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 20.096s
+
+OK

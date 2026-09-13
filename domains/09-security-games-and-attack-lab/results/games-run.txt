@@ -1,0 +1,73 @@
+===== COMMAND: python3 ceqs_games.py --all
+===== cwd: domains/09-security-games-and-attack-lab/src   PYTHONDONTWRITEBYTECODE=1
+===== environment: pinned Python (Python 3.12.3; numpy not used by this harness)
+===== start: 2026-09-13T18:44:49+02:00
+
+GAME 1 - FRAME (recover an honest opening and name that seat):
+  n= 8  mean Q =     144.7  log2 =  7.18   theory 2^(n-1) = 128   (0.1s)
+  n=10  mean Q =     664.8  log2 =  9.38   theory 2^(n-1) = 512   (0.4s)
+  n=11  mean Q =    1153.3  log2 = 10.17   theory 2^(n-1) = 1024   (0.7s)
+  n=13  mean Q =    4942.5  log2 = 12.27   theory 2^(n-1) = 4096   (3.7s)
+  n=14  mean Q =   10414.0  log2 = 13.35   theory 2^(n-1) = 8192   (11.4s)
+  FIT  log2 Q = 1.0178 n + -0.931   (theory: 1.0 n - 1.0)
+  extrapolation to n=256: 2^259.6   exact theory 2^255
+  endgame: victim seat 0 named by extraction: True (a recovered opening wins the game)
+
+GAME 2 - SUPPRESS (silence extraction by a challenge collision):
+  v1.46  n= 8 h= 8  mean Q =       16.0  log2 =  4.00  theory =       20.1
+  v1.46  n=10 h=10  mean Q =       35.0  log2 =  5.13  theory =       40.1
+  v1.46  n=11 h=11  mean Q =       50.7  log2 =  5.66  theory =       56.7
+  v1.46  n=13 h=13  mean Q =      126.0  log2 =  6.98  theory =      113.4
+  v1.46  n=14 h=14  mean Q =      186.4  log2 =  7.54  theory =      160.4
+  v1.46  n=16 h=16  mean Q =      272.0  log2 =  8.09  theory =      320.8
+  v1.46  n=17 h=17  mean Q =      362.5  log2 =  8.50  theory =      453.7
+  v1.50  n= 8 h=24  mean Q =     2049.7  log2 = 11.00  theory =     5133.6
+  v1.50  n=10 h=30  mean Q =    14437.8  log2 = 13.82  theory =    41068.6
+  v1.50  n=11 h=33  mean Q =    71289.0  log2 = 16.12  theory =   116159.5
+  FIT over both schemes: log2 Q = 0.4498 h + 0.767   (theory 0.5 h + 0.326)
+  extrapolation h=256: fitted 2^115.9 vs exact 2^128.3  (fit error -12.4 bits)
+  extrapolation h=768: fitted 2^346.2 vs exact 2^384.3  (fit error -38.1 bits)
+
+GAME 3 - EVADE (equivocate with 22 corrupt seats, hide the culprits):
+  E= 2  mean delta trials =       7.0  log2 =  2.81  (2^E=4, 2^(E+1)=8)
+  E= 4  mean delta trials =      21.5  log2 =  4.43  (2^E=16, 2^(E+1)=32)
+  E= 6  mean delta trials =      61.5  log2 =  5.94  (2^E=64, 2^(E+1)=128)
+  E= 8  mean delta trials =     453.2  log2 =  8.82  (2^E=256, 2^(E+1)=512)
+  E=10  mean delta trials =    1322.0  log2 = 10.37  (2^E=1024, 2^(E+1)=2048)
+  E=12  mean delta trials =    8217.0  log2 = 13.00  (2^E=4096, 2^(E+1)=8192)
+  FIT  log2 Q = 1.0242 E + 0.393   (theory slope 1.0)
+  end-to-end: one evader costs exactly itself: v1.50 names the other 21 and flags complete=False; v1.46 would have named nobody
+
+GAME 4 - SAFETY (equivocate at all with <= 21 corrupt seats):
+  C= 0  impossible (counting) 
+  C= 1  impossible (counting) 
+  C= 2  impossible (counting) 
+  C= 3  impossible (counting) 
+  C= 4  impossible (counting) 
+  C= 5  impossible (counting) 
+  C= 6  impossible (counting) 
+  C= 7  impossible (counting) 
+  C= 8  impossible (counting) 
+  C= 9  impossible (counting) 
+  C=10  impossible (counting) 
+  C=11  impossible (counting) 
+  C=12  impossible (counting) 
+  C=13  impossible (counting) 
+  C=14  impossible (counting) 
+  C=15  impossible (counting) 
+  C=16  impossible (counting) 
+  C=17  impossible (counting) 
+  C=18  impossible (counting) 
+  C=19  impossible (counting) 
+  C=20  impossible (counting) 
+  C=21  impossible (counting) 
+  C=22  EQUIVOCATION POSSIBLE   -> names 23 of 22 genuine double-signers, missed 0, handle-coincidence false positives [40]
+  C=23  EQUIVOCATION POSSIBLE   -> names 23 of 23 genuine double-signers, missed 0, handle-coincidence false positives []
+
+Summary of measured vs theoretical exponents:
+  FRAME    classical slope 1.0178  (theory 1.0)
+  SUPPRESS slope per bit of output 0.4498  (theory 0.5)
+  EVADE    slope per expansion bit 1.0242  (theory 1.0)
+  SAFETY   threshold 22  (theory 22)
+
+===== end: 2026-09-13T18:47:17+02:00  exit_code=0  wall_seconds=148.19

@@ -1,0 +1,14 @@
+differential_b0: 2200 pairs, 0 disagreements, blame checks 5632 (0 disagree)
+  overlap_uniform                  n= 800 agree= 800 accepted_by_both= 800
+  overlap_natural                  n= 300 agree= 300 accepted_by_both= 300
+  overlap_min_22                   n= 100 agree= 100 accepted_by_both= 100
+  overlap_full_43                  n= 100 agree= 100 accepted_by_both= 100
+  overlap_42_two_bit_diff          n= 100 agree= 100 accepted_by_both= 100
+  single_bit_bitmap_diff_invalid   n= 100 agree= 100 accepted_by_both=   0
+  disjoint_invalid                 n= 100 agree= 100 accepted_by_both=   0
+  disjoint_43_vs_21_invalid        n= 100 agree= 100 accepted_by_both=   0
+  same_message                     n= 100 agree= 100 accepted_by_both=   0
+  different_domain                 n= 100 agree= 100 accepted_by_both=   0
+  cross_registry                   n= 100 agree= 100 accepted_by_both=   0
+  corrupted_signature              n= 100 agree= 100 accepted_by_both=   0
+  swapped_slots                    n= 100 agree= 100 accepted_by_both=   0

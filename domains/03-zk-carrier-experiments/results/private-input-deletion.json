@@ -1,0 +1,15 @@
+{
+  "deleted_before_public_verification": true,
+  "files": [
+    {
+      "path": "continuation_v1.27b/fixture/case0/PRIVATE_TRACE_WITNESS.bin",
+      "bytes": 4472
+    },
+    {
+      "path": "continuation_v1.27b/fixture/case1/PRIVATE_TRACE_WITNESS.bin",
+      "bytes": 4472
+    }
+  ],
+  "bytes_deleted": 8944,
+  "secure_erasure_claim": false
+}

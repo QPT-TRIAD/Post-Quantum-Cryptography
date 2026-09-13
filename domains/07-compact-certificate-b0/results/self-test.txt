@@ -1,0 +1,45 @@
+test_all_overlaps_22_to_43 (__main__.B0Tests.test_all_overlaps_22_to_43) ... ok
+test_different_domain_rejected_in_extract (__main__.B0Tests.test_different_domain_rejected_in_extract) ... ok
+test_extraction_range_43_vs_22_63 (__main__.B0Tests.test_extraction_range_43_vs_22_63) ... ok
+test_honest_seat_framing_rejected (__main__.B0Tests.test_honest_seat_framing_rejected) ... ok
+test_hybrid_and_combiner (__main__.B0Tests.test_hybrid_and_combiner) ... ok
+test_popcount_42_and_44_rejected (__main__.B0Tests.test_popcount_42_and_44_rejected) ... ok
+test_same_message_not_a_conflict (__main__.B0Tests.test_same_message_not_a_conflict) ... ok
+test_size_gate (__main__.B0Tests.test_size_gate) ... ok
+test_truncated_and_trailing_rejected (__main__.B0Tests.test_truncated_and_trailing_rejected) ... ok
+test_valid_encode_verify (__main__.B0Tests.test_valid_encode_verify) ... ok
+test_verify_blame (__main__.B0Tests.test_verify_blame) ... ok
+test_width_mismatch_rejected (__main__.B0Tests.test_width_mismatch_rejected) ... ok
+test_wrong_cfg_rejected (__main__.B0Tests.test_wrong_cfg_rejected) ... ok
+test_wrong_domain_rejected (__main__.B0Tests.test_wrong_domain_rejected) ... ok
+test_wrong_message_rejected (__main__.B0Tests.test_wrong_message_rejected) ... ok
+test_wrong_seat_signature_rejected (__main__.B0Tests.test_wrong_seat_signature_rejected) ... ok
+test_wrong_suite_rejected (__main__.B0Tests.test_wrong_suite_rejected) ... ok
+test_64_rotating_quorums (__main__.B1Tests.test_64_rotating_quorums) ... ok
+test_body_5712_and_proof_budget (__main__.B1Tests.test_body_5712_and_proof_budget) ... ok
+test_delta_zero_out_of_range_and_duplicate_rejected (__main__.B1Tests.test_delta_zero_out_of_range_and_duplicate_rejected) ... ok
+test_distinctness_lemma_both_branches (__main__.B1Tests.test_distinctness_lemma_both_branches) ... ok
+test_duplicate_registered_keys_rejected (__main__.B1Tests.test_duplicate_registered_keys_rejected) ... ok
+test_extraction_range_and_all_overlaps (__main__.B1Tests.test_extraction_range_and_all_overlaps) ... ok
+test_handle_input_is_135_bytes (__main__.B1Tests.test_handle_input_is_135_bytes) ... ok
+test_identity_table_keys_distinct_for_all_512_basis (__main__.B1Tests.test_identity_table_keys_distinct_for_all_512_basis) ... ok
+test_key_mismatch_rejected (__main__.B1Tests.test_key_mismatch_rejected) ... ok
+test_registry_key_is_128_bytes (__main__.B1Tests.test_registry_key_is_128_bytes) ... ok
+test_relation_holds_for_honest_rows (__main__.B1Tests.test_relation_holds_for_honest_rows) ... ok
+test_unsorted_and_duplicate_links_rejected (__main__.B1Tests.test_unsorted_and_duplicate_links_rejected) ... ok
+test_verify_b1_never_authorizes (__main__.B1Tests.test_verify_b1_never_authorizes) ... ok
+test_wrong_domain_rejected (__main__.B1Tests.test_wrong_domain_rejected) ... ok
+test_wrong_message_rejected (__main__.B1Tests.test_wrong_message_rejected) ... ok
+test_wrong_seat_rejected (__main__.B1Tests.test_wrong_seat_rejected) ... ok
+test_binius64_provenance_and_floor (__main__.CalculatorTests.test_binius64_provenance_and_floor) ... ok
+test_grover_threshold_exact (__main__.CalculatorTests.test_grover_threshold_exact) ... ok
+test_mode_s_linear_lower_bound (__main__.CalculatorTests.test_mode_s_linear_lower_bound) ... ok
+test_per_seat_budget (__main__.CalculatorTests.test_per_seat_budget) ... ok
+test_report_flags (__main__.CalculatorTests.test_report_flags) ... ok
+test_theorem_c_wire_budget (__main__.CalculatorTests.test_theorem_c_wire_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 39 tests in 0.180s
+
+OK
+# elapsed_s 0.28

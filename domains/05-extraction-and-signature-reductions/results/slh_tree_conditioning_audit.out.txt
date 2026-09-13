@@ -1,0 +1,32 @@
+================================================================
+$ python3 slh_tree_conditioning_audit.py
+----------------------------------------------------------------
+test_01_refactoring_preserves_acceptance (__main__.TreeConditioningTests.test_01_refactoring_preserves_acceptance) ... ok
+test_02_repetition_does_not_amplify_and_conditioning_can_equal_one (__main__.TreeConditioningTests.test_02_repetition_does_not_amplify_and_conditioning_can_equal_one) ... ok
+test_03_public_deterministic_value_has_no_guessing_entropy (__main__.TreeConditioningTests.test_03_public_deterministic_value_has_no_guessing_entropy) ... ok
+test_04_proposed_formula_cannot_certify_claimed_threshold (__main__.TreeConditioningTests.test_04_proposed_formula_cannot_certify_claimed_threshold) ... ok
+test_05_exhaustive_cases_are_a_sum (__main__.TreeConditioningTests.test_05_exhaustive_cases_are_a_sum) ... ok
+test_06_nested_theorem_substitution_matches_expanded_ledger (__main__.TreeConditioningTests.test_06_nested_theorem_substitution_matches_expanded_ledger) ... ok
+test_07_missing_bounds_are_never_zero (__main__.TreeConditioningTests.test_07_missing_bounds_are_never_zero) ... ok
+test_08_hypertree_target_identity (__main__.TreeConditioningTests.test_08_hypertree_target_identity) ... ok
+test_09_ideal_query_success_exceeds_query_free_guess (__main__.TreeConditioningTests.test_09_ideal_query_success_exceeds_query_free_guess) ... ok
+test_10_quorum_conversion_keeps_the_identity_loss (__main__.TreeConditioningTests.test_10_quorum_conversion_keeps_the_identity_loss) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.003s
+
+OK
+SLH TREE CONDITIONAL LIMIT: UNESTABLISHED
+CONCRETE QPT-128 SIGNATURE BOUND: UNESTABLISHED
+Refactoring/repetition gives no automatic probability amplification.
+Claimed RHS at q_s=1, leaves=2, lambda=128: 2^-127 (before other terms).
+Published dependency ledger: 10 distinct terms; TCR_F coefficient is 3.
+Quantum/FIPS/hash matches and numerical property bounds remain required.
+Parameter comparison: name | n bytes | layers | height per layer
+SLH-DSA-SHAKE-128s | 16 | 7 | 9
+SLH-DSA-SHAKE-128f | 16 | 22 | 3
+SLH-DSA-SHAKE-256s | 32 | 8 | 8
+No parameter-set label or finite test result is a security certificate.
+----------------------------------------------------------------
+# exit_code: 0
+

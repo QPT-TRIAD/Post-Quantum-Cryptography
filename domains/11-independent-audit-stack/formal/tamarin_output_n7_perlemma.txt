@@ -1,0 +1,15 @@
+# N=7 Tamarin results (qpt128_quorum_n7.spthy). Batch --prove of all-but-D1: TIMEOUT 1200 s (no output; batch mode prints only at the end).
+# D1 alone: TAMARIN_EXIT=251 ELAPSED=593s (251 = GHC heap exhausted at -M2500m).
+# Isolated per-lemma runs (tamarin-prover --prove=<lemma> ... +RTS -N2 -M2500m), rc=124 timeout, rc=251 heap exhausted:
+sanity_honest_certificate | rc=0 | 127s | sanity_honest_certificate (exists-trace): verified (8 steps)
+A1_distinct_signers | rc=0 | 139s | A1_distinct_signers (all-traces): verified (23 steps)
+A2_signer_authorized | rc=0 | 156s | A2_signer_authorized (all-traces): verified (4685 steps)
+D2_intersection_seats_corrupt | rc=0 | 134s | D2_intersection_seats_corrupt (all-traces): verified (6 steps)
+D2b_intersection_seats_corrupt_unordered | rc=0 | 116s | D2b_intersection_seats_corrupt_unordered (all-traces): verified (6 steps)
+B_conflict_needs_2qN_corrupt | rc=124 | 420s | NO-RESULT
+C1_intersection_nonempty | rc=124 | 360s | NO-RESULT
+E2_at_threshold_conflict_exists | rc=251 | 266s | NO-RESULT
+A_acceptance_authorized | rc=251 | 198s | NO-RESULT
+C3_evidence_reachable | rc=0 | 156s | C3_evidence_reachable (exists-trace): verified (4 steps)
+E1_below_threshold_no_conflict | not run in isolation (same shape as B, which timed out); only in the timed-out batch run
+C2_intersection_at_least_2qN | not run in isolation; only in the timed-out batch run

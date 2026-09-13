@@ -1,0 +1,10 @@
+test_challenge_invertible_and_linear (__main__.V150Tests.test_challenge_invertible_and_linear) ... ok
+test_extraction_all_overlaps (__main__.V150Tests.test_extraction_all_overlaps) ... ok
+test_message_canonicality (__main__.V150Tests.test_message_canonicality) ... ok
+test_partial_extraction_reports_found_seats (__main__.V150Tests.test_partial_extraction_reports_found_seats) ... ok
+test_relation (__main__.V150Tests.test_relation) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 14.995s
+
+OK

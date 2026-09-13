@@ -1,0 +1,11 @@
+{
+  "scope": "EXTRACTED_FOCUSED_PACKAGE_VERIFICATION",
+  "zip_integrity": true,
+  "manifest_entries_checked": 895,
+  "both_retained_pairs_verified_from_extracted_files": true,
+  "final_public_negative_controls": 18,
+  "no_private_witness_members": true,
+  "complete_original_goal_QCs": 0,
+  "rebuild_from_source_tested_here": false,
+  "note": "Native binaries and all public inputs executed after extraction; source rebuild needs an external toolchain/dependencies."
+}

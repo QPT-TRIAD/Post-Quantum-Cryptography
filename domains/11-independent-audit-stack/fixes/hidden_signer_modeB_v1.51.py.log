@@ -1,0 +1,30 @@
+test_challenge_invertible_and_linear (__main__.V150Tests.test_challenge_invertible_and_linear) ... ok
+test_extraction_all_overlaps (__main__.V150Tests.test_extraction_all_overlaps) ... ok
+test_message_canonicality (__main__.V150Tests.test_message_canonicality) ... ok
+test_partial_extraction_reports_found_seats (__main__.V150Tests.test_partial_extraction_reports_found_seats) ... ok
+test_relation (__main__.V150Tests.test_relation) ... ok
+test_f5_domain_canonicality (__main__.AuditFixTests.test_f5_domain_canonicality) ... ok
+test_f5_parse_requires_bytes (__main__.AuditFixTests.test_f5_parse_requires_bytes) ... ERROR
+
+======================================================================
+ERROR: test_f5_parse_requires_bytes (__main__.AuditFixTests.test_f5_parse_requires_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<source-tree>/hidden_signer_modeB_v1.51.py", line 343, in test_f5_parse_requires_bytes
+    frame = encode(self.p, self.registry, self.secrets, b'D' * 64, b'M' * 64, list(range(QUORUM)))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<source-tree>/hidden_signer_modeB_v1.51.py", line 149, in encode
+    cfg = m46.cfg_of(registry, p)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<source-tree>/hidden_signer_modeB_v1.46.py", line 351, in cfg_of
+    return H(b'CQ46/cfg/B', *parts)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<source-tree>/hidden_signer_modeB_v1.46.py", line 300, in H
+    h.update(struct.pack('>Q', len(p)))
+                               ^^^^^^
+TypeError: object of type 'int' has no len()
+
+----------------------------------------------------------------------
+Ran 7 tests in 11.180s
+
+FAILED (errors=1)

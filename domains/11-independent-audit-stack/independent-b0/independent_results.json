@@ -1,0 +1,110 @@
+{
+ "vectors": "b0_vectors.json",
+ "spec": "B0_wire_spec_v1.44.md",
+ "cases": 900,
+ "categories": {
+  "cfg": {
+   "agree": 1,
+   "disagree": 0
+  },
+  "conflict.blame": {
+   "agree": 3200,
+   "disagree": 0
+  },
+  "conflict.encode": {
+   "agree": 800,
+   "disagree": 0
+  },
+  "conflict.extract": {
+   "agree": 400,
+   "disagree": 0
+  },
+  "conflict.verify": {
+   "agree": 800,
+   "disagree": 0
+  },
+  "conflict.verify_fields": {
+   "agree": 800,
+   "disagree": 0
+  },
+  "mutated.verify": {
+   "agree": 100,
+   "disagree": 0
+  },
+  "other-domain.blame_all_false(spec-derived)": {
+   "agree": 100,
+   "disagree": 0
+  },
+  "other-domain.extract": {
+   "agree": 100,
+   "disagree": 0
+  },
+  "same-message.blame_all_false(spec-derived)": {
+   "agree": 100,
+   "disagree": 0
+  },
+  "same-message.extract": {
+   "agree": 100,
+   "disagree": 0
+  },
+  "trailing.verify": {
+   "agree": 100,
+   "disagree": 0
+  },
+  "truncated.verify": {
+   "agree": 100,
+   "disagree": 0
+  }
+ },
+ "total_agree": 6701,
+ "total_disagree": 0,
+ "disagreements": [],
+ "info": {
+  "registry": {
+   "scheme_id used as UTF-8 text": 1,
+   "canonical toy registry": 1
+  },
+  "conflict.extract": {
+   "overlap=43": 62,
+   "overlap=23": 61,
+   "overlap=22": 142,
+   "overlap=30": 69,
+   "overlap=25": 66
+  },
+  "conflict.blame": {
+   "ref=True": 1391,
+   "ref=False": 1809
+  },
+  "same-message.extract_reason": {
+   "8.2 messages equal (not a conflict)": 100
+  },
+  "same-message.verify_each": {
+   "accept": 200
+  },
+  "mutated.reject_reason": {
+   "7.7": 93,
+   "7.4": 7
+  },
+  "mutated.frame_len": {
+   "1592": 100
+  },
+  "other-domain.extract_reason": {
+   "8.2 domain differ": 100
+  },
+  "other-domain.verify_each": {
+   "accept": 200
+  },
+  "truncated.reject_reason": {
+   "7.3": 100
+  },
+  "truncated.frame_len": {
+   "1591": 100
+  },
+  "trailing.reject_reason": {
+   "7.3": 100
+  },
+  "trailing.frame_len": {
+   "1593": 100
+  }
+ }
+}

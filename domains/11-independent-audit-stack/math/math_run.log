@@ -1,0 +1,27 @@
+[M1_quorum] {"symbolic_threshold": "-N + 2*q", "N64_q43": 22, "exhaustive_N4_to_64_mismatches": [], "verdict": "REPRODUCED"}
+[M2_arithmetic] {"cfhl_queries_log2": {"n256": 81.74, "n768": 252.4}, "cfhl_gates_log2": {"n256": 99.74, "n768": 270.4}, "module_bound_at_2^81.7_queries": 0.3333, "classical_birthday_log2": {"n256": 128, "n768": 384}, "grover_iterations_log2_and_gates": {"128": [63.65, 82.0], "192": [95.65, 114.0], "256": [127.65, 146.0]}, "multi_target_unprefixed_pass_iff_T_log2_le": 36, "multi_target_T40_gates_log2": 126.0, "prefixed_gates_log2": 146, "category_attacks_pass_2^128": {"1": false, "2": false, "3": false, "5": true}, "s6_margins_bits": {"128": -46, "192": -14, "256": 18}, "sizes": {"qc_43_mldsa87": 199357, "lms
+[M3_gf_differential] {"samples": 400, "mismatches": {"mul": 0, "inv": 0, "pow7": 0, "root7": 0}, "toy_fields": {"8": {"irreducible_by_galois": true, "pairs": 4096, "mismatches": 0}, "10": {"irreducible_by_galois": true, "pairs": 4096, "mismatches": 0}, "16": {"irreducible_by_galois": true, "pairs": 4096, "mismatches": 0}}, "verdict": "REPRODUCED"}
+[M4_kernel] {"linearized_D": {"GF(2^4)": {"mode": "exhaustive", "triples": 4095, "kernel_dim_histogram": {"0": 1320, "1": 2250, "2": 525}, "max_dim": 2, "non_subspace_cases": 0}, "GF(2^6)": {"mode": "exhaustive", "triples": 262143, "kernel_dim_histogram": {"0": 86184, "1": 134946, "2": 41013}, "max_dim": 2, "non_subspace_cases": 0}, "GF(2^8)": {"mode": "random", "triples": 20000, "kernel_dim_histogram": {"0": 6636, "1": 10133, "2": 3231}, "max_dim": 2, "non_subspace_cases": 0}, "GF(2^12)": {"mode": "random", "triples": 3000, "kernel_dim_histogram": {"0": 1030, "1": 1475, "2": 495}, "max_dim": 2, "non_subs
+[M5_quantum] {"rows": [{"n": 8, "k_measured": 12, "k_predicted": 12, "p_at_pred": 0.999947, "closed_form": 0.999947}, {"n": 10, "k_measured": 25, "k_predicted": 25, "p_at_pred": 0.999461, "closed_form": 0.999461}, {"n": 12, "k_measured": 50, "k_predicted": 50, "p_at_pred": 0.999945, "closed_form": 0.999945}, {"n": 14, "k_measured": 100, "k_predicted": 100, "p_at_pred": 1.0, "closed_form": 1.0}, {"n": 16, "k_measured": 201, "k_predicted": 201, "p_at_pred": 0.999988, "closed_form": 0.999988}, {"n": 18, "k_measured": 402, "k_predicted": 402, "p_at_pred": 0.999998, "closed_form": 0.999998}], "fitted_slope_log2
+[M6_multi_target] {"classical_n16": {"1": {"shared_mean_work": 72806, "prefixed_mean_work": 40283, "expected_shared": 65536, "expected_prefixed": 65536}, "2": {"shared_mean_work": 22120, "prefixed_mean_work": 60515, "expected_shared": 32768, "expected_prefixed": 65536}, "4": {"shared_mean_work": 5433, "prefixed_mean_work": 31596, "expected_shared": 16384, "expected_prefixed": 65536}, "16": {"shared_mean_work": 2319, "prefixed_mean_work": 65012, "expected_shared": 4096, "expected_prefixed": 65536}, "64": {"shared_mean_work": 746, "prefixed_mean_work": 39251, "expected_shared": 1024, "expected_prefixed": 65536}, 
+[M7_frame_toy] {"rows": [{"bits": 8, "forgery_work": 279, "expected_2^bits": 256, "honest_named_before_attack": [], "frame_succeeded_after_forgery": true}, {"bits": 10, "forgery_work": 2879, "expected_2^bits": 1024, "honest_named_before_attack": [], "frame_succeeded_after_forgery": true}, {"bits": 12, "forgery_work": 4418, "expected_2^bits": 4096, "honest_named_before_attack": [], "frame_succeeded_after_forgery": true}, {"bits": 14, "forgery_work": 22285, "expected_2^bits": 16384, "honest_named_before_attack": [], "frame_succeeded_after_forgery": true}], "fitted_slope_log2work_vs_bits": 0.979, "expected_slop
+[M8_evade] {"N": 7, "q": 5, "pairs": 441, "pairs_below_2q_minus_N": 0, "verdict": "REPRODUCED"}
+{
+ "engines": {
+  "sympy": "1.13.1",
+  "galois": "0.4.11",
+  "numpy": "2.4.6",
+  "sage": "not installed"
+ },
+ "seconds": 217.2,
+ "verdicts": {
+  "M1_quorum": "REPRODUCED",
+  "M2_arithmetic": "REPRODUCED",
+  "M3_gf_differential": "REPRODUCED",
+  "M4_kernel": "REPRODUCED",
+  "M5_quantum": "REPRODUCED",
+  "M6_multi_target": "REPRODUCED",
+  "M7_frame_toy": "REPRODUCED",
+  "M8_evade": "REPRODUCED"
+ }
+}

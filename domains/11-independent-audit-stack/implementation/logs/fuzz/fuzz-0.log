@@ -1,0 +1,95 @@
+fuzz_verify: params b=6 tau=4 wg=8 rho=64 seed=49; cert = m(64)||handles(1376)||proof(8996) = 10436 bytes; init 47.7s (prove 31.35s, verify 12.53s, genuine ok=1 'ok')
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1887053857
+INFO: Loaded 1 modules   (2052 inline 8-bit counters): 2052 [0x5ecef863f8a8, 0x5ecef86400ac), 
+INFO: Loaded 1 PC tables (2052 PCs): 2052 [0x5ecef86400b0,0x5ecef86480f0), 
+INFO:       42 files found in <workdir>/qpt_audit_stack/implementation/corpus/
+INFO: seed corpus: files: 42 min: 1b max: 20872b total: 424907b rss: 71Mb
+Slowest unit: 11 s:
+artifact_prefix='<workdir>/qpt_audit_stack/implementation/artifacts/'; Test unit written to <workdir>/qpt_audit_stack/implementation/artifacts/slow-unit-ba24afc27d35a514a11637a1a0e9a9e93a541a03
+#32	pulse  cov: 455 ft: 537 corp: 12/98Kb exec/s: 2 rss: 78Mb
+#43	INITED cov: 455 ft: 586 corp: 13/108Kb exec/s: 3 rss: 79Mb
+#64	pulse  cov: 455 ft: 586 corp: 13/108Kb lim: 10436 exec/s: 4 rss: 80Mb
+#128	pulse  cov: 455 ft: 586 corp: 13/108Kb lim: 10436 exec/s: 8 rss: 83Mb
+#159	RELOAD cov: 455 ft: 675 corp: 15/128Kb lim: 10436 exec/s: 9 rss: 87Mb
+#221	NEW    cov: 455 ft: 722 corp: 16/138Kb lim: 10436 exec/s: 12 rss: 88Mb L: 10436/10436 MS: 2 CrossOver-ChangeByte-
+#240	NEW    cov: 455 ft: 742 corp: 17/149Kb lim: 10436 exec/s: 13 rss: 89Mb L: 10436/10436 MS: 4 ShuffleBytes-ChangeByte-ChangeBit-CMP- DE: "\001\001"-
+#248	NEW    cov: 455 ft: 747 corp: 18/159Kb lim: 10436 exec/s: 13 rss: 89Mb L: 10436/10436 MS: 3 PersAutoDict-CrossOver-CopyPart- DE: "\001\001"-
+#249	NEW    cov: 455 ft: 748 corp: 19/169Kb lim: 10436 exec/s: 13 rss: 89Mb L: 10436/10436 MS: 1 CMP- DE: "\246\247\\\226J\3076\272\316Qv{\031\252!\244\256x\231\357\006\"\"\034\027\331\376\3029\376\001\033"-
+#254	NEW    cov: 455 ft: 752 corp: 20/179Kb lim: 10436 exec/s: 14 rss: 90Mb L: 10436/10436 MS: 5 CopyPart-ChangeBinInt-PersAutoDict-ChangeBinInt-CopyPart- DE: "\246\247\\\226J\3076\272\316Qv{\031\252!\244\256x\231\357\006\"\"\034\027\331\376\3029\376\001\033"-
+#256	pulse  cov: 455 ft: 752 corp: 20/179Kb lim: 10436 exec/s: 14 rss: 90Mb
+#275	REDUCE cov: 455 ft: 752 corp: 20/178Kb lim: 10436 exec/s: 15 rss: 90Mb L: 4184/10436 MS: 1 EraseBytes-
+#365	NEW    cov: 455 ft: 757 corp: 21/188Kb lim: 10436 exec/s: 18 rss: 94Mb L: 10436/10436 MS: 5 ChangeBinInt-ShuffleBytes-CopyPart-ChangeBit-CrossOver-
+#380	REDUCE cov: 455 ft: 757 corp: 21/188Kb lim: 10436 exec/s: 19 rss: 95Mb L: 3326/10436 MS: 4 ChangeByte-ChangeASCIIInt-CopyPart-EraseBytes-
+#397	NEW    cov: 455 ft: 788 corp: 22/198Kb lim: 10436 exec/s: 18 rss: 95Mb L: 10436/10436 MS: 2 CopyPart-PersAutoDict- DE: "\001\001"-
+#425	RELOAD cov: 455 ft: 792 corp: 23/208Kb lim: 10436 exec/s: 20 rss: 97Mb
+#437	NEW    cov: 455 ft: 798 corp: 24/218Kb lim: 10436 exec/s: 19 rss: 98Mb L: 10436/10436 MS: 2 ChangeByte-CMP- DE: ".\000\000\000"-
+#474	NEW    cov: 455 ft: 807 corp: 25/228Kb lim: 10436 exec/s: 21 rss: 99Mb L: 10436/10436 MS: 2 ChangeBinInt-PersAutoDict- DE: ".\000\000\000"-
+#512	pulse  cov: 455 ft: 807 corp: 25/228Kb lim: 10436 exec/s: 23 rss: 100Mb
+#512	REDUCE cov: 455 ft: 807 corp: 25/227Kb lim: 10436 exec/s: 23 rss: 100Mb L: 2427/10436 MS: 3 ChangeBit-ShuffleBytes-EraseBytes-
+#519	RELOAD cov: 455 ft: 808 corp: 26/238Kb lim: 10436 exec/s: 22 rss: 100Mb
+#526	NEW    cov: 455 ft: 829 corp: 27/248Kb lim: 10436 exec/s: 22 rss: 101Mb L: 10436/10436 MS: 2 PersAutoDict-PersAutoDict- DE: "\246\247\\\226J\3076\272\316Qv{\031\252!\244\256x\231\357\006\"\"\034\027\331\376\3029\376\001\033"-"\001\001"-
+#543	NEW    cov: 455 ft: 830 corp: 28/258Kb lim: 10436 exec/s: 23 rss: 102Mb L: 10436/10436 MS: 2 ChangeBinInt-CopyPart-
+#544	NEW    cov: 455 ft: 834 corp: 29/268Kb lim: 10436 exec/s: 23 rss: 102Mb L: 10436/10436 MS: 1 CMP- DE: "\022\235\020\315\220\021\204\347\245\277\367\246HA\211\325=\231e\374dG\202A2\327/.\010\221\211\331"-
+#680	NEW    cov: 455 ft: 844 corp: 30/278Kb lim: 10436 exec/s: 27 rss: 107Mb L: 10436/10436 MS: 1 PersAutoDict- DE: ".\000\000\000"-
+#862	RELOAD cov: 455 ft: 849 corp: 32/299Kb lim: 10436 exec/s: 29 rss: 113Mb
+#963	REDUCE cov: 455 ft: 849 corp: 32/298Kb lim: 10436 exec/s: 32 rss: 117Mb L: 1490/10436 MS: 1 EraseBytes-
+#1024	pulse  cov: 455 ft: 849 corp: 32/298Kb lim: 10436 exec/s: 34 rss: 119Mb
+#1185	NEW    cov: 455 ft: 866 corp: 33/308Kb lim: 10436 exec/s: 35 rss: 124Mb L: 10436/10436 MS: 2 ChangeByte-ChangeByte-
+#1200	NEW    cov: 455 ft: 867 corp: 34/318Kb lim: 10436 exec/s: 36 rss: 125Mb L: 10436/10436 MS: 5 ChangeByte-CrossOver-ChangeASCIIInt-CopyPart-PersAutoDict- DE: "\001\001"-
+#1226	RELOAD cov: 455 ft: 878 corp: 35/328Kb lim: 10436 exec/s: 36 rss: 127Mb
+#1301	NEW    cov: 455 ft: 879 corp: 36/339Kb lim: 10436 exec/s: 37 rss: 129Mb L: 10436/10436 MS: 5 ChangeASCIIInt-ShuffleBytes-ChangeByte-CrossOver-CMP- DE: "\000\000\000/"-
+#1417	RELOAD cov: 455 ft: 880 corp: 37/349Kb lim: 10436 exec/s: 38 rss: 134Mb
+#1624	NEW    cov: 455 ft: 881 corp: 38/359Kb lim: 10436 exec/s: 38 rss: 142Mb L: 10436/10436 MS: 2 ChangeBit-CMP- DE: "\377\377"-
+#1640	NEW    cov: 455 ft: 884 corp: 39/369Kb lim: 10436 exec/s: 39 rss: 142Mb L: 10436/10436 MS: 1 PersAutoDict- DE: "\000\000\000/"-
+#1678	NEW    cov: 455 ft: 887 corp: 40/379Kb lim: 10436 exec/s: 39 rss: 144Mb L: 10436/10436 MS: 3 PersAutoDict-ChangeByte-PersAutoDict- DE: "\377\377"-"\001\001"-
+#2048	pulse  cov: 455 ft: 887 corp: 40/379Kb lim: 10436 exec/s: 43 rss: 156Mb
+#2176	RELOAD cov: 455 ft: 888 corp: 41/390Kb lim: 10436 exec/s: 43 rss: 162Mb
+#2928	REDUCE cov: 455 ft: 888 corp: 41/390Kb lim: 10436 exec/s: 45 rss: 190Mb L: 1455/10436 MS: 1 EraseBytes-
+#3321	NEW    cov: 455 ft: 889 corp: 42/400Kb lim: 10436 exec/s: 45 rss: 205Mb L: 10436/10436 MS: 1 ChangeBit-
+#3363	NEW    cov: 455 ft: 890 corp: 43/410Kb lim: 10436 exec/s: 45 rss: 207Mb L: 10436/10436 MS: 2 ChangeASCIIInt-PersAutoDict- DE: ".\000\000\000"-
+#3632	NEW    cov: 455 ft: 891 corp: 44/420Kb lim: 10436 exec/s: 45 rss: 218Mb L: 10436/10436 MS: 2 ShuffleBytes-PersAutoDict- DE: "\001\001"-
+#3829	RELOAD cov: 455 ft: 892 corp: 45/430Kb lim: 10436 exec/s: 46 rss: 225Mb
+#3954	NEW    cov: 455 ft: 893 corp: 46/441Kb lim: 10436 exec/s: 45 rss: 229Mb L: 10436/10436 MS: 5 CrossOver-PersAutoDict-ChangeByte-ChangeBit-CMP- DE: "\377\377"-"\000\000\000="-
+#4096	pulse  cov: 455 ft: 893 corp: 46/441Kb lim: 10436 exec/s: 46 rss: 235Mb
+#4150	RELOAD cov: 455 ft: 894 corp: 47/451Kb lim: 10436 exec/s: 46 rss: 237Mb
+#4751	RELOAD cov: 455 ft: 902 corp: 48/461Kb lim: 10436 exec/s: 46 rss: 261Mb
+#5076	NEW    cov: 455 ft: 903 corp: 49/471Kb lim: 10436 exec/s: 46 rss: 273Mb L: 10436/10436 MS: 5 ChangeByte-ChangeBinInt-CrossOver-CrossOver-PersAutoDict- DE: ".\000\000\000"-
+#5144	NEW    cov: 455 ft: 904 corp: 50/481Kb lim: 10436 exec/s: 46 rss: 276Mb L: 10436/10436 MS: 3 ChangeByte-ChangeBit-PersAutoDict- DE: "\000\000\000="-
+#5371	NEW    cov: 455 ft: 905 corp: 51/492Kb lim: 10436 exec/s: 45 rss: 285Mb L: 10436/10436 MS: 2 PersAutoDict-PersAutoDict- DE: "\000\000\000/"-"\377\377"-
+#5512	NEW    cov: 455 ft: 915 corp: 52/502Kb lim: 10436 exec/s: 45 rss: 291Mb L: 10436/10436 MS: 1 PersAutoDict- DE: "\000\000\000/"-
+#5849	NEW    cov: 455 ft: 917 corp: 53/512Kb lim: 10436 exec/s: 45 rss: 304Mb L: 10436/10436 MS: 2 CopyPart-PersAutoDict- DE: ".\000\000\000"-
+#6072	NEW    cov: 455 ft: 925 corp: 54/522Kb lim: 10436 exec/s: 45 rss: 313Mb L: 10436/10436 MS: 2 CopyPart-PersAutoDict- DE: "\000\000\000/"-
+#6825	NEW    cov: 455 ft: 933 corp: 55/532Kb lim: 10436 exec/s: 45 rss: 342Mb L: 10436/10436 MS: 2 ChangeBinInt-ChangeBit-
+#8022	NEW    cov: 455 ft: 935 corp: 56/542Kb lim: 10436 exec/s: 46 rss: 386Mb L: 10436/10436 MS: 2 ChangeBit-ChangeBinInt-
+#8153	RELOAD cov: 455 ft: 937 corp: 57/553Kb lim: 10436 exec/s: 46 rss: 392Mb
+#8192	pulse  cov: 455 ft: 937 corp: 57/553Kb lim: 10436 exec/s: 46 rss: 394Mb
+#8219	NEW    cov: 455 ft: 961 corp: 58/563Kb lim: 10436 exec/s: 46 rss: 395Mb L: 10436/10436 MS: 1 ChangeASCIIInt-
+#8925	NEW    cov: 455 ft: 962 corp: 59/573Kb lim: 10436 exec/s: 46 rss: 422Mb L: 10436/10436 MS: 1 PersAutoDict- DE: "\000\000\000="-
+#9431	RELOAD cov: 455 ft: 969 corp: 60/583Kb lim: 10436 exec/s: 46 rss: 443Mb
+#15333	NEW    cov: 455 ft: 970 corp: 61/593Kb lim: 10488 exec/s: 48 rss: 469Mb L: 10436/10436 MS: 1 CMP- DE: "\377\377\377\377\377\377\377)"-
+#16384	pulse  cov: 455 ft: 970 corp: 61/593Kb lim: 10488 exec/s: 49 rss: 473Mb
+#18598	NEW    cov: 455 ft: 972 corp: 62/604Kb lim: 10514 exec/s: 51 rss: 477Mb L: 10436/10436 MS: 4 ShuffleBytes-PersAutoDict-ShuffleBytes-ChangeByte- DE: ".\000\000\000"-
+#22731	NEW    cov: 455 ft: 973 corp: 63/614Kb lim: 10553 exec/s: 56 rss: 484Mb L: 10436/10436 MS: 3 ChangeBit-CrossOver-ChangeByte-
+#29810	NEW    cov: 455 ft: 974 corp: 64/624Kb lim: 10618 exec/s: 62 rss: 495Mb L: 10436/10436 MS: 4 ChangeBinInt-CMP-ChangeBinInt-CMP- DE: "\246\247\\\226J\3076\272\316Qv{\031\252!\244\256x\231\357\006\"\"\034\027\331\376\3029\376\001\033"-"\001."-
+#31034	REDUCE cov: 455 ft: 974 corp: 64/624Kb lim: 10618 exec/s: 62 rss: 499Mb L: 1451/10436 MS: 4 InsertRepeatedBytes-CrossOver-CopyPart-EraseBytes-
+#31526	NEW    cov: 455 ft: 982 corp: 65/634Kb lim: 10618 exec/s: 63 rss: 500Mb L: 10436/10436 MS: 2 PersAutoDict-PersAutoDict- DE: "\377\377"-"\000\000\000="-
+#32768	pulse  cov: 455 ft: 982 corp: 65/634Kb lim: 10618 exec/s: 64 rss: 501Mb
+#40311	DONE   cov: 455 ft: 982 corp: 65/634Kb lim: 10696 exec/s: 67 rss: 516Mb
+###### Recommended dictionary. ######
+"\001\001" # Uses: 421
+"\246\247\\\226J\3076\272\316Qv{\031\252!\244\256x\231\357\006\"\"\034\027\331\376\3029\376\001\033" # Uses: 360
+".\000\000\000" # Uses: 374
+"\022\235\020\315\220\021\204\347\245\277\367\246HA\211\325=\231e\374dG\202A2\327/.\010\221\211\331" # Uses: 379
+"\000\000\000/" # Uses: 432
+"\377\377" # Uses: 394
+"\000\000\000=" # Uses: 357
+"\377\377\377\377\377\377\377)" # Uses: 252
+"\001." # Uses: 104
+###### End of recommended dictionary. ######
+Done 40311 runs in 601 second(s)
+stat::number_of_executed_units: 40311
+stat::average_exec_per_sec:     67
+stat::new_units_added:          44
+stat::slowest_unit_time_sec:    11
+stat::peak_rss_mb:              516

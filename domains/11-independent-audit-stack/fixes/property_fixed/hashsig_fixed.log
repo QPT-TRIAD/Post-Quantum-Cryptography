@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "<workdir>/qpt_audit_stack/fixes/property_fixed/test_props_hashsig_fixed.py", line 98, in <module>
+    _k = T4.LmsPrivate(_pair[0], _pair[1], I=b'\xA5' * 16, seed=(bytes(_pair) * 16)[:32])   # dedicated, never re-used
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<source-tree>/pq_audit_s1_lms_v2.2.py", line 149, in __init__
+    raise ValueError('F3: LMS m and LM-OTS n must match (SP 800-208 approved sets pair n with m; '
+ValueError: F3: LMS m and LM-OTS n must match (SP 800-208 approved sets pair n with m; RFC 8554 5.1: the two hash functions SHOULD be the same)

@@ -1,0 +1,164 @@
+(*
+ * QPT-128 / CE-QS profile B0 -- quorum-certificate accountability
+ * ProVerif model, N = 4 seats, q = 3, 2q-N = 2.      VARIANT: C = 2 corrupt seats
+ *
+ * STATUS: UNEXECUTED.  ProVerif is not installed in the audit environment; this
+ * file was syntax-checked by reading only (ProVerif >= 2.04 typed syntax:
+ * tables, `restriction`, disjunctions in query conclusions).
+ *
+ * Abstraction (same as the Tamarin model qpt128_quorum.spthy)
+ *   - seats s0..s3 are public constants; each has a fresh long-term key
+ *   - ML-DSA is an ideal message-recovering signature (getmess / checksign)
+ *   - honest seats sign one candidate per coordinate (enforced by the
+ *     `restriction` below, which removes traces violating it)
+ *   - the verifier accepts when three signatures over (K,v,seat) verify under
+ *     the registered keys of three pairwise-distinct seats
+ *   - the extractor takes two signatures of the same seat on conflicting
+ *     transcripts (the seat is then in the intersection of any two certificates
+ *     that carry them) and emits Evidence
+ *   - corruption: exactly C long-term keys are published (C = 2 here;
+ *     see qpt128_quorum_C1.pv for C = 1).  Counting corruptions is not
+ *     expressible in ProVerif, so the threshold is tested by variants.
+ *
+ * Expected results for THIS variant (C = 2 = 2q-N):
+ *   A  (authorized)                     true
+ *   C  (intersection non-empty)         true
+ *   D  (non-frameability)               true  (evidence names only s0 or s1)
+ *   D' (intersection seats corrupt)     true
+ *   E2 (no conflicting pair)            FALSE -- attack trace expected:
+ *      s0,s1 forge for both v1,v2; s2 signs v1; s3 signs v2.
+ *   B  (conflict ==> two distinct corrupt) true (trivially: Corrupt(s0),
+ *      Corrupt(s1) occur); the meaningful test of B is the C = 1 variant,
+ *      where "no conflict" (E1) must be TRUE.
+ *)
+
+set ignoreTypes = false.
+
+free c: channel.
+
+type seat.
+type skey.
+type pkey.
+
+fun pk(skey): pkey.
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, k: skey; getmess(sign(m, k)) = m.
+reduc forall m: bitstring, k: skey; checksign(sign(m, k), pk(k)) = m.
+
+(* the seat universe: exactly N = 4 named seats *)
+free s0, s1, s2, s3: seat.
+
+(* registered public keys *)
+table keys(seat, pkey).
+
+(* events *)
+event Registered(seat, pkey).
+event Corrupt(seat).
+event Signed(seat, bitstring, bitstring).            (* seat, K, v *)
+event Verified(seat, bitstring, bitstring).          (* seat, K, v : signer of an accepted cert *)
+event Accept(bitstring, bitstring, seat, seat, seat). (* K, v, a1, a2, a3 *)
+event Evidence(seat, bitstring, bitstring, bitstring). (* seat, K, v1, v2 *)
+
+(* ---- honest seats sign at most one candidate per coordinate ------------ *)
+restriction s: seat, K: bitstring, v1: bitstring, v2: bitstring;
+  event(Signed(s, K, v1)) && event(Signed(s, K, v2)) ==> v1 = v2.
+
+(* ---- processes --------------------------------------------------------- *)
+
+(* an honest seat: signs adversary-chosen (K,v) in its own name *)
+let Seat(s: seat, sk: skey) =
+  ! ( in(c, (K: bitstring, v: bitstring));
+      event Signed(s, K, v);
+      out(c, sign((K, v, s), sk)) ).
+
+(* the verifier: three signatures of three distinct registered seats *)
+let Verifier =
+  ! ( in(c, (K: bitstring, v: bitstring, sigA: bitstring, sigB: bitstring, sigC: bitstring));
+      let (=K, =v, a1: seat) = getmess(sigA) in
+      let (=K, =v, a2: seat) = getmess(sigB) in
+      let (=K, =v, a3: seat) = getmess(sigC) in
+      get keys(=a1, pkA: pkey) in
+      get keys(=a2, pkB: pkey) in
+      get keys(=a3, pkC: pkey) in
+      if checksign(sigA, pkA) = (K, v, a1) then
+      if checksign(sigB, pkB) = (K, v, a2) then
+      if checksign(sigC, pkC) = (K, v, a3) then
+      if a1 <> a2 && a1 <> a3 && a2 <> a3 then
+      event Verified(a1, K, v);
+      event Verified(a2, K, v);
+      event Verified(a3, K, v);
+      event Accept(K, v, a1, a2, a3) ).
+
+(* the extractor: two signatures of one seat on conflicting transcripts *)
+let Extractor =
+  ! ( in(c, (K: bitstring, v1: bitstring, v2: bitstring, sig1: bitstring, sig2: bitstring));
+      let (=K, =v1, s: seat) = getmess(sig1) in
+      let (=K, =v2, =s) = getmess(sig2) in
+      get keys(=s, pks) in
+      if checksign(sig1, pks) = (K, v1, s) then
+      if checksign(sig2, pks) = (K, v2, s) then
+      if v1 <> v2 then
+      event Evidence(s, K, v1, v2);
+      out(c, (s, K, v1, v2, sig1, sig2)) ).
+
+(* ---- queries ------------------------------------------------------------ *)
+
+(* A: acceptance implies each of the three (distinct) signers is either an
+      honest signer of (K,v) or a corrupt seat *)
+query K: bitstring, v: bitstring, a1: seat, a2: seat, a3: seat;
+  event(Accept(K, v, a1, a2, a3)) ==>
+       (event(Signed(a1, K, v)) || event(Corrupt(a1)))
+    && (event(Signed(a2, K, v)) || event(Corrupt(a2)))
+    && (event(Signed(a3, K, v)) || event(Corrupt(a3))).
+
+(* A': a verified signer is authorized *)
+query s: seat, K: bitstring, v: bitstring;
+  event(Verified(s, K, v)) ==> event(Signed(s, K, v)) || event(Corrupt(s)).
+
+(* B: a conflicting pair implies two distinct corrupt seats
+      (in this variant trivially true because s0 and s1 are corrupt) *)
+query K: bitstring, v1: bitstring, v2: bitstring,
+      a1: seat, a2: seat, a3: seat, b1: seat, b2: seat, b3: seat;
+  event(Accept(K, v1, a1, a2, a3)) && event(Accept(K, v2, b1, b2, b3)) ==>
+       v1 = v2 || (event(Corrupt(s0)) && event(Corrupt(s1))).
+
+(* C: non-empty intersection of the signer sets of a conflicting pair *)
+query K: bitstring, v1: bitstring, v2: bitstring,
+      a1: seat, a2: seat, a3: seat, b1: seat, b2: seat, b3: seat;
+  event(Accept(K, v1, a1, a2, a3)) && event(Accept(K, v2, b1, b2, b3)) ==>
+       v1 = v2
+    || a1 = b1 || a1 = b2 || a1 = b3
+    || a2 = b1 || a2 = b2 || a2 = b3
+    || a3 = b1 || a3 = b2 || a3 = b3.
+
+(* D: non-frameability -- every seat named by extraction is corrupt *)
+query s: seat, K: bitstring, v1: bitstring, v2: bitstring;
+  event(Evidence(s, K, v1, v2)) ==> event(Corrupt(s)).
+
+(* D': a seat with verified signatures on two candidates at one K is corrupt *)
+query s: seat, K: bitstring, v1: bitstring, v2: bitstring;
+  event(Verified(s, K, v1)) && event(Verified(s, K, v2)) ==> v1 = v2 || event(Corrupt(s)).
+
+(* E2 (C = 2): "no conflicting pair" is expected to be FALSE (attack found) *)
+query K: bitstring, v1: bitstring, v2: bitstring,
+      a1: seat, a2: seat, a3: seat, b1: seat, b2: seat, b3: seat;
+  event(Accept(K, v1, a1, a2, a3)) && event(Accept(K, v2, b1, b2, b3)) ==> v1 = v2.
+
+(* reachability sanity: a certificate and evidence are reachable *)
+query K: bitstring, v: bitstring, a1: seat, a2: seat, a3: seat;
+  event(Accept(K, v, a1, a2, a3)).
+query s: seat, K: bitstring, v1: bitstring, v2: bitstring;
+  event(Evidence(s, K, v1, v2)).
+
+(* ---- main --------------------------------------------------------------- *)
+
+process
+  new sk0: skey; new sk1: skey; new sk2: skey; new sk3: skey;
+  insert keys(s0, pk(sk0)); insert keys(s1, pk(sk1));
+  insert keys(s2, pk(sk2)); insert keys(s3, pk(sk3));
+  out(c, (pk(sk0), pk(sk1), pk(sk2), pk(sk3)));
+  (* corruption: exactly C = 2 seats *)
+  event Corrupt(s0); out(c, sk0);
+  event Corrupt(s1); out(c, sk1);
+  ( Seat(s0, sk0) | Seat(s1, sk1) | Seat(s2, sk2) | Seat(s3, sk3)
+  | Verifier | Extractor )

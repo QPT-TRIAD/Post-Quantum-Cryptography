@@ -1,0 +1,7 @@
+PASS bitmap_policy_equivalence n=3
+PASS bitmap_policy_equivalence n=4
+PASS bitmap_policy_equivalence n=5
+PASS bft_intersection n=4 f=1 q=3 minimum=2
+PASS bft_intersection n=7 f=2 q=5 minimum=3
+EXPECTED-FAIL unbound_bitmap_attack blocked_by=f_B
+PASS n=64 bitmap_size_bytes=8

@@ -1,0 +1,5 @@
+### B_conflict_needs_2qN_corrupt  2026-09-13T03:54:41+02:00  -M8000m  timeout 1500 s
+maude tool: 'maude'
+ checking version: 3.5.1. OK.
+ checking installation: OK.
+### exit 137 wall 204 s

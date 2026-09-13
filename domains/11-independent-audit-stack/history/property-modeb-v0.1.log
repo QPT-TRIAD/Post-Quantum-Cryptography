@@ -1,0 +1,118 @@
+...F.....
+[modeB] n=256 kernel dims over 11 triples: [2, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0]
+..
+[modeB catalogue] rejected=25 accepted=1 wrong-exception=4
+  REJECT count_42                                      noncanonical header
+  REJECT count_44                                      noncanonical header
+  REJECT duplicate_signer_same_handle_twice            handles must be strictly increasing
+  REJECT duplicated_entry                              handles must be strictly increasing
+  REJECT empty                                         frame size out of bounds
+  REJECT encode_42_seats                               exactly 43 distinct seats
+  REJECT encode_duplicate_seat                         exactly 43 distinct seats
+  REJECT encode_oversized_proof                        frame exceeds 32,768 bytes
+  REJECT extract_cfg_mismatch                          configuration mismatch
+  REJECT extract_same_message                          equal messages are not a conflict
+  REJECT extract_unregistered_domain                   domain mismatch
+  REJECT invalid_length_plen_minus_1                   payload length mismatch
+  REJECT invalid_length_plen_plus_1                    payload length mismatch
+  REJECT oversized_32769                               frame size out of bounds
+  REJECT reordered_reversed                            handles must be strictly increasing
+  REJECT reordered_swap_0_1                            handles must be strictly increasing
+  REJECT trailing_byte                                 payload length mismatch
+  REJECT truncated_below_min                           frame size out of bounds
+  REJECT truncated_header_only                         frame size out of bounds
+  REJECT truncated_minus_1                             payload length mismatch
+  REJECT width_plus_1                                  noncanonical header
+  REJECT width_zero                                    noncanonical header
+  REJECT wrong_magic                                   noncanonical header
+  REJECT wrong_suite_46B0                              noncanonical header
+  REJECT wrong_version_46                              noncanonical header
+  ACCEPT invalid_encoding_bytearray   <-- FINDING
+  EXC    invalid_encoding_memoryview                   TypeError: '>=' not supported between instances of 'memoryview' and 'me
+  EXC    invalid_encoding_str                          TypeError: a bytes-like object is required, not 'str'
+  EXC    invalid_encoding_none                         TypeError: object of type 'NoneType' has no len()
+  EXC    invalid_encoding_int                          TypeError: object of type 'int' has no len()
+  DESIGN signer_not_in_set_unregistered_handle         parse ACCEPTS (structure-only); extract names 22 seats, all registered
+  DESIGN corrupted_handle_byte                         parse ACCEPTS (structure-only); extract names 21 seats, all registered
+  DESIGN trailing_bytes_absorbed_into_proof            parse ACCEPTS (structure-only); extract names 22 seats, all registered
+F....
+=================================== FAILURES ===================================
+___________ ModeBProperties.test_domain_length_not_validated_FINDING ___________
+
+self = <test_props_modeB.ModeBProperties testMethod=test_domain_length_not_validated_FINDING>
+
+    def test_domain_length_not_validated_FINDING(self):
+        """v1.50 fix (3) requires the message to be exactly 64 bytes 'so the header field and the
+        handle derivation see the same bytes'. The same rule is not applied to the domain: struct
+        '64s' silently truncates a 65-byte domain / zero-pads a 63-byte one, so the challenge is
+        derived from bytes the header does not carry and the frame is later unextractable
+        ('domain mismatch'). Property asserted: encode rejects a non-64-byte domain."""
+        long_d, short_d = bytes(range(65)), bytes(range(63))
+        reg, sec = M46.build_registry(P, b'epoch-len', (long_d, short_d), random.Random(7))
+        consequences = {}
+        for d in (long_d, short_d):
+            try:
+                f = M50.encode(P, reg, sec, d, M0, SEATS0)
+                parsed = M50.parse(P, f)
+                consequences[len(d)] = ('encoded; header domain == input: %s' % (parsed.domain == d))
+            except ModeBError as e:
+                consequences[len(d)] = 'rejected: %s' % e
+        for d in (long_d, short_d):
+>           with self.assertRaises(ModeBError, msg='domain len %d: %s' % (len(d), consequences[len(d)])):
+E           AssertionError: ModeBError not raised : domain len 65: encoded; header domain == input: False
+
+test_props_modeB.py:274: AssertionError
+___________________ ModeBProperties.test_malformed_catalogue ___________________
+
+self = <test_props_modeB.ModeBProperties testMethod=test_malformed_catalogue>
+
+    def test_malformed_catalogue(self):
+        must_reject, by_design = self._catalogue()
+        accepted, wrong_exc, rejected = [], [], {}
+        for name, fn in must_reject:
+            try:
+                fn()
+                accepted.append(name)
+            except ModeBError as e:
+                rejected[name] = str(e)
+            except Exception as e:                                          # noqa: BLE001
+                wrong_exc.append((name, type(e).__name__, str(e)[:60]))
+        design = {}
+        f_other = enc(list(range(21, 64)), M1)
+        for name, frame in by_design:
+            try:
+                parsed = M50.parse(P, frame)
+                res = M50.extract(P, REG, frame, f_other)
+                design[name] = 'parse ACCEPTS (structure-only); extract names %d seats, all registered'\
+                    % len(res['seats'])
+                self.assertTrue(all(0 <= s < NS for s in res['seats']))
+                handles = set(parsed.handles)
+                for b in res['blames']:                                     # no blame through a bad handle
+                    self.assertTrue(M50.verify_blame(P, REG, frame, f_other, b))
+                    self.assertIn(parsed.handles[b.position0], handles)
+            except ModeBError as e:
+                design[name] = 'rejected: %s' % e
+        print('\n[modeB catalogue] rejected=%d accepted=%d wrong-exception=%d' % (len(rejected), len(accepted), len(wrong_exc)))
+        for n in sorted(rejected):
+            print('  REJECT %-45s %s' % (n, rejected[n]))
+        for n in accepted:
+            print('  ACCEPT %s   <-- FINDING' % n)
+        for n, t, m in wrong_exc:
+            print('  EXC    %-45s %s: %s' % (n, t, m))
+        for n, v in design.items():
+            print('  DESIGN %-45s %s' % (n, v))
+>       self.assertEqual(accepted, [], 'ACCEPT-ON-INVALID: %r' % accepted)
+E       AssertionError: Lists differ: ['invalid_encoding_bytearray'] != []
+E       
+E       First list contains 1 additional elements.
+E       First extra element 0:
+E       'invalid_encoding_bytearray'
+E       
+E       - ['invalid_encoding_bytearray']
+E       + [] : ACCEPT-ON-INVALID: ['invalid_encoding_bytearray']
+
+test_props_modeB.py:464: AssertionError
+=========================== short test summary info ============================
+FAILED test_props_modeB.py::ModeBProperties::test_domain_length_not_validated_FINDING
+FAILED test_props_modeB.py::ModeBProperties::test_malformed_catalogue - Asser...
+2 failed, 14 passed in 210.87s (0:03:30)

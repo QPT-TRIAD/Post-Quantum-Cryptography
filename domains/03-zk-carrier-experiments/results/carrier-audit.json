@@ -1,0 +1,88 @@
+{
+  "scope": "EXPERIMENTAL_CARRIER_AUDIT_NOT_SECURITY_THEOREM",
+  "real_proof_representations": [
+    {
+      "representation": "QVT2",
+      "case": "case0",
+      "native_sha256": "de9d0365fadb02107aa5e5f5fe0b41694c0e5a79032ce6a8bb2325054665b013",
+      "complete_frame_bytes": 282016,
+      "field_value_bytes": 79712,
+      "boundary_hash_bytes": 179168,
+      "fixed_and_terminal_bytes": 17424,
+      "saved_from_QVT1": 1664,
+      "same_native_proof": true,
+      "public_negative_controls": 20
+    },
+    {
+      "representation": "QVT2",
+      "case": "case1",
+      "native_sha256": "f52154576fa266f4c7c6b9c7d15be6b00aec0ad9eeb75341ea56905d264a8656",
+      "complete_frame_bytes": 277968,
+      "field_value_bytes": 78672,
+      "boundary_hash_bytes": 176160,
+      "fixed_and_terminal_bytes": 17424,
+      "saved_from_QVT1": 1632,
+      "same_native_proof": true,
+      "public_negative_controls": 20
+    },
+    {
+      "representation": "QVT3",
+      "case": "case0",
+      "native_sha256": "de9d0365fadb02107aa5e5f5fe0b41694c0e5a79032ce6a8bb2325054665b013",
+      "complete_frame_bytes": 273952,
+      "field_value_bytes": 78080,
+      "boundary_hash_bytes": 172736,
+      "fixed_and_terminal_bytes": 17424,
+      "saved_from_QVT1": 9728,
+      "same_native_proof": true,
+      "public_negative_controls": 22
+    },
+    {
+      "representation": "QVT3",
+      "case": "case1",
+      "native_sha256": "f52154576fa266f4c7c6b9c7d15be6b00aec0ad9eeb75341ea56905d264a8656",
+      "complete_frame_bytes": 270304,
+      "field_value_bytes": 77248,
+      "boundary_hash_bytes": 169920,
+      "fixed_and_terminal_bytes": 17424,
+      "saved_from_QVT1": 9296,
+      "same_native_proof": true,
+      "public_negative_controls": 22
+    }
+  ],
+  "seeded_data_only": [
+    {
+      "file": "case_0.scd",
+      "carrier_bytes": 588,
+      "reconstructed_leaves": 1023,
+      "sha256": "b6dc55ab0bb213ea168474b8477d1aadc5282c32ae510d777ec80e2badf9ce08"
+    },
+    {
+      "file": "case_1.scd",
+      "carrier_bytes": 588,
+      "reconstructed_leaves": 1023,
+      "sha256": "c15f7eef9d69b5ac38f8affb8b0d62e0b9a759a33cf7c2e04f4eb652a0419bd9"
+    },
+    {
+      "file": "case_1023.scd",
+      "carrier_bytes": 588,
+      "reconstructed_leaves": 1023,
+      "sha256": "7d817427403a05d9f76045c274a3808fe969de50fc2d2d67cd6ecf0937e6f23f"
+    },
+    {
+      "file": "case_17.scd",
+      "carrier_bytes": 588,
+      "reconstructed_leaves": 1023,
+      "sha256": "b010694f6510df29d7c8c59cec07995a46412c73c7dd0d37f60f922d0fe52010"
+    },
+    {
+      "file": "case_511.scd",
+      "carrier_bytes": 588,
+      "reconstructed_leaves": 1023,
+      "sha256": "a047c8d0a8c6e358e6d9e3893b6375347811bc88ea2d8a6e92c52a113b078976"
+    }
+  ],
+  "complete_original_goal_QCs": 0,
+  "qpt_128_qualified": false,
+  "distributed_authorization_implemented": false
+}

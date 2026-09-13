@@ -1,0 +1,18 @@
+==== summary (logs/*.log) ====
+tesla exit=0 :: 8 passed, 2 xfailed in 3.46s
+b0 exit=0 :: 12 passed in 12.55s
+hashsig exit=1 :: 5 failed, 11 passed in 26.25s
+modeB exit=1 :: 2 failed, 14 passed in 146.36s (0:02:26)
+differential exit=0 ::   swapped_slots                    n= 100 agree= 100 accepted_by_both=   0
+    ACCEPT invalid_encoding_bytearray   <-- FINDING
+                          'ACCEPT-ON-INVALID multiproof: %r ; raises instead of False: %r' % (accepts, crashes))
+    DESIGN corrupted_handle_byte                         parse ACCEPTS (structure-only); extract names 21 seats, all registered
+                  design[name] = 'parse ACCEPTS (structure-only); extract names %d seats, all registered'\
+    DESIGN signer_not_in_set_unregistered_handle         parse ACCEPTS (structure-only); extract names 22 seats, all registered
+    DESIGN trailing_bytes_absorbed_into_proof            parse ACCEPTS (structure-only); extract names 22 seats, all registered
+  E       + [] : ACCEPT-ON-INVALID: ['invalid_encoding_bytearray']
+  E       AssertionError: False is not true : ACCEPT-ON-INVALID multiproof: ['empty_proof_dict'] ; raises instead of False: {'leaf_index_beyond_all_leaves': 'IndexError', 'unknown_rung_key': 'IndexError', 'nodes_wrong_shape': 'ValueError'}
+  [MTL multiproof catalogue] ACCEPTS=['empty_proof_dict'] CRASHES={'leaf_index_beyond_all_leaves': 'IndexError', 'unknown_rung_key': 'IndexError', 'nodes_wrong_shape': 'ValueError'}
+              print('  ACCEPT %s   <-- FINDING' % n)
+          print('[MTL multiproof catalogue] ACCEPTS=%r CRASHES=%r' % (accepts, crashes))
+  >       self.assertEqual(accepted, [], 'ACCEPT-ON-INVALID: %r' % accepted)

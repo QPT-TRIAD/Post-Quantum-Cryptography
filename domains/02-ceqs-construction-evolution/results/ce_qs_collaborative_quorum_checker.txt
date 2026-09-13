@@ -1,0 +1,10 @@
+PASS collaborative_quorum_honest_majority n=4 f=1 q=3
+PASS collaborative_quorum_honest_majority n=7 f=2 q=5
+PASS collaborative_quorum_honest_majority n=10 f=3 q=7
+PASS collector_has_no_trace_secret
+PASS one_final_proof_no_local_proof_list
+PASS same_hidden_set_vote_handle_binding
+PASS identifiable_abort_converges aborts=2 remaining_honest=5
+EXPECTED-FAIL non_identifiable_abort_no_progress
+PASS reference_64_21_43 honest_in_any_quorum>=22
+NOTE: structural checker only; no MPC/NIZK/PQ cryptography implemented.

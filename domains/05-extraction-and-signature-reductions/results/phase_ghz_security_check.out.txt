@@ -1,0 +1,31 @@
+================================================================
+$ python3 phase_ghz_security_check.py
+----------------------------------------------------------------
+usage: phase_ghz_security_check.py [-h] (--explain | --self-test)
+phase_ghz_security_check.py: error: one of the arguments --explain --self-test is required
+----------------------------------------------------------------
+# exit_code: 2
+
+================================================================
+$ python3 phase_ghz_security_check.py --self-test
+----------------------------------------------------------------
+test_01_phase_is_unit_modulus (__main__.PhaseTests.test_01_phase_is_unit_modulus) ... ok
+test_02_exact_128_qubit_state (__main__.PhaseTests.test_02_exact_128_qubit_state) ... ok
+test_03_incremental_qubit_counts (__main__.PhaseTests.test_03_incremental_qubit_counts) ... ok
+test_04_reverse_circuit_returns_initial_state (__main__.PhaseTests.test_04_reverse_circuit_returns_initial_state) ... ok
+test_05_computational_measurements_have_two_outcomes (__main__.PhaseTests.test_05_computational_measurements_have_two_outcomes) ... ok
+test_06_relative_phase_is_visible_in_other_basis (__main__.PhaseTests.test_06_relative_phase_is_visible_in_other_basis) ... ok
+test_07_global_phase_changes_no_density_matrix (__main__.PhaseTests.test_07_global_phase_changes_no_density_matrix) ... ok
+test_08_extra_conditional_phases_wrap_modulo_eight (__main__.PhaseTests.test_08_extra_conditional_phases_wrap_modulo_eight) ... ok
+test_09_nontrivial_bipartition_has_two_equal_eigenvalues (__main__.PhaseTests.test_09_nontrivial_bipartition_has_two_equal_eigenvalues) ... ok
+test_10_binary_tree_schedule_has_valid_disjoint_layers (__main__.PhaseTests.test_10_binary_tree_schedule_has_valid_disjoint_layers) ... ok
+test_11_independent_auxiliary_state_has_same_reduced_state_for_both_bits (__main__.PhaseTests.test_11_independent_auxiliary_state_has_same_reduced_state_for_both_bits) ... ok
+test_12_gate_sequence_simulates_independent_state_input_exactly (__main__.PhaseTests.test_12_gate_sequence_simulates_independent_state_input_exactly) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.222s
+
+OK
+----------------------------------------------------------------
+# exit_code: 0
+

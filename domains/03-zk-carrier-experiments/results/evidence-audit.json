@@ -1,0 +1,94 @@
+{
+  "scope": "RETAINED_EVIDENCE_AND_ALGEBRA_AUDIT_NOT_SECURITY_PROOF",
+  "field_certificate": {
+    "polynomial_tail": 293,
+    "frobenius_512_equals_x": true,
+    "gcd_x_2pow256_minus_x": 1,
+    "degree_prime_divisors": [
+      2
+    ],
+    "irreducible": true
+  },
+  "comparisons": [
+    {
+      "version": "1.25",
+      "case": "case0",
+      "gates": 899429,
+      "committed_allocated": 262144,
+      "native_proof_bytes": 339200,
+      "encoded_proof_bytes": 283952,
+      "frame_bytes": 289664,
+      "boundary_hash_bytes": 184608,
+      "transmitted_scalar_bytes": 81792,
+      "fixed_and_terminal_bytes": 17552,
+      "hypothetical_proof_bytes_if_boundary_hashes_cost_zero": 99344
+    },
+    {
+      "version": "1.25",
+      "case": "case1",
+      "gates": 904933,
+      "committed_allocated": 262144,
+      "native_proof_bytes": 339200,
+      "encoded_proof_bytes": 282000,
+      "frame_bytes": 287712,
+      "boundary_hash_bytes": 182816,
+      "transmitted_scalar_bytes": 81632,
+      "fixed_and_terminal_bytes": 17552,
+      "hypothetical_proof_bytes_if_boundary_hashes_cost_zero": 99184
+    },
+    {
+      "version": "1.27",
+      "case": "case0",
+      "gates": 521717,
+      "committed_allocated": 262144,
+      "native_proof_bytes": 339104,
+      "encoded_proof_bytes": 281936,
+      "frame_bytes": 287648,
+      "boundary_hash_bytes": 182944,
+      "transmitted_scalar_bytes": 81536,
+      "fixed_and_terminal_bytes": 17456,
+      "hypothetical_proof_bytes_if_boundary_hashes_cost_zero": 98992
+    },
+    {
+      "version": "1.27",
+      "case": "case1",
+      "gates": 527221,
+      "committed_allocated": 262144,
+      "native_proof_bytes": 339104,
+      "encoded_proof_bytes": 275520,
+      "frame_bytes": 281232,
+      "boundary_hash_bytes": 177120,
+      "transmitted_scalar_bytes": 80944,
+      "fixed_and_terminal_bytes": 17456,
+      "hypothetical_proof_bytes_if_boundary_hashes_cost_zero": 98400
+    },
+    {
+      "version": "1.27b",
+      "case": "case0",
+      "gates": 402306,
+      "committed_allocated": 131072,
+      "native_proof_bytes": 335360,
+      "encoded_proof_bytes": 277968,
+      "frame_bytes": 283680,
+      "boundary_hash_bytes": 179168,
+      "transmitted_scalar_bytes": 81376,
+      "fixed_and_terminal_bytes": 17424,
+      "hypothetical_proof_bytes_if_boundary_hashes_cost_zero": 98800
+    },
+    {
+      "version": "1.27b",
+      "case": "case1",
+      "gates": 407810,
+      "committed_allocated": 131072,
+      "native_proof_bytes": 335360,
+      "encoded_proof_bytes": 273888,
+      "frame_bytes": 279600,
+      "boundary_hash_bytes": 176160,
+      "transmitted_scalar_bytes": 80304,
+      "fixed_and_terminal_bytes": 17424,
+      "hypothetical_proof_bytes_if_boundary_hashes_cost_zero": 97728
+    }
+  ],
+  "complete_original_goal_QCs": 0,
+  "cost_diagnosis_scope": "Only these retained transcripts under the unchanged QVT1 representation; not a protocol lower bound."
+}

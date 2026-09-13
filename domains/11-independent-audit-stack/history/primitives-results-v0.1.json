@@ -1,0 +1,535 @@
+{
+ "generated_utc": "2026-09-11T18:41:30Z",
+ "scope": "PRIMITIVES ONLY (FIPS 204 ML-DSA-87, FIPS 203 ML-KEM-1024); not the QPT-128 construction",
+ "versions": {
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+  "liboqs": {
+   "version": "0.16.0",
+   "tag": "0.16.0",
+   "commit": "5a1a854b0dc9f2141bdc771c555ee60c37950183",
+   "path": "<workdir>/tools/liboqs-0.16.0/build/lib/liboqs.so",
+   "build": "cmake -GNinja -DOQS_MINIMAL_BUILD=SIG_ml_dsa_87;KEM_ml_kem_1024;SIG_ml_dsa_44;KEM_ml_kem_768 -DBUILD_SHARED_LIBS=ON -DOQS_BUILD_ONLY_LIB=ON",
+   "ml_dsa_87_backend": "FIPS204 (mldsa-native, x86_64)",
+   "ml_kem_1024_backend": "FIPS203 (mlkem-native, x86_64)",
+   "sig_ctx_support": true,
+   "sig_keypair_derand": "NOT AVAILABLE in 0.16.0 public API; seed injected through OQS_randombytes_custom_algorithm instead",
+   "kem_keypair_derand": true,
+   "kem_encaps_derand": true
+  },
+  "dilithium-py": {
+   "version": "1.4.0",
+   "standard": "ML-DSA per FIPS 204 (final); dilithium_py.ml_dsa (round-3 Dilithium lives separately in dilithium_py.dilithium)",
+   "api": "keygen(), key_derive(seed32), sign(sk,m,ctx=b'',deterministic=False), verify(pk,m,sig,ctx=b''), _sign_internal(sk,m',rnd,external_mu), _verify_internal(pk,m',sig), sign_external_mu(sk,mu,deterministic)"
+  },
+  "kyber-py": {
+   "version": "1.2.0",
+   "standard": "ML-KEM per FIPS 203 (final); kyber_py.ml_kem (round-3 Kyber lives separately in kyber_py.kyber)",
+   "api": "keygen(), key_derive(d||z), encaps(ek), decaps(dk,c), _keygen_internal(d,z), _encaps_internal(ek,m); encaps/decaps raise ValueError on ek modulus / dk hash check failure"
+  },
+  "acvp": {
+   "source": "usnistgov/ACVP-Server gen-val/json-files (master)",
+   "files": {
+    "ML-DSA-keyGen-FIPS204.internalProjection.json": "e67ee6540d40e11506c3c4e3b1f79fc1cefcd49820db99fc61f87cc8ba463baf",
+    "ML-DSA-sigGen-FIPS204.internalProjection.json": "72dcaf5f69853ca267ccd16af9cb40949786aca0fcfbf05d1ebeba132b93af22",
+    "ML-DSA-sigVer-FIPS204.internalProjection.json": "47cdd6314c7f746d02421ffcba89d4dbc7bb875ac49e07a029fdfc26fba55437",
+    "ML-KEM-encapDecap-FIPS203.internalProjection.json": "a556952ce869bb89c3a3196a701dad89647c193a34c86eafb61a9d710d5b810f",
+    "ML-KEM-keyGen-FIPS203.internalProjection.json": "d7a62a2c3476957f56dd8d24f9004ea6776ccfe995ffe71a65bb9506dc9c7b1b"
+   }
+  }
+ },
+ "sizes": {
+  "ML-DSA-87": {
+   "pk": 2592,
+   "sk": 4896,
+   "sig": 4627
+  },
+  "ML-KEM-1024": {
+   "ek": 1568,
+   "dk": 3168,
+   "ct": 1568,
+   "ss": 32
+  },
+  "expected": {
+   "dsa_pk": 2592,
+   "dsa_sk": 4896,
+   "dsa_sig": 4627,
+   "kem_ek": 1568,
+   "kem_dk": 3168,
+   "kem_ct": 1568,
+   "kem_ss": 32
+  }
+ },
+ "acvp_keygen": {
+  "ML-DSA-87": {
+   "vectors": 25,
+   "dilithium-py": {
+    "pass": 25,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "liboqs": {
+    "pass": 25,
+    "fail": 0,
+    "fail_ids": [],
+    "method": "seed via OQS_randombytes_custom_algorithm"
+   }
+  },
+  "ML-KEM-1024": {
+   "vectors": 25,
+   "kyber-py": {
+    "pass": 25,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "liboqs": {
+    "pass": 25,
+    "fail": 0,
+    "fail_ids": [],
+    "method": "OQS_KEM_keypair_derand(d||z)"
+   }
+  }
+ },
+ "acvp_sigver": {
+  "external/pure": {
+   "tgId": 5,
+   "vectors": 15,
+   "expected_true": 3,
+   "expected_false": 12,
+   "liboqs": {
+    "agree": 15,
+    "disagree": 0,
+    "n/a": 0,
+    "disagree_ids": [],
+    "method": "OQS_SIG_verify_with_ctx_str"
+   },
+   "dilithium-py": {
+    "agree": 15,
+    "disagree": 0,
+    "n/a": 0,
+    "disagree_ids": [],
+    "method": "ML_DSA_87.verify(pk,m,sig,ctx)"
+   },
+   "impl_agreement": {
+    "same_verdict": 15,
+    "different_verdict": 0,
+    "ids": []
+   }
+  },
+  "external/preHash (HashML-DSA-87)": {
+   "tgId": 6,
+   "vectors": 15,
+   "expected_true": 3,
+   "expected_false": 12,
+   "liboqs": {
+    "agree": 0,
+    "disagree": 0,
+    "n/a": 15,
+    "disagree_ids": [],
+    "method": "N/A (liboqs has no HashML-DSA)"
+   },
+   "dilithium-py": {
+    "agree": 15,
+    "disagree": 0,
+    "n/a": 0,
+    "disagree_ids": [],
+    "method": "harness M'=0x01|len|ctx|OID|PH(M) + ML_DSA_87._verify_internal"
+   },
+   "impl_agreement": {
+    "same_verdict": 0,
+    "different_verdict": 0,
+    "ids": []
+   }
+  },
+  "internal/externalMu": {
+   "tgId": 11,
+   "vectors": 15,
+   "expected_true": 3,
+   "expected_false": 12,
+   "liboqs": {
+    "agree": 0,
+    "disagree": 0,
+    "n/a": 15,
+    "disagree_ids": [],
+    "method": "N/A (no public external-mu API)"
+   },
+   "dilithium-py": {
+    "agree": 15,
+    "disagree": 0,
+    "n/a": 0,
+    "disagree_ids": [],
+    "method": "harness Alg.8 with supplied mu using dilithium-py internals"
+   },
+   "impl_agreement": {
+    "same_verdict": 0,
+    "different_verdict": 0,
+    "ids": []
+   }
+  },
+  "internal/raw M'": {
+   "tgId": 12,
+   "vectors": 15,
+   "expected_true": 3,
+   "expected_false": 12,
+   "liboqs": {
+    "agree": 0,
+    "disagree": 0,
+    "n/a": 15,
+    "disagree_ids": [],
+    "method": "N/A (public API always prepends 0x00|len|ctx)"
+   },
+   "dilithium-py": {
+    "agree": 15,
+    "disagree": 0,
+    "n/a": 0,
+    "disagree_ids": [],
+    "method": "ML_DSA_87._verify_internal(pk,M',sig)"
+   },
+   "impl_agreement": {
+    "same_verdict": 0,
+    "different_verdict": 0,
+    "ids": []
+   }
+  }
+ },
+ "acvp_siggen": {
+  "external/pure deterministic": {
+   "tgId": 5,
+   "vectors": 15,
+   "liboqs": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": [],
+    "method": "OQS_SIG_sign_with_ctx_str with rnd injected via OQS_randombytes_custom_algorithm"
+   },
+   "dilithium-py": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": []
+   }
+  },
+  "external/preHash (HashML-DSA-87) deterministic": {
+   "tgId": 6,
+   "vectors": 15,
+   "liboqs": {
+    "pass": 0,
+    "fail": 0,
+    "n/a": 15,
+    "fail_ids": [],
+    "method": "N/A"
+   },
+   "dilithium-py": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": []
+   }
+  },
+  "internal/externalMu deterministic": {
+   "tgId": 11,
+   "vectors": 15,
+   "liboqs": {
+    "pass": 0,
+    "fail": 0,
+    "n/a": 15,
+    "fail_ids": [],
+    "method": "N/A"
+   },
+   "dilithium-py": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": []
+   }
+  },
+  "internal/raw M' deterministic": {
+   "tgId": 12,
+   "vectors": 15,
+   "liboqs": {
+    "pass": 0,
+    "fail": 0,
+    "n/a": 15,
+    "fail_ids": [],
+    "method": "N/A"
+   },
+   "dilithium-py": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": []
+   }
+  },
+  "external/pure hedged(rnd given)": {
+   "tgId": 17,
+   "vectors": 15,
+   "liboqs": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": [],
+    "method": "OQS_SIG_sign_with_ctx_str with rnd injected via OQS_randombytes_custom_algorithm"
+   },
+   "dilithium-py": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": []
+   }
+  },
+  "external/preHash (HashML-DSA-87) hedged(rnd given)": {
+   "tgId": 18,
+   "vectors": 15,
+   "liboqs": {
+    "pass": 0,
+    "fail": 0,
+    "n/a": 15,
+    "fail_ids": [],
+    "method": "N/A"
+   },
+   "dilithium-py": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": []
+   }
+  },
+  "internal/externalMu hedged(rnd given)": {
+   "tgId": 23,
+   "vectors": 15,
+   "liboqs": {
+    "pass": 0,
+    "fail": 0,
+    "n/a": 15,
+    "fail_ids": [],
+    "method": "N/A"
+   },
+   "dilithium-py": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": []
+   }
+  },
+  "internal/raw M' hedged(rnd given)": {
+   "tgId": 24,
+   "vectors": 15,
+   "liboqs": {
+    "pass": 0,
+    "fail": 0,
+    "n/a": 15,
+    "fail_ids": [],
+    "method": "N/A"
+   },
+   "dilithium-py": {
+    "pass": 15,
+    "fail": 0,
+    "n/a": 0,
+    "fail_ids": []
+   }
+  }
+ },
+ "acvp_encapdecap": {
+  "encapsulation": {
+   "tgId": 3,
+   "testType": "AFT",
+   "vectors": 25,
+   "reasons": {
+    "-": 25
+   },
+   "liboqs": {
+    "pass": 25,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "kyber-py": {
+    "pass": 25,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "method": "encaps_derand(ek,m)==(c,k) and decaps(dk,c)==k"
+  },
+  "decapsulation": {
+   "tgId": 6,
+   "testType": "VAL",
+   "vectors": 10,
+   "reasons": {
+    "modified ciphertext": 5,
+    "valid decapsulation": 5
+   },
+   "liboqs": {
+    "pass": 10,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "kyber-py": {
+    "pass": 10,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "method": "decaps(dk,c)==k (incl. implicit-rejection 'modified ciphertext' cases)"
+  },
+  "decapsulationKeyCheck": {
+   "tgId": 11,
+   "testType": "VAL",
+   "vectors": 10,
+   "reasons": {
+    "modified H": 5,
+    "valid decapsulation key": 5
+   },
+   "liboqs": {
+    "pass": 10,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "kyber-py": {
+    "pass": 10,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "method": "decaps(dk, c) accepted-or-rejected == testPassed (dk hash check)"
+  },
+  "encapsulationKeyCheck": {
+   "tgId": 12,
+   "testType": "VAL",
+   "vectors": 10,
+   "reasons": {
+    "valid encapsulation key": 5,
+    "noisy linear system values too large": 5
+   },
+   "liboqs": {
+    "pass": 10,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "kyber-py": {
+    "pass": 10,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "method": "encaps(ek) accepted-or-rejected == testPassed (ek modulus check)"
+  }
+ },
+ "cross_impl": {
+  "n": 200,
+  "sizes_ok": true,
+  "size_violations": [],
+  "dsa": {
+   "liboqs_sign->dilithium_verify": {
+    "pass": 200,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "dilithium_sign->liboqs_verify": {
+    "pass": 200,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "keys": "even i: liboqs keypair, odd i: dilithium-py keygen; ctx random 0..16 bytes"
+  },
+  "kem": {
+   "liboqs_encaps->kyber_decaps": {
+    "pass": 200,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "kyber_encaps->liboqs_decaps": {
+    "pass": 200,
+    "fail": 0,
+    "fail_ids": []
+   },
+   "keys": "even i: liboqs keypair, odd i: kyber-py keygen"
+  }
+ },
+ "tamper": {
+  "n_positions": 50,
+  "dsa_signature": {
+   "liboqs": {
+    "rejected": 50,
+    "accepted": 0,
+    "accepted_positions": []
+   },
+   "dilithium-py": {
+    "rejected": 50,
+    "accepted": 0,
+    "accepted_positions": [],
+    "exceptions": 0
+   }
+  },
+  "dsa_public_key": {
+   "liboqs": {
+    "rejected": 50,
+    "accepted": 0,
+    "accepted_positions": []
+   },
+   "dilithium-py": {
+    "rejected": 50,
+    "accepted": 0,
+    "accepted_positions": [],
+    "exceptions": 0
+   }
+  },
+  "kem_ciphertext": {
+   "liboqs": {
+    "different_key": 50,
+    "same_key": 0,
+    "same_positions": []
+   },
+   "kyber-py": {
+    "different_key": 50,
+    "same_key": 0,
+    "same_positions": []
+   },
+   "impls_agree_on_rejection_key": 50,
+   "impls_differ": []
+  },
+  "kem_public_key": {
+   "liboqs": {
+    "rejected_ek": 6,
+    "different_key": 44,
+    "same_key": 0,
+    "same_positions": []
+   },
+   "kyber-py": {
+    "rejected_ek": 6,
+    "different_key": 44,
+    "same_key": 0,
+    "same_positions": []
+   },
+   "impls_agree_on_ek_validity": 50,
+   "impls_differ": []
+  },
+  "note": "KEM: a tampered ek/ct 'same_key' outcome would mean the honest decapsulator still derives the encapsulator's key, i.e. the tamper had no effect; a tampered ek in the rho (seed) region or a non-canonical coefficient is expected to be rejected or to yield a different key."
+ },
+ "timing": {
+  "unit": "median ms (informational only; single core, Python-driven; NOT a benchmark)",
+  "liboqs": {
+   "dsa_keygen": 0.078,
+   "dsa_sign": 0.152,
+   "dsa_verify": 0.068,
+   "kem_keygen": 0.031,
+   "kem_encaps": 0.032,
+   "kem_decaps": 0.024
+  },
+  "dilithium-py": {
+   "dsa_keygen": 10.788,
+   "dsa_sign": 25.883,
+   "dsa_verify": 12.751
+  },
+  "kyber-py": {
+   "kem_keygen": 3.579,
+   "kem_encaps": 4.528,
+   "kem_decaps": 5.922
+  }
+ },
+ "harness_selftest": {
+  "exercised_pairs": 27,
+  "flagged_pairs": 27,
+  "missed": [],
+  "disagreements_recorded_on_corrupted_input": 27
+ },
+ "disagreements": [],
+ "critical": [],
+ "runtime_s": 34.5
+}

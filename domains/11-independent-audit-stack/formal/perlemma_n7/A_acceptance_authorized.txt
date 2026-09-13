@@ -1,0 +1,13 @@
+maude tool: 'maude'
+ checking version: 3.5.1. OK.
+ checking installation: OK.
+[Theory QPT128_Quorum_N7_q5_Votes] Theory loaded
+[Theory QPT128_Quorum_N7_q5_Votes] Theory translated
+[Theory QPT128_Quorum_N7_q5_Votes] Derivation checks started
+[Theory QPT128_Quorum_N7_q5_Votes] Derivation checks ended
+[Theory QPT128_Quorum_N7_q5_Votes] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done
+tamarin-prover: Heap exhausted;
+tamarin-prover: Current maximum heap size is 2621440000 bytes (2500 MB).
+tamarin-prover: Use `+RTS -M<size>' to increase it.

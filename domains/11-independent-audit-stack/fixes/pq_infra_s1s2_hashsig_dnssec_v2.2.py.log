@@ -1,0 +1,20 @@
+test_s1_merkle_sign_verify_sizes_and_cost (__main__.Tests.test_s1_merkle_sign_verify_sizes_and_cost) ... ok
+test_s1_wots_roundtrip_and_tamper (__main__.Tests.test_s1_wots_roundtrip_and_tamper) ... ok
+test_s2_amortisation_law (__main__.Tests.test_s2_amortisation_law) ... ok
+test_s2_denial_variant_signature_budget (__main__.Tests.test_s2_denial_variant_signature_budget) ... ok
+test_s2_dnssec_classification (__main__.Tests.test_s2_dnssec_classification) ... ok
+test_s2_ladder_rungs_are_binary_decomposition (__main__.Tests.test_s2_ladder_rungs_are_binary_decomposition) ... ok
+test_s2_mtl_every_leaf_verifies_and_tamper_fails (__main__.Tests.test_s2_mtl_every_leaf_verifies_and_tamper_fails) ... ok
+test_s2_multiproof_correct_and_smaller (__main__.Tests.test_s2_multiproof_correct_and_smaller) ... ok
+test_s2_sharded_ladder_answer_independent_of_zone_size (__main__.Tests.test_s2_sharded_ladder_answer_independent_of_zone_size) ... ok
+test_s2_sqisign_v3_and_verify_rate (__main__.Tests.test_s2_sqisign_v3_and_verify_rate) ... ok
+test_f2_empty_proof_rejected (__main__.AuditFixTests.test_f2_empty_proof_rejected) ... ok
+test_f2_extra_and_missing_nodes_rejected (__main__.AuditFixTests.test_f2_extra_and_missing_nodes_rejected) ... ok
+test_f2_malformed_returns_false_never_raises (__main__.AuditFixTests.test_f2_malformed_returns_false_never_raises) ... ok
+test_f2_required_coverage (__main__.AuditFixTests.test_f2_required_coverage) ... ok
+test_f4_merkle_verify_malformed_returns_false (__main__.AuditFixTests.test_f4_merkle_verify_malformed_returns_false) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.471s
+
+OK

@@ -1,0 +1,59 @@
+{
+  "toy_params": {
+    "n": 16,
+    "keymap_m": 48,
+    "tau": 8,
+    "parties_log2": 8,
+    "lambda": 64,
+    "ell": 4128,
+    "ell_hat": 4320
+  },
+  "frame_bytes": 6990,
+  "proof_bytes_measured": 6696,
+  "proof_bytes_formula_lambda_bit_nodes": 5260,
+  "proof_bytes_formula_256_bit_nodes_1_block": 6924,
+  "proof_breakdown_bytes": {
+    "corrections_(tau-1)*ell_hat": 3780,
+    "witness_correction_d": 540,
+    "vole_hash_u_tilde_h_v": 16,
+    "quicksilver_coefficients": 24,
+    "h_com": 32,
+    "openings_tau*(b_nodes+com)*32": 2304
+  },
+  "verified": [
+    true,
+    true
+  ],
+  "extracted_seats": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "extracted_count": 22,
+  "all_blames_verified": true,
+  "seconds": {
+    "setup": 0.0,
+    "prove_one": 52.8,
+    "prove_second_plus_verify_first": 110.3,
+    "total": 192.0
+  }
+}

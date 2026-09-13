@@ -1,0 +1,15 @@
+--- <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c	2026-09-11 20:32:32.192942722 +0200
++++ <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50_nomain.c	2026-09-11 20:32:32.199111404 +0200
+@@ -932,6 +932,7 @@
+ /* --------------------------------------------------------------- main -- */
+ static void hex(const uint8_t *b, int n) { for (int i = 0; i < n; i++) printf("%02x", b[i]); }
+ 
++#ifndef FUZZ_NO_MAIN
+ int main(int argc, char **argv) {
+     params_t p = {20, 11, 16, 4096, 0};
+     unsigned seed = 49; int vectors = 0, run = 0;
+@@ -1025,3 +1026,4 @@
+            t_setup, T0.tree, T0.vole_hash, T0.quicksilver, T0.grind, T0.total, v0s, es, total);
+     return (ok0 && ok1 && n == MIN_OVERLAP && tamper_rejected) ? 0 : 1;
+ }
++#endif /* FUZZ_NO_MAIN */

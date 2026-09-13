@@ -1,0 +1,5 @@
+### A_acceptance_authorized  2026-09-13T03:51:27+02:00  -M8000m  timeout 1500 s
+maude tool: 'maude'
+ checking version: 3.5.1. OK.
+ checking installation: OK.
+### exit 137 wall 194 s

@@ -1,0 +1,135 @@
+Sidecar-free CE-QS certificate profiles, v1.44 — B0 and B1 final frames.
+
+CE-QS is a 64-seat committee with quorum Q=43 and total fault bound F=21, so any
+two accepting quorums share at least 2Q-N = 22 seats. The project target is a
+PORTABLE conflict-extractable quorum certificate (QC) of at most 32,768 bytes,
+from which two conflicting QCs let anyone publicly extract at least 22 seats that
+authorized both conflicting messages ("double-authorizers"). The certificate must
+carry no per-certificate sidecar and rely on no secret opener at extraction time.
+
+Repository copy. This is the v1.44 revision of the module; the version suffix has
+been dropped from the file name. Paths that name other project files are relative to
+the repository root, and a project file named here but not copied into this
+repository is marked as such. The line numbers and revision labels quoted from other
+revisions refer to the source tree, not to this repository.
+
+This file finalizes the two certificate FRAMES and their public algorithms. It
+implements exactly what it tests and claims nothing beyond that. In particular it
+does NOT produce a compact hidden-signer QC with a qualified zero-knowledge proof
+of authorization: no such proof backend exists here, and the size calculators at
+the end give reproducible lower bounds showing why the compact-B1 proof obligation
+is still open. Standard-library Python 3.12 suffices for every tested path; the
+real signature provider is optional and never required by the test suite.
+
+Common frame header (208 bytes, both profiles)
+----------------------------------------------
+The header is `struct '>4sHH64s64s64sHHI'`:
+  magic          b'CQ44'          (4 bytes)
+  version        u16 = 44
+  suite          u16              (0x44B0 for B0, 0x44B1 for B1)
+  configuration  cfg              (64 bytes)
+  domain         d                (64 bytes)
+  message        m                (64 bytes)
+  count          u16 = 43
+  width          u16              (per-item slot width; profile specific)
+  payload_len    u32
+A frame is header || payload with len(payload) == payload_len. Parsing rejects
+truncation, trailing bytes, a wrong magic/version/suite/count, and any frame over
+32,768 bytes. The hash is
+
+  H(label, *parts) = SHAKE256( u64be(len(label))||label ||
+                               u64be(len(p_0))||p_0 || ... )[:64],
+
+i.e. an eight-byte big-endian length prefix in front of the label and of every
+part, truncated to 64 bytes. This is the v1.29 domain-separated hash with an
+explicit leading label argument.
+
+Profile B0 — public signer set (suite 0x44B0). Sidecar-free and compact, NOT hidden
+-----------------------------------------------------------------------------------
+Registry: 64 distinct signature public keys and a scheme identifier `scheme_id`.
+  cfg = H(b'CQ44/cfg/B0', scheme_id, pk_0, ..., pk_63).
+Seat i's approval message is the concatenation
+  b'CQ44/B0/VOTE' || cfg || d || m || bytes([i]),
+signed with the scheme's PURE signing API and an empty external context.
+Payload: an 8-byte big-endian bitmap (seat i is bit value 1<<i), followed by
+exactly 43 fixed-width signatures in increasing seat order. Thus
+  payload_len = 8 + 43*width, total frame = 216 + 43*width.
+verify_b0 checks the header, that cfg equals the caller's authenticated
+expected_cfg and equals the value recomputed from the registry, that the bitmap
+popcount is 43, the exact length, and that every one of the 43 signatures verifies
+under its seat public key on that seat's approval message. Two conflicting B0
+frames publicly reveal their common signer seats: with two accepting quorums of 43
+in a 64-seat house, |S0 & S1| >= 43+43-64 = 22 always. extract_b0 returns those
+common seats, each with its signature position in both frames; the two signatures
+at those positions are public, independently verifiable double-authorization
+evidence. B0 is an EXECUTABLE REFERENCE. Its real-world security requires a
+category-5, QPT-128 signature whose bytes fit the size gate
+  B0_MAX_SIGNATURE_BYTES = (32768 - 216)//43 = 757.
+No FIPS-standardized signature fits: ML-DSA-87 is 4,627 bytes, SLH-DSA-SHAKE-256s
+29,792 and Falcon-padded-1024 1,280. Candidates in NIST's additional-signature
+process do fit. UOV 'OV-V' (260 bytes), SNOVA_29_6_5 (454) and SNOVA_60_10_4 (576)
+claim category 5 and are measured through liboqs 0.16.0 by --real-demo; so is the
+AND-hybrid OV-V||SNOVA_29_6_5 (714). Their frames are 11,396, 19,738, 24,984 and
+30,918 bytes. B0 publishes the signer bitmap, so it does NOT meet the hidden-signer
+privacy requirement.
+
+Profile B1 — hidden signer set, "Mode S" (suite 0x44B1). The full privacy target
+--------------------------------------------------------------------------------
+Credentials: seat i holds a 64-byte secret x_i; its registered key is the
+128-byte (1024-bit) value
+  K[i] = SHAKE256(b'CEQS/K1' || x_i)[:128]    (a 71-byte input, one absorb block),
+and cfg = H(b'CQ44/cfg/B1', K_0, ..., K_63) with duplicate keys rejected. The
+1024-bit registry keys carry the collision resistance the QPT-128 ledger relies
+on to keep forensic completeness under the O(q^2) online-extraction overhead. The
+context is D = H(b'CQ44/ctx', cfg, d). A seat's handle is
+  pair = SHAKE256(b'CEQS/P1' || x || D)[:128]  (a 135-byte input, one absorb block)
+  L = pair[:64]
+  Z = ( int(pair[64:]) XOR mul(int(m), i+1) )  in GF(2)[X]/(X^512+X^8+X^5+X^2+1).
+The payload is 43 handles (L||Z, 128 bytes each) strictly increasing by L, then
+proof bytes: payload_len = 5504 + proof_len, total = 5712 + proof_len, and
+proof_len <= 27056 so the frame never exceeds 32,768 bytes. check_relation is the
+private R-relation on 43 (seat, x) rows in handle order: it checks distinct seats,
+that each x opens its registered K, and that each handle is exactly handle(x, seat,
+D, m). extract_b1 is the v1.34 division-free identity decoder ported over the
+parsed handles (the v1.34 source is present in this repository as
+domains/05-extraction-and-signature-reductions/src/ceqs29_extractor.py); it
+returns ALGEBRAIC CANDIDATES ONLY. Authorization is asserted it returns ALGEBRAIC CANDIDATES ONLY. Authorization is asserted
+only through a ProofBackend, and the sole backend here, StructureOnlyTestBackend,
+is UNQUALIFIED (qualified=False, proof is a fixed marker, verify checks the marker
+only). Therefore verify_b1 always reports
+  status = 'STRUCTURE_ONLY_NO_QUALIFIED_PROOF', authorization_verified = False.
+
+Lower-bound calculators
+-----------------------
+Pure arithmetic with provenance, establishing why a compact B1 proof is still open:
+a keccak-f[1600] permutation has 24*1600 = 38,400 bit-level AND gates; Mode S needs
+43*2 = 86 permutations; a per-AND-output correction/opening bit (VOLE-in-the-head,
+or ZKBoo/KKW commit-and-open) forces at least ceil(86*38,400/8) = 412,800 bytes for
+those proof families, far above 27,056. A Binius64 PCS floor pinned from the
+vendored size estimators is at least 109,856 bytes at 96-bit soundness for Mode S's
+committed size, also far above 27,056. These are lower bounds for the named
+families on that circuit, not a claim that every proof system must exceed 27,056.
+
+Theorem C (theorem_c_budget) covers KKW-, BN++- and FAEST-style witness-committing
+proofs without fixing a circuit. It assumes one Grover iteration costs at most 2^24
+gates, so fewer than 2^128 gates buy up to 2^(104 - h) iterations for a 2^h-step
+challenge hash. Attacks then force tau*log2(N) + grinding bits >= 212 - 2h and
+credentials of at least 218 bits (64 targets). The 27,056-byte slot leaves at most
+359 witness bits per seat at N = 2^16 and 1,006 at N = 2^48 (1,258 with 32 grinding
+bits). The cheapest published category-5 instantiation of the Mode S relation needs
+about 2,816 bits per seat.
+
+Non-claims
+----------
+No hidden-signer compact QC is produced. No qualified zero-knowledge backend exists
+here. No cryptographic security level (128-bit, QPT-128, category 5) is established
+for any concrete instantiation. The symbolic signature provider is a labelled test
+double, not a signature scheme. The SHAKE evaluations are concrete function calls,
+not collision-resistance or ideal-model claims. Sizes in SIGNATURE_SIZE_TABLE and
+the Binius64 tables are transcribed/re-derived from cited public sources for
+comparison, not endorsements of any scheme for CE-QS.
+
+CLI: --self-test (unittest, verbosity 2), --explain (prints this docstring),
+--report (JSON summary), --real-demo (pqcrypto and/or liboqs-python, the latter only
+when OQS_INSTALL_PATH names an installed liboqs).
+

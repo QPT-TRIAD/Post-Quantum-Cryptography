@@ -1,0 +1,8 @@
+maude tool: 'maude'
+ checking version: 3.5.1. OK.
+ checking installation: OK.
+[Theory QPT128_Quorum_N7_q5_Votes] Theory loaded
+[Theory QPT128_Quorum_N7_q5_Votes] Theory translated
+[Theory QPT128_Quorum_N7_q5_Votes] Derivation checks started
+[Theory QPT128_Quorum_N7_q5_Votes] Derivation checks ended
+[Theory QPT128_Quorum_N7_q5_Votes] Theory closed

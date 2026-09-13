@@ -1,0 +1,7 @@
+PASS valid_quorum_relation
+EXPECTED-FAIL duplicate_signer_public_rejection reason=duplicate-tag
+EXPECTED-FAIL wrong_mask_relation_binding
+EXPECTED-FAIL forged_tag_relation_binding
+PASS conflict_extracts_trace_secret
+PASS trace_secret_exposure_alone_not_accepted
+NOTE: relation mock only; real VOLEitH ZK/aggregation proofs remain unimplemented.

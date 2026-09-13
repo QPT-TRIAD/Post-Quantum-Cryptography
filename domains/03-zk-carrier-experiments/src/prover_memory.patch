@@ -1,0 +1,590 @@
+--- a/crates/prover/src/protocols/intmul/mod.rs
++++ b/crates/prover/src/protocols/intmul/mod.rs
+@@ -9,3 +9,6 @@
+ 
+ #[cfg(test)]
+ mod tests;
++
++#[doc(hidden)]
++pub mod recompute;
+--- a/crates/prover/src/protocols/intmul/prove.rs
++++ b/crates/prover/src/protocols/intmul/prove.rs
+@@ -78,11 +78,8 @@
+ {
+ 	let [a, b, lo, hi] = columns;
+ 
+-	let witness = tracing::debug_span!("Build IntMul witness")
+-		.in_scope(|| Witness::<_, P>::new(alloc, a, b, lo, hi))?;
+-
+ 	let mut prover = IntMulProver::new(0, channel, alloc);
+-	Ok(prover.prove(witness))
++	prover.prove_recomputing([a, b, lo, hi])
+ }
+ 
+ /// A helper structure that encapsulates switchover settings and the prover channel for
+@@ -91,9 +88,9 @@
+ 	_p_marker: PhantomData<P>,
+ 
+ 	switchover: usize,
+-	channel: &'a mut Channel,
++	pub(super) channel: &'a mut Channel,
+ 	/// Pool the GKR working buffers are drawn from.
+-	alloc: &'alloc A,
++	pub(super) alloc: &'alloc A,
+ }
+ 
+ impl<'a, 'alloc, A: Allocator, P, Channel> IntMulProver<'a, 'alloc, A, P, Channel> {
+--- /dev/null
++++ b/crates/prover/src/protocols/intmul/recompute.rs
+@@ -0,0 +1,299 @@
++// Copyright 2026. CE-QS research continuation; same license as the host crate.
++//! Prover-only recomputation of the existing 64-bit multiplication product tree.
++//! No verifier, transcript schedule, field, relation or security setting changes.
++
++use std::iter;
++
++use binius_compute::Allocator;
++use binius_core::word::Word;
++use binius_field::{BinaryField, Divisible, Field, PackedField};
++use binius_iop_prover::channel::IOPProverChannel;
++use binius_ip::prodcheck::MultilinearEvalClaim;
++use binius_ip_prover::{
++    channel::IPProverChannel,
++    prodcheck::ProdcheckProver,
++    sumcheck::{bivariate_product_mle, prove_single_mlecheck, ProveSingleOutput},
++};
++use binius_math::{
++    FieldBuffer, FieldSlice, FieldVec,
++    line::extrapolate_line,
++    multilinear::{eq::eq_ind_partial_eval, evaluate::evaluate_inplace},
++};
++use binius_utils::{
++    checked_arithmetics::log2_ceil_usize,
++    rayon::prelude::*,
++    strided_array::StridedArray2DViewMut,
++};
++use binius_verifier::protocols::intmul::common::{
++    IntMulOutput, LIMB_BITS, LOG_N_LIMBS, N_LIMBS, Phase1Output, Phase2Output,
++    Phase3Output, frobenius_twist,
++};
++
++use super::{
++    error::Error,
++    prove::IntMulProver,
++    witness::{compute_b_leaves, limb_leaves, power_table},
++};
++
++/// Layer with 2^k columns. Column j is the product of original leaves whose bit
++/// index is j modulo 2^k. At k=0 this is the root; at k=6 these are all 64 leaves.
++/// Padding rows have exponent zero and therefore contribute multiplicative one.
++pub(super) fn b_layer<A, F, P>(
++    alloc: &A, bases: FieldSlice<'_, P>, exponents: &[Word], k: usize,
++) -> FieldVec<P, A>
++where A: Allocator, F: Field, P: PackedField<Scalar=F> {
++    assert!(k <= Word::LOG_BITS);
++    let n = bases.log_len();
++    assert!(exponents.len() <= 1 << n);
++    if k == Word::LOG_BITS {
++        return compute_b_leaves(alloc, bases, exponents);
++    }
++    let height = 1 << k;
++    let mut out = FieldBuffer::zeros_in(alloc, n + k);
++    if n < P::LOG_WIDTH {
++        for i in 0..1 << n {
++            let exp = exponents.get(i).copied().unwrap_or(Word::ZERO);
++            let mut values = [F::ONE; Word::BITS];
++            let mut base = bases.get(i);
++            for z in 0..Word::BITS {
++                let mask = F::make_mask(iter::once(exp.extract_bit(z)));
++                values[z & (height-1)] *= F::ONE + (base-F::ONE).select(&mask);
++                base = base.square();
++            }
++            for (j, value) in values[..height].iter().enumerate() {
++                out.set((j << n) + i, *value);
++            }
++        }
++        return out;
++    }
++    let n_packed = bases.as_ref().len();
++    let mut strided = StridedArray2DViewMut::without_stride(out.as_mut(), height, n_packed)
++        .expect("layer dimensions");
++    let one = P::broadcast(F::ONE);
++    (strided.par_iter_cols(), bases.as_ref()).into_par_iter().enumerate()
++        .for_each(|(packed_index, (mut col, &base))| {
++            let start = (packed_index * P::WIDTH).min(exponents.len());
++            let exp = &exponents[start..(start + P::WIDTH).min(exponents.len())];
++            let mut values = [one; Word::BITS];
++            let mut power = base;
++            for z in 0..Word::BITS {
++                let mask = P::make_mask(exp.iter().map(|x| x.extract_bit(z)));
++                values[z & (height-1)] *= one + (power-one).select(&mask);
++                power = power.square();
++            }
++            for j in 0..height { col[j] = values[j]; }
++        });
++    out
++}
++
++/// Evaluate all 64 original leaf columns at x without retaining the leaf table.
++/// Only the equality tensor over the row dimension and 64 packed accumulators
++/// per parallel worker are required beyond the bases and exponent columns.
++pub(super) fn leaf_evals<A, F, P>(
++    _alloc: &A, bases: FieldSlice<'_, P>, exponents: &[Word], x: &[F],
++) -> Vec<F>
++where A: Allocator, F: Field, P: PackedField<Scalar=F> {
++    assert_eq!(bases.log_len(), x.len());
++    let tensor = eq_ind_partial_eval::<P>(x);
++    if x.len() < P::LOG_WIDTH {
++        let mut sums = [F::ZERO; Word::BITS];
++        for i in 0..1 << x.len() {
++            let mut base = bases.get(i);
++            let exp = exponents.get(i).copied().unwrap_or(Word::ZERO);
++            for (z, sum) in sums.iter_mut().enumerate() {
++                let mask = F::make_mask(iter::once(exp.extract_bit(z)));
++                *sum += tensor.get(i) * (F::ONE + (base-F::ONE).select(&mask));
++                base = base.square();
++            }
++        }
++        return sums.to_vec();
++    }
++    let zero = P::broadcast(F::ZERO);
++    let one = P::broadcast(F::ONE);
++    let sums = (bases.as_ref(), tensor.as_ref()).into_par_iter().enumerate()
++        .fold(|| [zero; Word::BITS], |mut sums, (packed_index, (&base, &weight))| {
++            let start = (packed_index * P::WIDTH).min(exponents.len());
++            let exp = &exponents[start..(start + P::WIDTH).min(exponents.len())];
++            let mut power = base;
++            for (z, sum) in sums.iter_mut().enumerate() {
++                let mask = P::make_mask(exp.iter().map(|x| x.extract_bit(z)));
++                *sum += weight * (one + (power-one).select(&mask));
++                power = power.square();
++            }
++            sums
++        })
++        .reduce(|| [zero; Word::BITS], |mut a, b| {
++            for (a, b) in a.iter_mut().zip(b) { *a += b; }
++            a
++        });
++    sums.into_iter().map(|p| p.iter().sum()).collect()
++}
++
++impl<'alloc, A, F, P, Channel> IntMulProver<'_, 'alloc, A, P, Channel>
++where
++    A: Allocator,
++    F: BinaryField<Underlier: Divisible<u64>>,
++    P: PackedField<Scalar=F>,
++    Channel: IOPProverChannel<P, A>,
++{
++    pub fn prove_recomputing(&mut self, columns: [&[Word]; 4]) -> Result<IntMulOutput<F>, Error> {
++        let [a, b, c_lo, c_hi] = columns;
++        if [b, c_lo, c_hi].iter().any(|x| x.len() != a.len()) {
++            return Err(Error::ExponentLengthMismatch);
++        }
++        let n = log2_ceil_usize(a.len());
++        let alloc = self.alloc;
++        if n >= 20 { eprintln!("IntMul: build fixed-base roots"); }
++        let mut base = F::MULTIPLICATIVE_GENERATOR;
++        let tables: Vec<FieldVec<P, A>> = (0..2*N_LIMBS).map(|_| {
++            let table = power_table::<F, P>(LIMB_BITS, base);
++            for _ in 0..LIMB_BITS { base = base.square(); }
++            FieldBuffer::from_view_in(alloc, table.as_view())
++        }).collect();
++        let (a_prodcheck, a_root) = ProdcheckProver::new(LOG_N_LIMBS, alloc,
++            limb_leaves(alloc, &tables[..N_LIMBS], a));
++        drop(a_prodcheck);
++        let (c_lo_prodcheck, c_lo_root) = ProdcheckProver::new(LOG_N_LIMBS, alloc,
++            limb_leaves(alloc, &tables[..N_LIMBS], c_lo));
++        drop(c_lo_prodcheck);
++        let (c_hi_prodcheck, c_hi_root) = ProdcheckProver::new(LOG_N_LIMBS, alloc,
++            limb_leaves(alloc, &tables[N_LIMBS..], c_hi));
++        drop(c_hi_prodcheck);
++
++        if n >= 20 { eprintln!("IntMul: variable-base product reduction"); }
++        let initial_eval_point = self.channel.sample_many(n);
++        let exp_eval = evaluate_inplace(b_layer(alloc, a_root.as_view(), b, 0), &initial_eval_point);
++        self.channel.send_one(exp_eval);
++        let Phase1Output { eval_point: phase1_eval_point, b_leaves_evals } =
++            self.phase1_recomputing(&initial_eval_point, a_root.as_view(), b, exp_eval);
++        let Phase2Output { twisted_eval_points, twisted_evals } =
++            frobenius_twist(Word::LOG_BITS, &phase1_eval_point, &b_leaves_evals);
++        if n >= 20 { eprintln!("IntMul: selector reduction"); }
++        let Phase3Output {
++            eval_point: phase3_eval_point, r_ib, b_recomb,
++            gpow_a_eval, gpow_c_lo_eval, gpow_c_hi_eval,
++        } = self.phase3(&twisted_eval_points, &twisted_evals, a_root, b,
++            [c_lo_root, c_hi_root], &initial_eval_point, exp_eval);
++        if n >= 20 { eprintln!("IntMul: rebuild fixed-base product trees"); }
++        let (a_prodcheck, _) = ProdcheckProver::new(LOG_N_LIMBS, alloc,
++            limb_leaves(alloc, &tables[..N_LIMBS], a));
++        let (c_lo_prodcheck, _) = ProdcheckProver::new(LOG_N_LIMBS, alloc,
++            limb_leaves(alloc, &tables[..N_LIMBS], c_lo));
++        let (c_hi_prodcheck, _) = ProdcheckProver::new(LOG_N_LIMBS, alloc,
++            limb_leaves(alloc, &tables[N_LIMBS..], c_hi));
++        let phase4 = self.phase4(&phase3_eval_point,
++            (gpow_a_eval, a_prodcheck), (gpow_c_lo_eval, c_lo_prodcheck),
++            (gpow_c_hi_eval, c_hi_prodcheck), [a, c_lo, c_hi], &tables);
++        if n >= 20 { eprintln!("IntMul: lookup reduction"); }
++        Ok(self.phase5(&phase4, b, &phase3_eval_point, &r_ib, b_recomb,
++            a, c_lo, c_hi, tables[0].as_view()))
++    }
++}
++
++impl<'alloc, A, F, P, Channel> IntMulProver<'_, 'alloc, A, P, Channel>
++where A: Allocator, F: BinaryField, P: PackedField<Scalar=F>, Channel: IPProverChannel<F> {
++    fn phase1_recomputing(&mut self, point: &[F], bases: FieldSlice<'_, P>,
++        exponents: &[Word], root_eval: F) -> Phase1Output<F> {
++        let n = point.len();
++        let mut claim = MultilinearEvalClaim { point: point.to_vec(), eval: root_eval };
++        // This is the original ProdcheckProver::prove message schedule. Only layer
++        // storage changes: generate the current layer and consume it immediately.
++        for k in 1..=Word::LOG_BITS {
++            if n >= 20 { eprintln!("IntMul: variable-base layer {k}/6"); }
++            let layer = b_layer(self.alloc, bases, exponents, k);
++            let prover = bivariate_product_mle::new_split_half(
++                self.alloc, layer, claim.point.clone(), claim.eval);
++            let ProveSingleOutput { multilinear_evals, challenges } =
++                prove_single_mlecheck(prover, self.channel);
++            let [a, b] = multilinear_evals.try_into().expect("two leaf halves");
++            self.channel.send_many(&[a, b]);
++            let r = self.channel.sample();
++            let mut next_point = challenges;
++            next_point.reverse();
++            next_point.push(r);
++            claim = MultilinearEvalClaim { eval: extrapolate_line(a, b, r), point: next_point };
++        }
++        let x = &claim.point[..n];
++        let evals = leaf_evals(self.alloc, bases, exponents, x);
++        self.channel.send_many(&evals);
++        Phase1Output { eval_point: x.to_vec(), b_leaves_evals: evals }
++    }
++}
++
++#[doc(hidden)]
++pub mod diagnostics {
++    use super::*;
++    use binius_compute::GlobalAllocator;
++    use binius_field::{Ghash128b, PackedGhash2x128b, Random};
++    use binius_iop::channel::{OracleSpec, naive::NaiveVerifierChannel};
++    use binius_iop_prover::channel::naive::NaiveProverChannel;
++    use binius_math::multilinear::evaluate::evaluate;
++    use binius_transcript::{ProverTranscript, VerifierTranscript};
++    use binius_verifier::{config::StdChallenger, protocols::intmul::verify};
++    use rand::prelude::*;
++    use super::super::witness::Witness;
++    type F = Ghash128b;
++    type P = PackedGhash2x128b;
++
++    pub fn every_recomputed_layer_and_leaf_evaluation_matches_original() {
++        let alloc = GlobalAllocator;
++        let mut rng = StdRng::seed_from_u64(1701);
++        for n_rows in [1usize, 3, 17, 64] {
++            let n = log2_ceil_usize(n_rows);
++            let bases = FieldBuffer::<P>::from_values(&(0..1 << n)
++                .map(|_| F::random(&mut rng)).collect::<Vec<_>>());
++            let exponents: Vec<_> = (0..n_rows).map(|_| Word(rng.random())).collect();
++            let x: Vec<_> = (0..n).map(|_| F::random(&mut rng)).collect();
++            let original = compute_b_leaves(&alloc, bases.as_view(), &exponents);
++            let evals: Vec<_> = original.chunks(n).map(|leaf| evaluate(&leaf, &x)).collect();
++            assert_eq!(leaf_evals(&alloc, bases.as_view(), &exponents, &x), evals);
++            let mut expected = original;
++            for k in (0..=Word::LOG_BITS).rev() {
++                assert_eq!(b_layer(&alloc, bases.as_view(), &exponents, k), expected,
++                    "layer differs for n_rows={n_rows}, k={k}");
++                if k > 0 {
++                    let (lo, hi) = expected.split_half();
++                    expected = FieldBuffer::from_values(&lo.iter_scalars().zip(hi.iter_scalars())
++                        .map(|(a, b)| a*b).collect::<Vec<_>>());
++                }
++            }
++        }
++    }
++
++    pub fn recomputed_complete_protocol_is_byte_identical_and_verifies() {
++        let alloc = GlobalAllocator;
++        let mut rng = StdRng::seed_from_u64(1702);
++        for rows in [1usize, 3, 5, 32, 33, 129] {
++            let mut columns: [Vec<Word>; 4] = std::array::from_fn(|_| Vec::new());
++            for i in 0..rows {
++                let (a, b) = match i % 5 {
++                    0 => (0, u64::MAX), 1 => (u64::MAX, u64::MAX),
++                    2 => (1 << 63, 1 << 63), _ => (rng.random(), rng.random()),
++                };
++                let product = (a as u128)*(b as u128);
++                for (c, v) in columns.iter_mut().zip([a, b, product as u64, (product >> 64) as u64]) {
++                    c.push(Word(v));
++                }
++            }
++            let refs = columns.each_ref().map(Vec::as_slice);
++            let run = |recompute: bool| {
++                let mut t = ProverTranscript::<StdChallenger>::default();
++                let mut ch = NaiveProverChannel::<F, _>::new(&mut t, vec![OracleSpec::new(LIMB_BITS)]);
++                let mut p = IntMulProver::<_, P, _>::new(0, &mut ch, &alloc);
++                let result = if recompute { p.prove_recomputing(refs).unwrap() }
++                    else { p.prove(Witness::new(&alloc, refs[0], refs[1], refs[2], refs[3]).unwrap()) };
++                ch.finish();
++                (result, t.finalize())
++            };
++            let (eager_claims, eager_bytes) = run(false);
++            let (claims, proof) = run(true);
++            assert_eq!(claims, eager_claims, "claims differ at rows={rows}");
++            assert_eq!(proof, eager_bytes, "transcript differs at rows={rows}");
++            let specs = [OracleSpec::new(LIMB_BITS)];
++            let mut t = VerifierTranscript::new(StdChallenger::default(), proof);
++            let mut ch = NaiveVerifierChannel::new(&mut t, &specs);
++            assert_eq!(verify(log2_ceil_usize(rows), &mut ch).unwrap(), claims);
++            ch.finish();
++        }
++    }
++}
+--- a/crates/prover/src/protocols/intmul/witness.rs
++++ b/crates/prover/src/protocols/intmul/witness.rs
+@@ -317,7 +317,7 @@
+ /// corresponding word. The columns are concatenated into one `(n_vars + LOG_N_LIMBS)`-variate
+ /// buffer with the limb index in the high bits, so the prodcheck's node reductions pair column `z`
+ /// with column `z + N_LIMBS/2`.
+-fn limb_leaves<A, F, P>(alloc: &A, tables: &[FieldVec<P, A>], exponents: &[Word]) -> FieldVec<P, A>
++pub(super) fn limb_leaves<A, F, P>(alloc: &A, tables: &[FieldVec<P, A>], exponents: &[Word]) -> FieldVec<P, A>
+ where
+ 	A: Allocator,
+ 	F: Field,
+--- a/crates/prover/src/prove.rs
++++ b/crates/prover/src/prove.rs
+@@ -1,7 +1,7 @@
+ // Copyright 2025 Irreducible Inc.
+ // Copyright 2026 The Binius Developers
+ 
+-use std::{marker::PhantomData, mem::MaybeUninit};
++use std::{marker::PhantomData, mem::MaybeUninit, sync::OnceLock};
+ 
+ use binius_compute::{Allocator, BufferPool, VecLike};
+ use binius_core::{
+@@ -53,7 +53,7 @@
+ pub struct IOPProver {
+ 	constraint_system: ConstraintSystem,
+ 	log_witness_elems: usize,
+-	key_collection: KeyCollection,
++	key_collection: OnceLock<KeyCollection>,
+ }
+ 
+ impl IOPProver {
+@@ -64,7 +64,16 @@
+ 		Self {
+ 			constraint_system,
+ 			log_witness_elems,
+-			key_collection,
++			key_collection: OnceLock::from(key_collection),
++		}
++	}
++
++	/// Creates a prover that builds shift keys only when the shift phase needs them.
++	pub fn new_lazy(iop_verifier: IOPVerifier) -> Self {
++		Self {
++			log_witness_elems: iop_verifier.log_witness_elems(),
++			constraint_system: iop_verifier.into_constraint_system(),
++			key_collection: OnceLock::new(),
+ 		}
+ 	}
+ 
+@@ -76,8 +85,9 @@
+ 	/// Returns a reference to the KeyCollection.
+ 	///
+ 	/// This can be used to serialize the KeyCollection for later use.
+-	pub const fn key_collection(&self) -> &KeyCollection {
+-		&self.key_collection
++	pub fn key_collection(&self) -> &KeyCollection {
++		self.key_collection.get_or_init(|| KeyCollection::build(
++			&self.constraint_system, InoutSegment::Public))
+ 	}
+ 
+ 	/// Proves using an IOP channel interface.
+@@ -96,6 +106,8 @@
+ 		Channel: IOPProverChannel<P, A> + WordIPProverChannel<B128, Word = Word>,
+ 	{
+ 		let cs = &self.constraint_system;
++		let ceqs_large = cs.n_imul_constraints() >= 1 << 20;
++		if ceqs_large { eprintln!("IOP: pack witness"); }
+ 
+ 		// [phase] Setup - initialization and constraint system setup
+ 		//
+@@ -114,7 +126,9 @@
+ 		let witness_commit_guard = tracing::info_span!("Commit witness").entered();
+ 
+ 		// Commit witness via channel
++		if ceqs_large { eprintln!("IOP: commit witness"); }
+ 		let trace_oracle = channel.send_oracle(witness_packed.as_view());
++		if ceqs_large { eprintln!("IOP: witness committed"); }
+ 
+ 		drop(witness_commit_guard);
+ 
+@@ -147,6 +161,7 @@
+ 		// the transcript stays in sync. Skipped entirely (no transcript messages) when there are
+ 		// no BMUL constraints; the zero `OperatorData` synthesized below then contributes nothing
+ 		// to the shift reduction.
++		if ceqs_large { eprintln!("IOP: multiplication reduction finished"); }
+ 		let binmul_output = if cs.n_bmul_constraints() > 0 {
+ 			let binmul_guard = tracing::info_span!(
+ 				"[phase] BinMul check",
+@@ -169,6 +184,7 @@
+ 		};
+ 
+ 		// [phase] BitAnd Reduction - AND constraint reduction
++		if ceqs_large { eprintln!("IOP: AND reduction"); }
+ 		let bitand_guard =
+ 			tracing::info_span!("[phase] BitAnd check", n_constraints = cs.and_constraints.len())
+ 				.entered();
+@@ -275,6 +291,7 @@
+ 		};
+ 
+ 		// [phase] Shift Reduction - shift operations
++		if ceqs_large { eprintln!("IOP: shift reduction"); }
+ 		let shift_guard = tracing::info_span!(
+ 			"[phase] Shift Reduction",
+ 			phase = "shift_reduction",
+@@ -288,7 +305,7 @@
+ 			},
+ 			wiring_eval,
+ 		} = shift::prove::<_, P, _, _>(
+-			&self.key_collection,
++			self.key_collection(),
+ 			witness.public(),
+ 			witness.non_public(),
+ 			OperatorClaims {
+@@ -445,7 +462,7 @@
+ 	/// Returns a reference to the KeyCollection.
+ 	///
+ 	/// This can be used to serialize the KeyCollection for later use.
+-	pub const fn key_collection(&self) -> &KeyCollection {
++	pub fn key_collection(&self) -> &KeyCollection {
+ 		self.iop_prover.key_collection()
+ 	}
+ 
+--- a/crates/prover/src/zk_config.rs
++++ b/crates/prover/src/zk_config.rs
+@@ -8,7 +8,7 @@
+ 
+ use std::{marker::PhantomData, sync::Arc};
+ 
+-use binius_compute::BufferPool;
++use binius_compute::GlobalAllocator;
+ use binius_core::constraint_system::{ConstraintSystem, InoutSegment, ValueVec};
+ use binius_field::{Ghash128b as B128, PackedField};
+ use binius_hash_prover::ParallelHashSuite;
+@@ -38,17 +38,12 @@
+ 	H: ParallelHashSuite,
+ {
+ 	inner_iop_prover: IOPProver,
+-	inner_iop_verifier: IOPVerifier,
+ 	outer_iop_prover: binius_spartan_prover::IOPProver<B128>,
+ 	/// Shared with the verifier via an `Arc`, not owned outright.
+ 	/// Setup skips deep-cloning the layout, and each `prove` shares it with a reference-count
+ 	/// bump.
+ 	outer_layout: Arc<WitnessLayout<B128>>,
+ 	basefold_compiler: BaseFoldProverCompiler<P, ProverNTT<B128>>,
+-	/// The pool that recycles this prover's working buffers. It lives for the prover's lifetime,
+-	/// so blocks freed by one `prove` call are reused by the next. The inner IOP proof and the
+-	/// outer wrapper proof share it, since they run sequentially.
+-	pool: BufferPool,
+ 	/// The prover creates its Merkle transcript channels with the hash suite `H`.
+ 	_hash_marker: PhantomData<H>,
+ }
+@@ -61,14 +56,7 @@
+ {
+ 	/// Constructs a ZK prover from a [`ZKVerifier`].
+ 	pub fn setup(zk_verifier: &ZKVerifier<H>) -> Result<Self, Error> {
+-		let key_collection = {
+-			let _guard = tracing::debug_span!("Build key collection").entered();
+-			KeyCollection::build(
+-				zk_verifier.inner_iop_verifier().constraint_system(),
+-				InoutSegment::Public,
+-			)
+-		};
+-		Self::setup_with_key_collection(zk_verifier, key_collection)
++		Self::setup_with_optional_key_collection(zk_verifier, None)
+ 	}
+ 
+ 	/// Constructs a ZK prover from a verifier and a prebuilt [`KeyCollection`], skipping the
+@@ -78,9 +66,18 @@
+ 		zk_verifier: &ZKVerifier<H>,
+ 		key_collection: KeyCollection,
+ 	) -> Result<Self, Error> {
+-		// Build the inner IOPProver.
++		Self::setup_with_optional_key_collection(zk_verifier, Some(key_collection))
++	}
++
++	fn setup_with_optional_key_collection(
++		zk_verifier: &ZKVerifier<H>,
++		key_collection: Option<KeyCollection>,
++	) -> Result<Self, Error> {
+ 		let inner_iop_verifier = zk_verifier.inner_iop_verifier().clone();
+-		let inner_iop_prover = IOPProver::new(inner_iop_verifier.clone(), key_collection);
++		let inner_iop_prover = match key_collection {
++			Some(keys) => IOPProver::new(inner_iop_verifier, keys),
++			None => IOPProver::new_lazy(inner_iop_verifier),
++		};
+ 
+ 		// Reuse the padded outer constraint system and layout the verifier already built.
+ 		//
+@@ -107,11 +104,9 @@
+ 
+ 		Ok(Self {
+ 			inner_iop_prover,
+-			inner_iop_verifier,
+ 			outer_iop_prover,
+ 			outer_layout,
+ 			basefold_compiler,
+-			pool: BufferPool::new(),
+ 			_hash_marker: PhantomData,
+ 		})
+ 	}
+@@ -122,7 +117,7 @@
+ 	}
+ 
+ 	/// Returns a reference to the KeyCollection.
+-	pub const fn key_collection(&self) -> &crate::protocols::shift::KeyCollection {
++	pub fn key_collection(&self) -> &crate::protocols::shift::KeyCollection {
+ 		self.inner_iop_prover.key_collection()
+ 	}
+ 
+@@ -136,15 +131,15 @@
+ 		// The replay closure captures the public words as a borrowed slice.
+ 		let inout_words = witness.inout();
+ 
+-		// Working buffers for this proof are drawn from the prover's pool, recycling blocks freed
+-		// by earlier proofs. The inner IOP proof and the outer wrapper proof (run inside
+-		// `finish`) share it via the `A = &BufferPool` allocator.
+-		let alloc = &self.pool;
++		// CE-QS memory experiment: release discarded working buffers instead of caching
++		// every size of recomputed multiplication-tree layer. Protocol bytes are unchanged.
++		let alloc = GlobalAllocator;
+ 
+ 		// Create BaseFold prover channel and wrap with outer prover.
+ 		let basefold_channel = self
+ 			.basefold_compiler
+ 			.create_channel_from_transcript::<H, Challenger_, _, _>(transcript, &mut rng, alloc);
++		if witness.non_public().len() >= 1 << 24 { eprintln!("ZK: commit transcript mask"); }
+ 		let mut wrapped_channel = ZKWrappedProverChannel::new(
+ 			basefold_channel,
+ 			&self.outer_iop_prover,
+@@ -152,8 +147,12 @@
+ 			&alloc,
+ 			&mut rng,
+ 			{
+-				let inner_iop_verifier = &self.inner_iop_verifier;
++				let inner_cs = self.inner_iop_prover.constraint_system();
+ 				move |replay_channel: &mut ReplayChannel<B128>| {
++					// Delay this duplicate constraint system until replay, after the large
++					// multiplication working buffers have been consumed.
++					let log_public = inner_cs.log_public_words(InoutSegment::Public);
++					let inner_iop_verifier = IOPVerifier::new(inner_cs.clone(), log_public);
+ 					// A faithful replay of the verifier's call sequence, which observes the
+ 					// statement before delegating.
+ 					let inout = replay_channel.observe_words(inout_words);
+@@ -226,7 +225,7 @@
+ 	fn serialize(&self, mut write_buf: impl BufMut) -> Result<(), SerializationError> {
+ 		const VERSION: u32 = 1;
+ 		VERSION.serialize(&mut write_buf)?;
+-		self.inner_iop_verifier
++		self.inner_iop_prover
+ 			.constraint_system()
+ 			.serialize(&mut write_buf)?;
+ 		self.basefold_compiler

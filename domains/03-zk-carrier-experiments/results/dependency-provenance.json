@@ -1,0 +1,13 @@
+{
+  "filename": "pqcrypto-0.3.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+  "url": "https://files.pythonhosted.org/packages/e8/22/34ab7c32ac903dfb3b1a612668496396ae2e434ea390f4a5315d06f2bba5/pqcrypto-0.3.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+  "digests": {
+    "blake2b_256": "e82234ab7c32ac903dfb3b1a612668496396ae2e434ea390f4a5315d06f2bba5",
+    "md5": "48dbfe7efd017b45e8ca01cb24b4a695",
+    "sha256": "b2f9bad43a1e3970f55e6f68fc1864595c9b0c6e53638aa8393b1d01216a6ebb"
+  },
+  "size": 27036304,
+  "upload_time_iso_8601": "2025-07-07T09:18:22.807281Z",
+  "local_sha256": "b2f9bad43a1e3970f55e6f68fc1864595c9b0c6e53638aa8393b1d01216a6ebb",
+  "hash_matches_pypi": true
+}

@@ -1,0 +1,56 @@
+{
+  "scope": "ACTUAL_CEQS12B_RELATION_PROOFS_EXPERIMENTAL",
+  "binary_sha256": "8db8a47e5b3606b9fd0c52d14882b578dc9044627c9dbcb2ecb7aa836cbd1c6d",
+  "only_verification_inputs": "authenticated public configuration and complete inline frame bytes",
+  "frames": [
+    {
+      "sha256": "cb3d8019166fadde751035b3522d12d6e6958ee16b379e375b1193648f5f8d8f",
+      "native_verified": true,
+      "frame_bytes": 282016,
+      "complete_QC_accepted": false,
+      "all_proof_bytes_inline": true,
+      "private_input_opened": false,
+      "expanded_native_sha256": "de9d0365fadb02107aa5e5f5fe0b41694c0e5a79032ce6a8bb2325054665b013",
+      "native_proof_bytes": 335360,
+      "encoded_proof_bytes": 276304
+    },
+    {
+      "sha256": "1f826350861ce9dfbbc66681ffe67f04754546c99acb4f5858f99693a2ca608c",
+      "native_verified": true,
+      "frame_bytes": 277968,
+      "complete_QC_accepted": false,
+      "all_proof_bytes_inline": true,
+      "private_input_opened": false,
+      "expanded_native_sha256": "f52154576fa266f4c7c6b9c7d15be6b00aec0ad9eeb75341ea56905d264a8656",
+      "native_proof_bytes": 335360,
+      "encoded_proof_bytes": 272256
+    }
+  ],
+  "recovered_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "qpt_128_qualified": false,
+  "actual_authorization_or_nonframing_proved": false,
+  "complete_32KiB_QCs_accepted": 0
+}

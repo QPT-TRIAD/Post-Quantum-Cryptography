@@ -1,0 +1,106 @@
+################################################################
+### 2026-09-11T20:38:41+02:00  cmd: taskset -c 0-3 timeout 1200 bin/asan_ubsan --vectors
+### env: OMP_NUM_THREADS=4 ASAN_OPTIONS=detect_leaks=1:abort_on_error=0 UBSAN_OPTIONS=print_stacktrace=1 MSAN_OPTIONS=
+{"shake256_abc":"483366601360a8771c6863080cc4114d8db44530f8f1e1ee4f94ea37e78b5739","x_times_x255_low64":"0000000000000425","a_times_b":"13acf0785755f6e08fbe50276bb4f1a1789ab0b5c8755bb4d1c561d44af883da","root7_ok":1,"inv_ok":1}
+### exit code: 0   (124 = killed by the 20-minute timeout)   wall time: .017736586 s
+
+################################################################
+### 2026-09-11T20:38:41+02:00  cmd: taskset -c 0-3 timeout 1200 bin/asan_ubsan --run --b 10 --tau 4 --wg 8 --rho 256 --threads 4
+### env: OMP_NUM_THREADS=4 ASAN_OPTIONS=detect_leaks=1:abort_on_error=0 UBSAN_OPTIONS=print_stacktrace=1 MSAN_OPTIONS=
+
+=================================================================
+==121082==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 19136 byte(s) in 2 object(s) allocated from:
+    #0 0x5e1d759a0223 in malloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd2223) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759eb5ef in verify <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:803:21
+    #2 0x5e1d759e1f2c in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:1001:13
+    #3 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+Direct leak of 12416 byte(s) in 1 object(s) allocated from:
+    #0 0x5e1d759a0223 in malloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd2223) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759e145b in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:975:21
+    #2 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #3 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #4 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+Direct leak of 1840 byte(s) in 1 object(s) allocated from:
+    #0 0x5e1d759a040d in calloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd240d) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759e1a37 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:982:48
+    #2 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #3 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #4 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+Direct leak of 1840 byte(s) in 1 object(s) allocated from:
+    #0 0x5e1d759a040d in calloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd240d) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759e1a25 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:982:19
+    #2 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #3 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #4 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+Direct leak of 64 byte(s) in 1 object(s) allocated from:
+    #0 0x5e1d759a0223 in malloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd2223) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759e08ca in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:974:17
+    #2 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #3 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #4 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+Indirect leak of 33554432 byte(s) in 1 object(s) allocated from:
+    #0 0x5e1d759a040d in calloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd240d) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759e0929 in qmap_init <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:253:15
+    #2 0x5e1d759e0929 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:974:36
+    #3 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+Indirect leak of 65536 byte(s) in 1 object(s) allocated from:
+    #0 0x5e1d759a040d in calloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd240d) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759e0977 in qmap_init <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:254:14
+    #2 0x5e1d759e0977 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:974:36
+    #3 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+Indirect leak of 9508 byte(s) in 1 object(s) allocated from:
+    #0 0x5e1d759a0223 in malloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd2223) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759e66ea in prove <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:700:19
+    #2 0x5e1d759e1afb in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:986:9
+    #3 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+Indirect leak of 9508 byte(s) in 1 object(s) allocated from:
+    #0 0x5e1d759a0223 in malloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd2223) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759e66ea in prove <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:700:19
+    #2 0x5e1d759e1ac1 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:985:9
+    #3 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+Indirect leak of 1024 byte(s) in 1 object(s) allocated from:
+    #0 0x5e1d759a040d in calloc (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0xd240d) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+    #1 0x5e1d759e09c0 in qmap_init <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:255:14
+    #2 0x5e1d759e09c0 in main <workdir>/qpt_audit_stack/implementation/src/modeB_prover_v1.50.c:974:36
+    #3 0x74187c22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #4 0x74187c22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #5 0x5e1d759053d4 in _start (<workdir>/qpt_audit_stack/implementation/bin/asan_ubsan+0x373d4) (BuildId: dcd1b9f33d446e9ed2c1856636fc48f68169d21b)
+
+SUMMARY: AddressSanitizer: 33675304 byte(s) leaked in 11 allocation(s).
+### exit code: 1   (124 = killed by the 20-minute timeout)   wall time: 25.279909538 s
+
+################################################################
+### (a1) re-run with detect_leaks=0 so the program's own stdout/exit code are captured (LSan's Die() uses _exit, which
+###      discarded the block-buffered JSON in the run above). Single thread on core 2 (fuzzing occupies cores 0-1).
+### 2026-09-11T20:43:30+02:00  cmd: taskset -c 2 timeout 1200 bin/asan_ubsan --run --b 10 --tau 4 --wg 8 --rho 256 --threads 1
+### env: ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=print_stacktrace=1 OMP_NUM_THREADS=1
+{"params":{"handle":"r^7 + c_a s + c_b s^2 + c_c s^4 (v1.50)","b":10,"tau":4,"wg":8,"rho":256,"tau_b_plus_wg":48,"n_bits":256,"keymap_equations":1024,"keymap_monomials_per_eq":255,"ell":13760,"ell_hat":15296,"degree":6,"threads":1},"sizes":{"proof_bytes":9508,"frame_bytes":11092,"fits_32768":true,"prefix_bytes":1584,"breakdown":{"h_com":64,"corrections":5736,"witness_correction":1912,"vole_hash":64,"quicksilver":192,"grind_ctr":4,"openings":1536}},"verified":[true,true],"reasons":["ok","ok"],"tampered_rejected":true,"extracted_count":22,"extracted_seats":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],"seconds":{"setup_keymap_registry":0.75,"prove_tree":0.93,"prove_vole_hash":0.00,"prove_quicksilver":21.13,"prove_grind":0.00,"prove_total":22.06,"verify":6.57,"extract":26.63,"total":88.49}}
+### exit code: 0   wall time: 88.509844761 s
+
+################################################################
+### (a2) PRODUCTION parameters under ASan+UBSan, 2 threads (cores 2-3), detect_leaks=0, 20-minute timeout
+### 2026-09-11T20:45:40+02:00  cmd: taskset -c 2,3 timeout 1200 bin/asan_ubsan --run --threads 2
+### env: ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=print_stacktrace=1 OMP_NUM_THREADS=2
+### exit code: 124   (124 = killed by the 20-minute timeout)   wall time: 1200.010364368 s
+

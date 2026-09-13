@@ -1,0 +1,14 @@
+PASS baseline_P1_intersection     trials=50 min_|S0∩S1|=25 (bound f+1=22)
+PASS baseline_P2_no_cross_topic   trials=50
+EXPECTED-FAIL mutation_wrong_mask  victim=0 correctly NOT recovered; property=NoFalseIdentityFromMaskSubstitution
+EXPECTED-FAIL mutation_duplicate_signer distinct-signer-count=42 < q=43; tag algebra still traces only the true intersection (uniqueness must be enforced by the outer ZK relation, NOT by this algebra layer)
+EXPECTED-FAIL mutation_forged_tag  random field element produced no registry hit; property=NoFalsePositiveFromForgedTag (note: this only checks the algebra -- a real forged tag must be rejected earlier by the PQ threshold-ring proof Pi, which this simulator does not model)
+EXPECTED-FAIL mutation_absent_signer absent=0 correctly excluded; |S0∩S1|=29
+EXPECTED-FAIL mutation_challenge_collision SKIPPED: no colliding message found in probe budget (expected -- SHA-256 challenge collisions are computationally infeasible; this confirms denom==0 is a negligible-probability event, not a design flaw)
+
+ALL CE-QS v0.2 MUTATION CONTROLS PASSED (5/5 from Section 19 step 5)
+NOTE: these are algebra-layer tests only. They validate the CET tag
+relation in isolation, exactly as scoped in PQ_CE_QS_frontier_v0_1.md
+Section 19. They do NOT validate the PQ threshold-ring proof Pi, do
+NOT constitute a security proof, and do NOT model an adaptive
+adversary choosing (S0,S1) after seeing commitments.

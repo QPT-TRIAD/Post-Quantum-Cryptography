@@ -1,0 +1,13 @@
+sanity_honest_certificate | rc=0 | 5s | sanity_honest_certificate (exists-trace): verified (9 steps)
+A1_three_distinct_signers | rc=0 | 4s | A1_three_distinct_signers (all-traces): verified (6 steps)
+A2_signer_authorized | rc=0 | 5s | A2_signer_authorized (all-traces): verified (162 steps)
+A_acceptance_authorized | rc=0 | 5s | A_acceptance_authorized (all-traces): verified (158 steps)
+D2_intersection_seats_corrupt | rc=0 | 2s | D2_intersection_seats_corrupt (all-traces): verified (6 steps)
+D1_non_frameability | rc=0 | 83s | D1_non_frameability (all-traces): verified (2374 steps)
+B_conflict_needs_2qN_corrupt | rc=0 | 5s | B_conflict_needs_2qN_corrupt (all-traces): verified (82 steps)
+C1_intersection_nonempty | rc=0 | 4s | C1_intersection_nonempty (all-traces): verified (34 steps)
+C2_intersection_at_least_2qN | rc=0 | 4s | C2_intersection_at_least_2qN (all-traces): verified (18 steps)
+C3_evidence_reachable | rc=0 | 10s | C3_evidence_reachable (exists-trace): verified (15 steps)
+E1_below_threshold_no_conflict | rc=0 | 5s | E1_below_threshold_no_conflict (all-traces): verified (82 steps)
+E2_at_threshold_conflict_exists | rc=0 | 28s | E2_at_threshold_conflict_exists (exists-trace): verified (22 steps)
+LOOP-DONE

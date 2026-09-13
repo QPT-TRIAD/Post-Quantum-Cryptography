@@ -1,0 +1,65 @@
+test_all_three_coefficients_colliding_names_nobody_observation (__main__.ModeBProperties.test_all_three_coefficients_colliding_names_nobody_observation)
+Documented limit: if c_a, c_b, c_c all collide (768-bit event) the difference map is 0, ... ok
+test_challenge_invertible_linear_minimal_counter (__main__.ModeBProperties.test_challenge_invertible_linear_minimal_counter) ... ok
+test_check_relation_accepts_honest_rejects_tampered (__main__.ModeBProperties.test_check_relation_accepts_honest_rejects_tampered) ... ok
+test_domain_length_not_validated_FINDING (__main__.ModeBProperties.test_domain_length_not_validated_FINDING)
+v1.50 fix (3) requires the message to be exactly 64 bytes 'so the header field and the ... ok
+test_encode_parse_roundtrip (__main__.ModeBProperties.test_encode_parse_roundtrip) ... ok
+test_extraction_complete_on_conflicts (__main__.ModeBProperties.test_extraction_complete_on_conflicts)
+Conflict (same cfg, same domain, m0 != m1): extract names exactly the intersection, ... ok
+test_extraction_difference_map_kernel_le_2 (__main__.ModeBProperties.test_extraction_difference_map_kernel_le_2)
+The extraction system (L_c0 + L_c1)(s) = Z0 + Z1 has at most 4 solutions per handle pair. ... ok
+test_extraction_never_aborts_on_count (__main__.ModeBProperties.test_extraction_never_aborts_on_count)
+One common seat's handle in frame1 replaced by an unregistered opening: the remaining ... ok
+test_extraction_symmetric (__main__.ModeBProperties.test_extraction_symmetric) ... ok
+test_kernel_dimension_at_most_2_n256_production_field (__main__.ModeBProperties.test_kernel_dimension_at_most_2_n256_production_field) ... ok
+test_kernel_dimension_at_most_2_n32 (__main__.ModeBProperties.test_kernel_dimension_at_most_2_n32)
+D(s) = a s + b s^2 + c s^4 is F2-linear of s-degree 4: for (a,b,c) != 0 its kernel has ... ok
+test_malformed_catalogue (__main__.ModeBProperties.test_malformed_catalogue) ... ok
+test_message_must_be_canonical_bytes (__main__.ModeBProperties.test_message_must_be_canonical_bytes) ... ok
+test_message_must_be_exactly_64_bytes (__main__.ModeBProperties.test_message_must_be_exactly_64_bytes) ... ok
+test_non_conflicts_rejected (__main__.ModeBProperties.test_non_conflicts_rejected) ... ok
+test_unregistered_or_corrupted_handle_never_blamed (__main__.ModeBProperties.test_unregistered_or_corrupted_handle_never_blamed)
+Precise property offered by the code: a handle that does not open a registered key is ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 300.407s
+
+OK
+
+[modeB] n=256 kernel dims over 11 triples: [2, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0]
+
+[modeB catalogue] rejected=30 accepted=0 wrong-exception=0
+  REJECT count_42                                      noncanonical header
+  REJECT count_44                                      noncanonical header
+  REJECT duplicate_signer_same_handle_twice            handles must be strictly increasing
+  REJECT duplicated_entry                              handles must be strictly increasing
+  REJECT empty                                         frame size out of bounds
+  REJECT encode_42_seats                               exactly 43 distinct seats
+  REJECT encode_duplicate_seat                         exactly 43 distinct seats
+  REJECT encode_oversized_proof                        frame exceeds 32,768 bytes
+  REJECT extract_cfg_mismatch                          configuration mismatch
+  REJECT extract_same_message                          equal messages are not a conflict
+  REJECT extract_unregistered_domain                   domain mismatch
+  REJECT invalid_encoding_bytearray                    frame must be canonical bytes
+  REJECT invalid_encoding_int                          frame must be canonical bytes
+  REJECT invalid_encoding_memoryview                   frame must be canonical bytes
+  REJECT invalid_encoding_none                         frame must be canonical bytes
+  REJECT invalid_encoding_str                          frame must be canonical bytes
+  REJECT invalid_length_plen_minus_1                   payload length mismatch
+  REJECT invalid_length_plen_plus_1                    payload length mismatch
+  REJECT oversized_32769                               frame size out of bounds
+  REJECT reordered_reversed                            handles must be strictly increasing
+  REJECT reordered_swap_0_1                            handles must be strictly increasing
+  REJECT trailing_byte                                 payload length mismatch
+  REJECT truncated_below_min                           frame size out of bounds
+  REJECT truncated_header_only                         frame size out of bounds
+  REJECT truncated_minus_1                             payload length mismatch
+  REJECT width_plus_1                                  noncanonical header
+  REJECT width_zero                                    noncanonical header
+  REJECT wrong_magic                                   noncanonical header
+  REJECT wrong_suite_46B0                              noncanonical header
+  REJECT wrong_version_46                              noncanonical header
+  DESIGN signer_not_in_set_unregistered_handle         parse ACCEPTS (structure-only); extract names 22 seats, all registered
+  DESIGN corrupted_handle_byte                         parse ACCEPTS (structure-only); extract names 21 seats, all registered
+  DESIGN trailing_bytes_absorbed_into_proof            parse ACCEPTS (structure-only); extract names 22 seats, all registered

@@ -1,0 +1,24 @@
+{
+  "checks_passed": 18,
+  "rejected": [
+    "configuration",
+    "domain",
+    "message",
+    "link",
+    "mask",
+    "proof",
+    "suite",
+    "count",
+    "proof_length",
+    "previous_suite_header",
+    "other_message_proof",
+    "truncated",
+    "trailing",
+    "proof_absent",
+    "duplicate_public_handle",
+    "changed_registry_without_rebinding",
+    "domain_rebound_in_frame_and_config",
+    "registry_rebound_in_frame_and_config"
+  ],
+  "scope": "FINITE_NEGATIVE_CONTROLS_NOT_A_SECURITY_THEOREM"
+}

@@ -1,0 +1,8 @@
+PASS trials=50
+n=64 f=21 q=43
+minimum observed quorum intersection=26
+trace tag payload at 32 bytes/tag=1376 bytes (1.344 KiB)
+pair checks per conflict=1849
+PASS same-topic conflicting certificates recover exactly the hidden signer-set intersection
+PASS different-topic certificates produced no trace match
+NOTE: algebra/combinatorics only; no ZK/security proof implemented.

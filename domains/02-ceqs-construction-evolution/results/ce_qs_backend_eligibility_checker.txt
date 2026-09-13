@@ -1,0 +1,10 @@
+LaZer-2024-succinct        eligible=False byte_status=FAIL total=75300
+LaZer-Toolkit-2026         eligible=False byte_status=OPEN total=None
+CoSNIZK-published-DAA      eligible=False byte_status=FAIL total=38912
+Fusion-direct              eligible=False byte_status=FAIL total=47185
+Lazarus-repo               eligible=False byte_status=PASS total=30736
+Mutable-BARG-theory        eligible=False byte_status=OPEN total=None
+PASS score_28KiB_48B=2032
+EXPECTED-FAIL score_28KiB_96B=-32
+PASS eligibility_requires_all_properties toy_total=28704
+NOTE: eligibility logic only; no backend cryptography benchmark executed.

@@ -1,0 +1,34 @@
+fuzz_verify: params b=6 tau=4 wg=8 rho=64 seed=49; cert = m(64)||handles(1376)||proof(8996) = 10436 bytes; init 20.7s (prove 13.58s, verify 4.70s, genuine ok=1 'ok')
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3841031528
+INFO: Loaded 1 modules   (2052 inline 8-bit counters): 2052 [0x60526d6338a8, 0x60526d6340ac), 
+INFO: Loaded 1 PC tables (2052 PCs): 2052 [0x60526d6340b0,0x60526d63c0f0), 
+INFO:       42 files found in corpus/
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 20872 bytes
+INFO: seed corpus: files: 42 min: 1b max: 20872b total: 424907b rss: 72Mb
+
+=================================================================
+==121251==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 9568 byte(s) in 1 object(s) allocated from:
+    #0 0x60526d588de3 in malloc (<workdir>/qpt_audit_stack/implementation/bin/fuzz_verify+0x114de3) (BuildId: 8ece3b3b9b69074ff03ef760db67a171b53c6d93)
+    #1 0x60526d5d6a8f in verify <workdir>/qpt_audit_stack/implementation/./src/modeB_prover_v1.50_nomain.c:803:21
+    #2 0x60526d5de75f in LLVMFuzzerTestOneInput <workdir>/qpt_audit_stack/implementation/fuzz_verify.c:146:14
+    #3 0x60526d4d4cb4 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (<workdir>/qpt_audit_stack/implementation/bin/fuzz_verify+0x60cb4) (BuildId: 8ece3b3b9b69074ff03ef760db67a171b53c6d93)
+    #4 0x60526d4d43a9 in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) (<workdir>/qpt_audit_stack/implementation/bin/fuzz_verify+0x603a9) (BuildId: 8ece3b3b9b69074ff03ef760db67a171b53c6d93)
+    #5 0x60526d4d5fc6 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::vector<fuzzer::SizedFile, std::allocator<fuzzer::SizedFile>>&) (<workdir>/qpt_audit_stack/implementation/bin/fuzz_verify+0x61fc6) (BuildId: 8ece3b3b9b69074ff03ef760db67a171b53c6d93)
+    #6 0x60526d4d64d7 in fuzzer::Fuzzer::Loop(std::vector<fuzzer::SizedFile, std::allocator<fuzzer::SizedFile>>&) (<workdir>/qpt_audit_stack/implementation/bin/fuzz_verify+0x624d7) (BuildId: 8ece3b3b9b69074ff03ef760db67a171b53c6d93)
+    #7 0x60526d4c39cf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (<workdir>/qpt_audit_stack/implementation/bin/fuzz_verify+0x4f9cf) (BuildId: 8ece3b3b9b69074ff03ef760db67a171b53c6d93)
+    #8 0x60526d4ee056 in main (<workdir>/qpt_audit_stack/implementation/bin/fuzz_verify+0x7a056) (BuildId: 8ece3b3b9b69074ff03ef760db67a171b53c6d93)
+    #9 0x7a8aca02a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #10 0x7a8aca02a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #11 0x60526d4b89b4 in _start (<workdir>/qpt_audit_stack/implementation/bin/fuzz_verify+0x449b4) (BuildId: 8ece3b3b9b69074ff03ef760db67a171b53c6d93)
+
+SUMMARY: AddressSanitizer: 9568 byte(s) leaked in 1 allocation(s).
+
+INFO: a leak has been found in the initial corpus.
+
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+artifact_prefix='artifacts/'; Test unit written to artifacts/leak-05e0ceaa36a8ede190f99bfc174668fc37284143

@@ -1,0 +1,9 @@
+PASS valid_distributed_relation
+PASS collector_witness_contains_no_signer_secrets
+EXPECTED-FAIL duplicate_hidden_identity
+EXPECTED-FAIL vote_tag_identity_mismatch
+EXPECTED-FAIL forged_local_tag_proof
+EXPECTED-FAIL public_tag_list_mismatch
+EXPECTED-FAIL below_threshold
+PASS conflict_extracts_exact_intersection intersection=[0, 1, 2]
+NOTE: ideal proof/signature interfaces only; no real ZK or PQ signatures.

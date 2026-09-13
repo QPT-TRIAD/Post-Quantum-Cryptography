@@ -1,0 +1,5 @@
+tesla exit=0 :: 8 passed, 2 xfailed in 3.38s
+b0 exit=0 :: 12 passed in 11.13s
+hashsig exit=1 :: 5 failed, 11 passed in 33.94s
+modeB exit=1 :: 2 failed, 14 passed in 210.87s (0:03:30)
+differential exit=0 ::   swapped_slots                    n= 100 agree= 100 accepted_by_both=   0

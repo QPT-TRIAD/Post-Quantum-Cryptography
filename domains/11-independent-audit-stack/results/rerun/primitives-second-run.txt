@@ -1,0 +1,13 @@
+[acvp_keygen] done in 0.6s
+[acvp_sigver] done in 0.9s
+[acvp_siggen] done in 7.1s
+[acvp_encapdecap] done in 0.4s
+[cross_impl] done in 16.0s
+[tamper] done in 2.3s
+[timing] done in 2.1s
+[harness_selftest] done in 0.5s
+RESULTS.md: 55 lines; disagreements=0 critical=0
+
+real	0m30.189s
+user	0m30.013s
+sys	0m0.086s

@@ -1,0 +1,26 @@
+{
+  "modified_rust_sources": [
+    "crates/prover/src/protocols/intmul/mod.rs",
+    "crates/prover/src/protocols/intmul/prove.rs",
+    "crates/prover/src/protocols/intmul/recompute.rs",
+    "crates/prover/src/protocols/intmul/witness.rs",
+    "crates/prover/src/prove.rs",
+    "crates/prover/src/zk_config.rs"
+  ],
+  "all_other_tracked_upstream_files_byte_identical": true,
+  "all_verifier_sources_byte_identical": true,
+  "trace_circuit_byte_identical": true,
+  "codec_byte_identical": true,
+  "original_verifier_binary_sha256": "d7724fedd0ad58bde8d721899b8da476e40680e4aec22681da1ff4bbf8da0980",
+  "modified_prover_binary_sha256": "06d26568cf755a1259a475ed734c194c830b571bcc7cd83abd472a2b842d1d8d",
+  "low_level_checker_binary_sha256": "3cfe4d6495f8160012185606b1979afb88db470d574776d773fec5e61265a11a",
+  "patch_sha256": "b916606810a4b8416baddadfac531302eec91935a73b1528a201a4a189a4b563",
+  "modified_source_sha256": {
+    "crates/prover/src/protocols/intmul/mod.rs": "92a3b171fed7ad0650d0db23794039cbb1d481dc1cd9e7d104e59ec569b7d625",
+    "crates/prover/src/protocols/intmul/prove.rs": "da77e46bcc422cde97c45ac350bf00dc483dbd9fbd674f6e39e5a5dd36348086",
+    "crates/prover/src/protocols/intmul/recompute.rs": "0f9470fa1e3f625b23a2cec31621edb61f558648d1941c9122a3d153e596b06f",
+    "crates/prover/src/protocols/intmul/witness.rs": "1e13fb31ac65071cee2c70cad24d99d5a1df38dddb59bf5fbc958c45c59dff9b",
+    "crates/prover/src/prove.rs": "322d24ec24689fabf9cab3c538e283fb4d74ccfbf3e351a507853150af4bb66d",
+    "crates/prover/src/zk_config.rs": "89b7652a7e5165b7cda04a743236db5d7d95d1482298c22e53147201076bf817"
+  }
+}

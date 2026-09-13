@@ -1,0 +1,319 @@
+================================================================
+$ python3 circuit_witness_extractor.py
+----------------------------------------------------------------
+Concrete circuit witness extraction, v1.36 — 2026-09-10
+
+This update supplies a concrete deterministic special-soundness extractor E*
+for a candidate Boolean-circuit proof backend, plus a matching circuit-level
+prover/verifier. E* reconstructs the complete witness bit vector from fixed
+committed views. It finds an extractable repetition by scanning, without
+being handed a successful challenge set or searching exponentially many
+challenge combinations. Two exact witnesses were recovered from one shared
+classical test database after both circuit proofs had verified.
+
+This is a NEW candidate backend, not a patch to or proof of the old R29 backend.
+The R29 authorization relation has not been compiled into this circuit format.
+The test database records ordinary classical SHAKE calls; it is not a quantum
+compressed-oracle implementation. Consequently no full-R29 extraction or
+QPT-128 security claim is made.
+
+Run this self-contained file:
+  python3 circuit_witness_extractor.py --self-test
+  python3 circuit_witness_extractor.py --explain
+The standard library suffices. There is no deployment CLI. The file contains
+the complete circuit code, witness extractor, and synthetic tests.
+
+Public statement and relation
+
+A statement x encodes a fixed acyclic Boolean circuit C, public context bytes,
+and a repetition count r. Gates are CONST, NOT, XOR and AND, with references
+only to earlier wires. The relation implemented here is
+  R_C(x,w) = [w is an n-bit vector and C(w)=1].
+Canonical encodings bind each view to the complete x, repetition and party.
+The context label alone does not constrain C's semantics: an application must
+pin its approved circuit and correct public inputs. A proof for C=constant-1
+does not prove R29 just because it is labeled with an R29 context string.
+
+For R29 integration, C must be the audited circuit for the ENTIRE fixed
+authorization predicate on the body and authenticated registry. That includes
+43 distinct indices, every trace credential opening, recomputation of each
+handle using the same index, and full approval-signature verification for
+that same seat and canonical approval message. A proved witness-bit encoding
+must map the extracted vector back to all 43 (index, seed, signature) rows.
+Neither a supplied Boolean `authorized` flag nor a circuit that checks only
+the handle algebra can substitute for those conditions.
+
+Source ingredients and adaptation
+
+ZKBoo [S1, Section 4.1 and Proposition 4.2] supplies a three-share circuit
+decomposition and a three-special-soundness argument. Its text explicitly
+rejects two-special soundness: two openings may reveal all input shares while
+leaving a computation branch unchecked. DFMS [S2, Definition 3.5] requires
+an efficient S-sound* decoder that finds a witness without being supplied an
+accepting challenge set. Its ordinary commit-and-open framework uses distinct
+subsets of committed messages as challenges. These are imported ingredients;
+the encoding, driver, tests and adaptation proved below are this update's work.
+
+Three-view arithmetic and local verification
+
+Party indices below are i=0,1,2 modulo 3. For each input witness bit w, choose
+two uniform shares w0,w1 and set w2=w XOR w0 XOR w1. Each view contains its
+own wire shares and independent random mask bits for all AND gates. No
+pseudorandom tape generator or new hardness assumption is needed for the
+algebraic statements here; the reference prover samples those bits directly.
+
+CONST(b) has shares (b,0,0). A NOT flips party 0's share. XOR is evaluated
+sharewise. For an AND gate on wire triples a,b, using fresh masks rho_i, set
+  z_i = a_i b_i XOR a_(i+1) b_i XOR a_i b_(i+1)
+        XOR rho_i XOR rho_(i+1).
+Products in this equation are bit ANDs. A local check at direction i sees
+views i and i+1 and verifies every local recurrence for party i, their
+metadata, both opened output shares, and the declared output reconstruction.
+It does not certify the unverified neighbor's own AND recurrence.
+
+The first message declares three output-share bits per repetition, whose XOR
+must be 1. These outputs enter the Fiat-Shamir challenge input along with all
+commitments and the complete statement. Every opened view's output must
+equal the declaration at its own party position. In DFMS notation these
+declarations are the additional first-message string a-circle; they may be
+included in the augmented instance, with R unchanged on the original x,w.
+
+Lemma 1: three passing local directions yield a witness
+
+Suppose the three fixed views of a repetition pass directions 0,1,2. Every
+party's gate recurrence is therefore correct. XOR the three AND equations.
+Each rho_i occurs twice and cancels. The remaining nine product terms are
+exactly all a_i b_j, i,j in {0,1,2}, so
+  z0 XOR z1 XOR z2 = (a0 XOR a1 XOR a2) AND (b0 XOR b1 XOR b2).
+The same reconstruction property follows directly for CONST, NOT and XOR.
+Induction in the circuit's topological order therefore shows that the XOR
+of the three shares on each wire equals ordinary circuit evaluation on
+w = input0 XOR input1 XOR input2. At the output, all three declared bits
+are matched to the views, and their XOR is 1. Thus C(w)=1.
+
+The implemented helper special_soundness_extract scans repetition triples,
+checks all three directions, reconstructs every input bit, and evaluates C(w)
+again as a defensive invariant check. It skips missing or malformed triples
+and can succeed on a later intact repetition. The full protocol decoder
+special_soundness_extract_messages handles the four commitment slots below.
+It receives neither the witness nor a preferred accepting challenge set.
+
+Why two checks are insufficient
+
+A negative test uses the false witness (0,0) for C(w)=w0 AND w1. It generates
+correct shares, flips only branch 1's final output share, and updates the
+declared output so its XOR becomes 1. Directions 0 and 2 still pass, while
+direction 1 fails. All input shares are present, but their reconstruction is
+still (0,0), which does not satisfy C. E* correctly returns failure. Thus
+the rule "two openings expose all shares, therefore extract" is invalid.
+
+Four distinct challenge subsets
+
+Each repetition commits to four messages: three views and a public dummy
+message bound to x and the repetition. A two-bit symbol chooses these slots:
+  symbol 0: {0,1},       checking direction 0;
+  symbol 1: {1,2},       checking direction 1;
+  symbol 2: {2,0},       checking direction 2;
+  symbol 3: {0,1,3},     checking direction 0 plus the exact dummy opening.
+All four subsets are distinct. The dummy has no witness-recovery role; it
+makes the fourth subset distinct while preserving binary challenge sampling.
+An earlier draft merely mapped symbols 0 and 3 to the same opening pair.
+That was insufficient to identify four distinct subsets in the source
+theorem, so this implementation was amended before finalization.
+
+There are ell=4r commitments and exactly 4^r distinct global challenge
+subsets. The challenge is the first 2r bits of the ideal h-bit hash output,
+read in canonical most-significant-first two-bit symbols. The prototype uses
+h=512 and 1<=r<=256, so no rejection sampling, modulo bias or extra hash
+stream is involved. A public verifier makes at most 1+3r hash calls: one
+challenge call and at most three commitment-opening checks per repetition.
+
+Lemma 2: the implemented decoder is S-sound*
+
+Define S to be the monotone family of sets of global challenges for which
+there exists a repetition j whose selected local directions cover {0,1,2}.
+Suppose the fixed committed messages admit accepting responses to every
+challenge in some member of S. At that j all three local directions must
+pass with the SAME three fixed view messages. Lemma 1 yields a valid witness.
+The decoder tests every j and every local direction, so it finds a witness
+without receiving that member of S. Missing dummy messages may invalidate
+symbol 3, but are unnecessary for reconstruction once the three directions
+pass. This proves the S-sound* property needed by the chosen backend.
+
+Three arbitrary distinct GLOBAL challenges are not enough: (0,0), (0,3),
+(3,0) are distinct but select only local direction 0 in either repetition.
+The checker includes this negative control. The theorem requires local
+three-direction coverage at some repetition, not just a count of transcripts.
+
+Finding a witness requires O(r(n+g)) local gate/vector operations for n input
+bits and g gates, plus canonical parsing/encoding work polynomial in their
+encoded lengths. There is no 4^r search. Enumeration in one small test only
+checks the combinatorial claim; the actual extractor never enumerates global
+challenges. Large R29-circuit performance has not been measured.
+
+Lemma 3: exact combinatorial trivial-success parameter
+
+If a challenge set is outside S, every repetition's projection misses at
+least one local direction. Missing direction 1 or 2 excludes at least one
+of the four symbols; missing direction 0 excludes two symbols. Thus each
+coordinate permits at most three symbols. The whole challenge set lies
+inside a product of such coordinate sets and has size at most 3^r.
+The set {0,2,3}^r attains this size and is outside S. Therefore
+  p_triv = 3^r/4^r = (3/4)^r.
+This proof does not assume that a malicious challenge set factorizes or that
+different repetitions' cheating events are independent. It is a counting
+statement about S and a uniformly sampled global challenge. It is not the
+complete Fiat-Shamir extraction error against quantum oracle queries.
+
+From database preimages to both exact witnesses
+
+The implemented circuit prover commits using the domain-separated input
+  b'CEQS136/commit\x00' || canonical_message.
+Its challenge uses a different prefix and includes the full canonical first
+message and statement. verify checks the challenge, every selected hash
+opening, dummy contents when selected, and local direction constraints.
+
+After a reduction measures its oracle database D, extract_from_database
+builds the canonical inverse map, looks up each commitment's preimage,
+checks the commit-domain prefix, and passes the recovered messages or bottom
+markers into E*. It makes no hash queries. The canonical inverse chooses
+the lexicographically smallest preimage if several are present; collision
+cases remain in the backend's bad-database event. No source of private
+witness material is added to the public proof.
+
+extract_two_from_database uses one inverse index of one ALREADY MEASURED D
+for the two original statement/proof pairs. It supplies neither private
+witnesses nor a decoding hint. The test creates two circuit proofs with
+different complete input vectors, verifies both, freezes the shared test
+oracle, and recovers those exact vectors. A separate check disables SHAKE
+during postprocessing and confirms that witness recovery makes no hash calls.
+
+The record of a public verifier's classical calls is insufficient for this
+decoder: it contains only the two circuit views opened in each repetition,
+and possibly the dummy. The corresponding test returns failure. The shared
+honest-prover test log contains all committed preimages and enables extraction.
+This distinction is deliberate. The classical log is an experimental stand-in
+for an ALREADY MEASURED reduction database, not an implementation or proof
+of quantum database extraction and not a proposed public sidecar.
+
+Connection to the v1.35 joint-extraction derivation
+
+That derivation runs the adversary once, verifies both proofs in one exact
+compressed-oracle simulation, measures once, and applies the deterministic
+decoder twice. The common bad-database event is global over instances; a
+single readout event covers both verifiers. These give the conditional form
+  p_E >= max(0, p-kappa_J), with joint multiplier L_J=1.
+
+For this candidate's ordinary commit-and-open protocol, the decoder and
+combinatorial slots are now explicit:
+  E*       = special_soundness_extract_messages;
+  R        = R_C, not yet R29;
+  ell      = 4r;
+  p_triv   = (3/4)^r;
+  v0+v1    <= 2+6r;
+  h        = 512 in the reference hash interface.
+For example, inserting these symbols into the conservative v1.35 ordinary
+bound gives an admissible error term
+  kappa_J = min(1,
+       [4+12r+(80r+60)Q^3]/2^512 + 20Q^2(3/4)^r),
+where Q includes ALL charged oracle calls through both verifications. This
+is symbolic bookkeeping under the exact QROM backend assumptions; it is not
+a selected parameter set or a numerical QPT-128 claim. The finite test log
+does not instantiate the quantum simulator or the deployed-hash assumption.
+
+Experimental validation and closure status
+
+The final bundled tests cover all 512 assignments for the AND reconstruction
+identity, honest three-direction recovery, incomplete/corrupt views, later
+extractable repetitions, all four challenge formats, all small global
+challenge sets used in the counting checks, and 40 deterministic randomly
+generated acyclic circuits. They also cover circuit/context substitution,
+false witnesses, canonical parsing, selected proof mutations, public-only
+database failure, complete witness-vector recovery, exact two-witness recovery,
+and the observed verifier hash-call counts against the stated maximum.
+
+All 27 test groups passed on 2026-09-10. These are finite implementation
+checks. The gate induction, S-sound* proof, and challenge counting argument
+above establish the corresponding mathematical claims. They do not establish
+zero knowledge for this variant, a deployed-hash QPT bound, or the full R29
+relation. The prototype is not a production proof system.
+
+Closed component: concrete polynomial-time witness decoder for this circuit
+backend, with matching circuit prover/verifier and the S-sound* argument.
+Next required component: a pinned, audited compilation of the entire R29
+authorization relation, with a proved witness encoding and equivalence
+  C_R29(public_input, Encode(w))=1 iff R29(public_input,w)=1.
+The visible project record supplies R29's intended conditions, but its
+implementation package was not available for inspection while this revision
+was written. It therefore does not claim source integration or an accepted
+original-goal quorum certificate.
+
+Primary sources
+
+[S1] Irene Giacomelli, Jesper Madsen, Claudio Orlandi, ZKBoo: Faster
+Zero-Knowledge for Boolean Circuits, USENIX Security 2016, Section 4.1,
+Proposition 4.2, Appendix A.
+https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_giacomelli.pdf
+
+[S2] Jelle Don, Serge Fehr, Christian Majenz, Christian Schaffner, Efficient
+NIZKs and Signatures from Commit-and-Open Protocols in the QROM,
+arXiv:2202.13730v1, Definition 3.5, Lemma 4.1, Theorem 4.2.
+https://arxiv.org/pdf/2202.13730
+
+[L1] src/joint_extractor_lift.py (v1.35), the preceding conditional joint-lift
+derivation and classical driver. No earlier missing source file was reread.
+
+Path note. This file is domains/05-extraction-and-signature-reductions/src/circuit_witness_extractor.py.
+Its own version label is the one in the first heading. All paths in this file
+are relative to the repository root. The other records it cites are in the same
+directory under their own version labels: v1.34 src/ceqs29_extractor.py,
+v1.35 src/joint_extractor_lift.py, v1.36 src/circuit_witness_extractor.py,
+v1.37 src/signature_security_reduction.py, v1.38 src/slh_dsa_signature_reduction.py,
+v1.39 src/signature_margin_sweep.py, v1.40 src/phase_ghz_security_check.py,
+v1.41 src/hybrid_sampling_bound_audit.py and v1.42
+src/slh_tree_conditioning_audit.py. 'The research trail' is the file
+docs/01-research-journey/pqt.md. Where a pointer carries a line number, the
+number is the one recorded in the source files; it is not re-verified against
+the repository copies.
+
+----------------------------------------------------------------
+# exit_code: 0
+
+================================================================
+$ python3 circuit_witness_extractor.py --self-test
+----------------------------------------------------------------
+test_01_all_gate_arithmetic_cases (__main__.CircuitExtractorTests.test_01_all_gate_arithmetic_cases) ... ok
+test_02_three_checks_reconstruct_full_input (__main__.CircuitExtractorTests.test_02_three_checks_reconstruct_full_input) ... ok
+test_03_partial_database_later_repetition_suffices (__main__.CircuitExtractorTests.test_03_partial_database_later_repetition_suffices) ... ok
+test_04_missing_one_view_in_every_repetition (__main__.CircuitExtractorTests.test_04_missing_one_view_in_every_repetition) ... ok
+test_05_malformed_unused_repetition_does_not_block_extraction (__main__.CircuitExtractorTests.test_05_malformed_unused_repetition_does_not_block_extraction) ... ok
+test_06_wrong_statement_party_and_repetition (__main__.CircuitExtractorTests.test_06_wrong_statement_party_and_repetition) ... ok
+test_07_tampered_wires_and_random_tapes (__main__.CircuitExtractorTests.test_07_tampered_wires_and_random_tapes) ... ok
+test_08_two_accepting_checks_can_hide_false_computation (__main__.CircuitExtractorTests.test_08_two_accepting_checks_can_hide_false_computation) ... ok
+test_09_binary_challenge_distribution_and_repetition_bound (__main__.CircuitExtractorTests.test_09_binary_challenge_distribution_and_repetition_bound) ... ok
+test_10_random_topological_circuits (__main__.CircuitExtractorTests.test_10_random_topological_circuits) ... ok
+test_11_noncanonical_circuit_rejected (__main__.CircuitExtractorTests.test_11_noncanonical_circuit_rejected) ... ok
+test_12_noncanonical_view_rejected (__main__.CircuitExtractorTests.test_12_noncanonical_view_rejected) ... ok
+test_13_complete_circuit_proof_and_database_extraction (__main__.CircuitExtractorTests.test_13_complete_circuit_proof_and_database_extraction) ... ok
+test_14_joint_same_database_exact_two_witnesses (__main__.CircuitExtractorTests.test_14_joint_same_database_exact_two_witnesses) ... ok
+test_15_wrong_instance_proof_fails (__main__.CircuitExtractorTests.test_15_wrong_instance_proof_fails) ... ok
+test_16_public_openings_alone_do_not_supply_full_views (__main__.CircuitExtractorTests.test_16_public_openings_alone_do_not_supply_full_views) ... ok
+test_17_public_proof_mutations_rejected (__main__.CircuitExtractorTests.test_17_public_proof_mutations_rejected) ... ok
+test_18_failed_relation_cannot_use_honest_prover (__main__.CircuitExtractorTests.test_18_failed_relation_cannot_use_honest_prover) ... ok
+test_19_output_and_partial_view_shape (__main__.CircuitExtractorTests.test_19_output_and_partial_view_shape) ... ok
+test_20_parameter_mapping_and_hash_query_count (__main__.CircuitExtractorTests.test_20_parameter_mapping_and_hash_query_count) ... ok
+test_21_recovery_returns_entire_bit_vector (__main__.CircuitExtractorTests.test_21_recovery_returns_entire_bit_vector) ... ok
+test_22_canonical_database_inverse_and_commit_domain (__main__.CircuitExtractorTests.test_22_canonical_database_inverse_and_commit_domain) ... ok
+test_23_four_challenges_are_distinct_opening_sets (__main__.CircuitExtractorTests.test_23_four_challenges_are_distinct_opening_sets) ... ok
+test_24_full_message_decoder_ignores_unneeded_dummy (__main__.CircuitExtractorTests.test_24_full_message_decoder_ignores_unneeded_dummy) ... ok
+test_25_all_four_challenge_opening_formats (__main__.CircuitExtractorTests.test_25_all_four_challenge_opening_formats) ... ok
+test_26_distinct_global_challenges_need_local_coverage (__main__.CircuitExtractorTests.test_26_distinct_global_challenges_need_local_coverage) ... ok
+test_27_circuit_must_be_pinned_by_the_application (__main__.CircuitExtractorTests.test_27_circuit_must_be_pinned_by_the_application) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.094s
+
+OK
+----------------------------------------------------------------
+# exit_code: 0
+

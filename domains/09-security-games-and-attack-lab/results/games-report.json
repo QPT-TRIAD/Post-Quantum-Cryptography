@@ -1,0 +1,489 @@
+{
+  "module": "ceqs_games",
+  "FRAME": {
+    "game": {
+      "name": "FRAME",
+      "informal": "Make public extraction name an honest seat that authorized nothing.",
+      "attacker_receives": [
+        "public parameters (key map F, field, challenge derivation)",
+        "the registry: all 64 public keys Y[d][i]",
+        "a certificate and all 43 published handles",
+        "the target honest seat i* and its handle Z",
+        "the domain and both messages"
+      ],
+      "attacker_does_not_receive": [
+        "any seat's opening (s, r)",
+        "proof randomness"
+      ],
+      "oracle": "evaluations of the public key map F (counted as Q)",
+      "wins_if": "it outputs (s', r') with F(s'||r') = Y[d][i*], which lets it place a handle for i* in a second certificate so that extraction names i*",
+      "attack": "for each candidate r: derive s = L_c^-1(Z + r^7) (the handle is public and L_c is invertible), then test F(s||r) = Y. This is the generic attack: the published handle collapses the search from 2^(2n) to 2^n.",
+      "theory_classical": "mean Q = 2^(n-1); slope 1.0 bits per bit of opening",
+      "theory_quantum": "(pi/4) 2^(n/2) Grover iterations; slope 0.5 (measured in v1.51 experiment C, exact state-vector simulation)"
+    },
+    "measurements": [
+      {
+        "n": 8,
+        "targets": 6,
+        "queries": [
+          108,
+          198,
+          154,
+          224,
+          5,
+          179
+        ],
+        "mean_Q": 144.66666666666666,
+        "log2_mean_Q": 7.1765887317233235,
+        "theory_mean_Q": 128,
+        "seconds": 0.0
+      },
+      {
+        "n": 10,
+        "targets": 6,
+        "queries": [
+          775,
+          872,
+          570,
+          674,
+          887,
+          211
+        ],
+        "mean_Q": 664.8333333333334,
+        "log2_mean_Q": 9.376848907366007,
+        "theory_mean_Q": 512,
+        "seconds": 0.2
+      },
+      {
+        "n": 11,
+        "targets": 6,
+        "queries": [
+          1938,
+          1270,
+          567,
+          113,
+          1754,
+          1278
+        ],
+        "mean_Q": 1153.3333333333333,
+        "log2_mean_Q": 10.171593821802931,
+        "theory_mean_Q": 1024,
+        "seconds": 0.4
+      },
+      {
+        "n": 13,
+        "targets": 6,
+        "queries": [
+          6145,
+          3072,
+          4017,
+          3833,
+          7911,
+          4677
+        ],
+        "mean_Q": 4942.5,
+        "log2_mean_Q": 12.271025250616571,
+        "theory_mean_Q": 4096,
+        "seconds": 2.6
+      },
+      {
+        "n": 14,
+        "targets": 6,
+        "queries": [
+          8130,
+          15833,
+          11441,
+          10710,
+          13771,
+          2599
+        ],
+        "mean_Q": 10414.0,
+        "log2_mean_Q": 13.34623669139025,
+        "theory_mean_Q": 8192,
+        "seconds": 6.1
+      }
+    ],
+    "fit": {
+      "slope": 1.0178,
+      "intercept": -0.931,
+      "theory_slope": 1.0,
+      "theory_intercept": -1.0
+    },
+    "extrapolation_n256_log2_classical": 259.6,
+    "exact_theory_n256_log2_classical": 255.0,
+    "endgame_demonstration": {
+      "result": "victim seat 0 named by extraction: True (a recovered opening wins the game)",
+      "victim_named": true,
+      "seats_named": 43
+    }
+  },
+  "SUPPRESS": {
+    "game": {
+      "name": "SUPPRESS",
+      "informal": "Make public extraction return nothing, so a real equivocation goes unpunished.",
+      "attacker_receives": [
+        "public parameters",
+        "the registry",
+        "the challenge derivation",
+        "freedom to choose the two conflicting messages"
+      ],
+      "attacker_does_not_receive": [
+        "any opening"
+      ],
+      "oracle": "evaluations of the public challenge derivation (counted as Q)",
+      "wins_if": "it finds m0 != m1 in one domain whose challenge maps are EQUAL, so the difference map D is identically zero and the extractor cannot solve for s",
+      "attack": "birthday search over messages",
+      "v1.46_output_length": "h = n  (a single challenge c; D(s) = (c0+c1)s)",
+      "v1.50_output_length": "h = 3n (the triple; D(s) = a s + b s^2 + c s^4)",
+      "lemma": "D is a linearized polynomial of 2-degree <= 2, so its kernel has dimension <= 2 and a PARTIAL collision leaves at most 4 candidate openings, all filtered by the registry. Only a full collision wins.",
+      "theory": "Q = sqrt(pi/2 * 2^h); slope 0.5 per bit of h"
+    },
+    "measurements": [
+      {
+        "scheme": "v1.46",
+        "n": 8,
+        "h": 8,
+        "trials": 12,
+        "mean_Q": 16.0,
+        "log2_mean_Q": 4.0,
+        "theory_Q": 20.053026197048002
+      },
+      {
+        "scheme": "v1.46",
+        "n": 10,
+        "h": 10,
+        "trials": 12,
+        "mean_Q": 35.0,
+        "log2_mean_Q": 5.129283016944966,
+        "theory_Q": 40.106052394096004
+      },
+      {
+        "scheme": "v1.46",
+        "n": 11,
+        "h": 11,
+        "trials": 12,
+        "mean_Q": 50.666666666666664,
+        "log2_mean_Q": 5.662965012722429,
+        "theory_Q": 56.71852322897651
+      },
+      {
+        "scheme": "v1.46",
+        "n": 13,
+        "h": 13,
+        "trials": 12,
+        "mean_Q": 126.0,
+        "log2_mean_Q": 6.977279923499917,
+        "theory_Q": 113.43704645795302
+      },
+      {
+        "scheme": "v1.46",
+        "n": 14,
+        "h": 14,
+        "trials": 12,
+        "mean_Q": 186.41666666666666,
+        "log2_mean_Q": 7.542387040337963,
+        "theory_Q": 160.42420957638402
+      },
+      {
+        "scheme": "v1.46",
+        "n": 16,
+        "h": 16,
+        "trials": 12,
+        "mean_Q": 272.0,
+        "log2_mean_Q": 8.087462841250339,
+        "theory_Q": 320.84841915276803
+      },
+      {
+        "scheme": "v1.46",
+        "n": 17,
+        "h": 17,
+        "trials": 12,
+        "mean_Q": 362.5,
+        "log2_mean_Q": 8.501837184902296,
+        "theory_Q": 453.74818583181207
+      },
+      {
+        "scheme": "v1.50",
+        "n": 8,
+        "h": 24,
+        "trials": 6,
+        "mean_Q": 2049.6666666666665,
+        "log2_mean_Q": 11.00117359075933,
+        "theory_Q": 5133.5747064442885
+      },
+      {
+        "scheme": "v1.50",
+        "n": 10,
+        "h": 30,
+        "trials": 4,
+        "mean_Q": 14437.75,
+        "log2_mean_Q": 13.817558307594165,
+        "theory_Q": 41068.59765155431
+      },
+      {
+        "scheme": "v1.50",
+        "n": 11,
+        "h": 33,
+        "trials": 2,
+        "mean_Q": 71289.0,
+        "log2_mean_Q": 16.12139186337511,
+        "theory_Q": 116159.53557294389
+      }
+    ],
+    "fit_over_both_schemes": {
+      "slope_per_bit_of_h": 0.4498,
+      "intercept": 0.767,
+      "theory_slope": 0.5,
+      "theory_intercept": 0.326
+    },
+    "extrapolation": {
+      "v1.46_h256_fitted_log2": 115.9,
+      "v1.46_h256_exact_birthday_log2": 128.3,
+      "v1.50_h768_fitted_log2": 346.2,
+      "v1.50_h768_exact_birthday_log2": 384.3
+    },
+    "quantum_costs_from_the_project_CFHL_bound": {
+      "v1.46_queries_log2": 81.7,
+      "v1.46_gates_log2": 99.7,
+      "v1.50_queries_log2": 252.4,
+      "v1.50_gates_log2": 270.4,
+      "gate_budget_log2": 128,
+      "verdict": "v1.46 is inside the budget (broken by 28 bits); v1.50 is outside it by 142 bits"
+    }
+  },
+  "EVADE": {
+    "game": {
+      "name": "EVADE",
+      "informal": "Equivocate with 22 corrupt seats and make extraction name fewer than 22.",
+      "attacker_receives": [
+        "public parameters and registry",
+        "the openings of its own corrupt seats",
+        "both certificates it is about to publish"
+      ],
+      "oracle": "evaluations of F / linear solves, counted as delta trials",
+      "wins_if": "both certificates satisfy the relation R_B, the messages differ, the domain is the same, and extraction names fewer than 22 seats",
+      "attack": "open one corrupt registry key twice: find x' != x with F(x') = F(x) by the linear trick (fix delta, solve F(x+delta)+F(x)=0, which is linear in x), then use x in one certificate and x' in the other, so that seat's handle pair decodes to garbage",
+      "theory": "mean delta trials = 2^E; measured ~2^(E+1.2) because delta always lies in the kernel of A_delta, so rank <= N-1 and consistency costs 2^-(E+1). The ledger charges 2^-E, i.e. it is conservative.",
+      "note_on_the_fix": "v1.49 cryptanalysis item 2: the old extractor ABORTED when fewer than 22 seats were found, so one evader hid all the others. v1.50 reports every seat it identifies and flags completeness."
+    },
+    "measurements": [
+      {
+        "expansion": 2,
+        "trials": 8,
+        "mean_delta_trials": 7.0,
+        "log2_mean": 2.807354922057604,
+        "theory_2^E": 4,
+        "refined_theory_2^(E+1)": 8,
+        "seconds": 0.0
+      },
+      {
+        "expansion": 4,
+        "trials": 8,
+        "mean_delta_trials": 21.5,
+        "log2_mean": 4.426264754702098,
+        "theory_2^E": 16,
+        "refined_theory_2^(E+1)": 32,
+        "seconds": 0.0
+      },
+      {
+        "expansion": 6,
+        "trials": 8,
+        "mean_delta_trials": 61.5,
+        "log2_mean": 5.94251450533924,
+        "theory_2^E": 64,
+        "refined_theory_2^(E+1)": 128,
+        "seconds": 0.1
+      },
+      {
+        "expansion": 8,
+        "trials": 8,
+        "mean_delta_trials": 453.25,
+        "log2_mean": 8.824163209744158,
+        "theory_2^E": 256,
+        "refined_theory_2^(E+1)": 512,
+        "seconds": 0.9
+      },
+      {
+        "expansion": 10,
+        "trials": 8,
+        "mean_delta_trials": 1322.0,
+        "log2_mean": 10.368506461507693,
+        "theory_2^E": 1024,
+        "refined_theory_2^(E+1)": 2048,
+        "seconds": 2.8
+      },
+      {
+        "expansion": 12,
+        "trials": 8,
+        "mean_delta_trials": 8217.0,
+        "log2_mean": 13.004396051426534,
+        "theory_2^E": 4096,
+        "refined_theory_2^(E+1)": 8192,
+        "seconds": 18.4
+      }
+    ],
+    "fit": {
+      "slope": 1.0242,
+      "intercept": 0.393,
+      "theory_slope": 1.0
+    },
+    "extrapolation_E512_log2_classical": 524.8,
+    "quantum_E512_log2": 256.0,
+    "end_to_end_consequence": {
+      "corrupt_double_signers": 22,
+      "seats_named_by_v1_50": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "count": 21,
+      "complete_flag": false,
+      "v1_46_behaviour_would_be": "ABORT (fewer than 22) -- all 21 other culprits hidden",
+      "summary": "one evader costs exactly itself: v1.50 names the other 21 and flags complete=False; v1.46 would have named nobody"
+    }
+  },
+  "SAFETY": {
+    "game": {
+      "name": "SAFETY",
+      "informal": "With at most 21 corrupt seats, equivocate at all.",
+      "attacker_receives": [
+        "the openings of its corrupt seats",
+        "honest approvals for one message per domain"
+      ],
+      "wins_if": "it assembles two certificates of 43 valid seats each, same domain, different messages",
+      "why_it_cannot": "each certificate needs 43 seats; an honest seat contributes to at most one message per domain; so 43 + 43 <= 64 + C, i.e. C >= 22",
+      "theory": "impossible for C <= 21; possible and fully attributable for C >= 22"
+    },
+    "measurements": [
+      {
+        "corrupt_seats": 0,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 1,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 2,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 3,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 4,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 5,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 6,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 7,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 8,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 9,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 10,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 11,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 12,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 13,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 14,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 15,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 16,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 17,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 18,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 19,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 20,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 21,
+        "two_conflicting_certificates_possible": false
+      },
+      {
+        "corrupt_seats": 22,
+        "two_conflicting_certificates_possible": true,
+        "seats_named": 23,
+        "genuine_double_signers": 22,
+        "missed": [],
+        "false_positives": [
+          40
+        ],
+        "all_named_are_corrupt": false
+      },
+      {
+        "corrupt_seats": 23,
+        "two_conflicting_certificates_possible": true,
+        "seats_named": 23,
+        "genuine_double_signers": 23,
+        "missed": [],
+        "false_positives": [],
+        "all_named_are_corrupt": true
+      }
+    ],
+    "measured_threshold": 22,
+    "theory_threshold": 22,
+    "matches_theory": true
+  }
+}

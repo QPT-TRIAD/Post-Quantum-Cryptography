@@ -1,0 +1,1467 @@
+{
+ "suites": {
+  "S1": {
+   "tests": [
+    {
+     "id": "S1-001",
+     "name": "test_S1_001_sizes_from_typecodes",
+     "description": "test_S1_001_sizes_from_typecodes",
+     "status": "PASS",
+     "column": "numbers"
+    },
+    {
+     "id": "S1-002",
+     "name": "test_S1_002_self_roundtrip_all_ots_types",
+     "description": "test_S1_002_self_roundtrip_all_ots_types",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S1-003",
+     "name": "test_S1_003_interop_mine_to_hsslms",
+     "description": "test_S1_003_interop_mine_to_hsslms",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S1-004",
+     "name": "test_S1_004_interop_hsslms_to_mine",
+     "description": "test_S1_004_interop_hsslms_to_mine",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S1-005",
+     "name": "test_S1_005_state_machine_normal_and_exhaustion",
+     "description": "test_S1_005_state_machine_normal_and_exhaustion",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S1-006",
+     "name": "test_S1_006_crash_injection_never_reuses_a_leaf",
+     "description": "test_S1_006_crash_injection_never_reuses_a_leaf",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S1-007",
+     "name": "test_S1_007_rollback_detected_by_hardware_counter",
+     "description": "test_S1_007_rollback_detected_by_hardware_counter",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S1-008",
+     "name": "test_S1_008_concurrent_signing_unique_leaves",
+     "description": "test_S1_008_concurrent_signing_unique_leaves",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S1-009",
+     "name": "test_S1_009_clone_shows_why_export_is_forbidden",
+     "description": "test_S1_009_clone_shows_why_export_is_forbidden",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S1-010",
+     "name": "test_S1_010_attack_game_ledger",
+     "description": "test_S1_010_attack_game_ledger",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S1-011",
+     "name": "test_S1_011_grover_simulation_matches_law",
+     "description": "test_S1_011_grover_simulation_matches_law",
+     "status": "PASS",
+     "column": "bound"
+    }
+   ],
+   "summary": "Ran 11 tests in 20.051s",
+   "all_pass": true,
+   "title": "Firmware / LMS (RFC 8554, SP 800-208)"
+  },
+  "S2": {
+   "tests": [
+    {
+     "id": "S2-001",
+     "name": "test_S2_001_wire_encoder_is_real",
+     "description": "test_S2_001_wire_encoder_is_real",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S2-002",
+     "name": "test_S2_002_model_numbers_remeasured",
+     "description": "test_S2_002_model_numbers_remeasured",
+     "status": "PASS",
+     "column": "numbers"
+    },
+    {
+     "id": "S2-003",
+     "name": "test_S2_003_worst_case_search_realistic",
+     "description": "test_S2_003_worst_case_search_realistic",
+     "status": "PASS",
+     "column": "numbers"
+    },
+    {
+     "id": "S2-004",
+     "name": "test_S2_004_multiproof_manipulation_games",
+     "description": "test_S2_004_multiproof_manipulation_games",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S2-005",
+     "name": "test_S2_005_binding_per_query_is_2_pow_minus_n",
+     "description": "test_S2_005_binding_per_query_is_2_pow_minus_n",
+     "status": "PASS",
+     "column": "bound"
+    },
+    {
+     "id": "S2-006",
+     "name": "test_S2_006_multi_target_game_prefix_matters",
+     "description": "test_S2_006_multi_target_game_prefix_matters",
+     "status": "PASS",
+     "column": "attack"
+    }
+   ],
+   "summary": "Ran 6 tests in 88.058s",
+   "all_pass": true,
+   "title": "DNSSEC (MTL ladder, multiproof, sharding)"
+  },
+  "S3": {
+   "tests": [
+    {
+     "id": "S3-001",
+     "name": "test_S3_001_encoders",
+     "description": "test_S3_001_encoders",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S3-002",
+     "name": "test_S3_002_client_hello_and_initials",
+     "description": "test_S3_002_client_hello_and_initials",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S3-003",
+     "name": "test_S3_003_server_hello_spills_initial",
+     "description": "test_S3_003_server_hello_spills_initial",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S3-004",
+     "name": "test_S3_004_x509_template",
+     "description": "test_S3_004_x509_template",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S3-005",
+     "name": "test_S3_005_mtc_certificate_bytes",
+     "description": "test_S3_005_mtc_certificate_bytes",
+     "status": "PASS",
+     "column": "numbers"
+    },
+    {
+     "id": "S3-006",
+     "name": "test_S3_006_ledger_vs_model",
+     "description": "test_S3_006_ledger_vs_model",
+     "status": "PASS",
+     "column": "bound"
+    },
+    {
+     "id": "S3-007",
+     "name": "test_S3_007_quic_and_tcp_framing",
+     "description": "test_S3_007_quic_and_tcp_framing",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S3-008",
+     "name": "test_S3_008_kemtls_flight_shape",
+     "description": "test_S3_008_kemtls_flight_shape",
+     "status": "PASS",
+     "column": "numbers"
+    },
+    {
+     "id": "S3-009",
+     "name": "test_S3_009_worst_case_chain",
+     "description": "test_S3_009_worst_case_chain",
+     "status": "PASS",
+     "column": "numbers"
+    },
+    {
+     "id": "S3-010",
+     "name": "test_S3_010_positive_control",
+     "description": "test_S3_010_positive_control",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S3-011",
+     "name": "test_S3_011_mitm",
+     "description": "test_S3_011_mitm",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S3-012",
+     "name": "test_S3_012_server_key_substitution",
+     "description": "test_S3_012_server_key_substitution",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S3-013",
+     "name": "test_S3_013_transcript_alteration",
+     "description": "test_S3_013_transcript_alteration",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S3-014",
+     "name": "test_S3_014_replay",
+     "description": "test_S3_014_replay",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S3-015",
+     "name": "test_S3_015_downgrade",
+     "description": "test_S3_015_downgrade",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S3-016",
+     "name": "test_S3_016_cross_server_key_confusion",
+     "description": "test_S3_016_cross_server_key_confusion",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S3-017",
+     "name": "test_S3_017_cert_substitution",
+     "description": "test_S3_017_cert_substitution",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S3-018",
+     "name": "test_S3_018_kem_ciphertext_substitution",
+     "description": "test_S3_018_kem_ciphertext_substitution",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S3-019",
+     "name": "test_S3_019_cpu_table",
+     "description": "test_S3_019_cpu_table",
+     "status": "PASS",
+     "column": "numbers"
+    },
+    {
+     "id": "S3-020",
+     "name": "test_S3_020_report_is_json",
+     "description": "test_S3_020_report_is_json",
+     "status": "PASS",
+     "column": "spec"
+    }
+   ],
+   "summary": "Ran 20 tests in 1.404s",
+   "all_pass": true,
+   "title": "TLS 1.3 / QUIC / MTC / KEMTLS"
+  },
+  "S4": {
+   "tests": [
+    {
+     "id": "S4-001",
+     "name": "test_S4_001_wiring_benign_link_all_accepted",
+     "description": "test_S4_001_wiring_benign_link_all_accepted",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S4-002",
+     "name": "test_S4_002_boundary_inequality_matches_every_grid_point_granular",
+     "description": "test_S4_002_boundary_inequality_matches_every_grid_point_granular",
+     "status": "PASS",
+     "column": "bound"
+    },
+    {
+     "id": "S4-003",
+     "name": "test_S4_003_boundary_inequality_matches_every_grid_point_continuous",
+     "description": "test_S4_003_boundary_inequality_matches_every_grid_point_continuous",
+     "status": "PASS",
+     "column": "bound"
+    },
+    {
+     "id": "S4-004",
+     "name": "test_S4_004_loss_strands_original_not_fixed",
+     "description": "test_S4_004_loss_strands_original_not_fixed",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S4-005",
+     "name": "test_S4_005_bug1_reproduction",
+     "description": "test_S4_005_bug1_reproduction",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S4-006",
+     "name": "test_S4_006_bug2_reproduction",
+     "description": "test_S4_006_bug2_reproduction",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S4-007",
+     "name": "test_S4_007_forge",
+     "description": "test_S4_007_forge",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S4-008",
+     "name": "test_S4_008_replay",
+     "description": "test_S4_008_replay",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S4-009",
+     "name": "test_S4_009_late_and_exact_boundary",
+     "description": "test_S4_009_late_and_exact_boundary",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S4-010",
+     "name": "test_S4_010_reorder_gaps_and_nonchaining_keys",
+     "description": "test_S4_010_reorder_gaps_and_nonchaining_keys",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S4-011",
+     "name": "test_S4_011_key_relabel",
+     "description": "test_S4_011_key_relabel",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S4-012",
+     "name": "test_S4_012_anchor_forge_rollback_replay",
+     "description": "test_S4_012_anchor_forge_rollback_replay",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S4-013",
+     "name": "test_S4_013_byte_accounting",
+     "description": "test_S4_013_byte_accounting",
+     "status": "PASS",
+     "column": "spec"
+    },
+    {
+     "id": "S4-014",
+     "name": "test_S4_014_report_is_json",
+     "description": "test_S4_014_report_is_json",
+     "status": "PASS",
+     "column": "spec"
+    }
+   ],
+   "summary": "Ran 14 tests in 2.761s",
+   "all_pass": true,
+   "title": "Constrained broadcast (TESLA + LMS anchor)"
+  },
+  "S5": {
+   "tests": [
+    {
+     "id": "S5-001",
+     "name": "test_S5_001_exhaustive_h2_to_h12_all_k",
+     "description": "test_S5_001_exhaustive_h2_to_h12_all_k",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S5-002",
+     "name": "test_S5_002_state_manipulation",
+     "description": "test_S5_002_state_manipulation",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S5-003",
+     "name": "test_S5_003_scaling_by_composition",
+     "description": "test_S5_003_scaling_by_composition",
+     "status": "PASS",
+     "column": "bound"
+    },
+    {
+     "id": "S5-004",
+     "name": "test_S5_004_fault_injection_every_hash",
+     "description": "test_S5_004_fault_injection_every_hash",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S5-005",
+     "name": "test_S5_005_reduced_exhaustion",
+     "description": "test_S5_005_reduced_exhaustion",
+     "status": "PASS",
+     "column": "attack"
+    }
+   ],
+   "summary": "Ran 5 tests in 43.451s",
+   "all_pass": true,
+   "title": "Smart card (BDS traversal, faults)"
+  },
+  "S6": {
+   "tests": [
+    {
+     "id": "S6-001",
+     "name": "test_S6_001_game_a_classical_compromised_scales_as_2_pow_minus_n",
+     "description": "test_S6_001_game_a_classical_compromised_scales_as_2_pow_minus_n",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-002",
+     "name": "test_S6_002_game_b_pq_compromised_scales_as_2_pow_minus_n",
+     "description": "test_S6_002_game_b_pq_compromised_scales_as_2_pow_minus_n",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-003",
+     "name": "test_S6_003_game_c_correlated_components_negative_result",
+     "description": "test_S6_003_game_c_correlated_components_negative_result",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-004",
+     "name": "test_S6_004_game_d_transcript_binding_detects_deletion",
+     "description": "test_S6_004_game_d_transcript_binding_detects_deletion",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-005",
+     "name": "test_S6_005_game_d_unbound_downgrade_succeeds_and_quantum_caveat",
+     "description": "test_S6_005_game_d_unbound_downgrade_succeeds_and_quantum_caveat",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-006",
+     "name": "test_S6_006_game_e_typecode_pinning_rejects_substitution",
+     "description": "test_S6_006_game_e_typecode_pinning_rejects_substitution",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-007",
+     "name": "test_S6_007_game_e_lax_prefix_compare_is_the_failure_mode",
+     "description": "test_S6_007_game_e_lax_prefix_compare_is_the_failure_mode",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-008",
+     "name": "test_S6_008_game_e_root_version_rollback",
+     "description": "test_S6_008_game_e_root_version_rollback",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-009",
+     "name": "test_S6_009_game_f_ledger_targets_cat5_deployed_not_passing",
+     "description": "test_S6_009_game_f_ledger_targets_cat5_deployed_not_passing",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-010",
+     "name": "test_S6_010_game_f_exact_gate_margins",
+     "description": "test_S6_010_game_f_exact_gate_margins",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-011",
+     "name": "test_S6_011_composition_union_bound_same_game",
+     "description": "test_S6_011_composition_union_bound_same_game",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-012",
+     "name": "test_S6_012_composition_refuses_independent_layers",
+     "description": "test_S6_012_composition_refuses_independent_layers",
+     "status": "PASS",
+     "column": "bound"
+    },
+    {
+     "id": "S6-013",
+     "name": "test_S6_013_report_is_json_with_required_game_fields",
+     "description": "test_S6_013_report_is_json_with_required_game_fields",
+     "status": "PASS",
+     "column": "attack"
+    },
+    {
+     "id": "S6-014",
+     "name": "test_S6_014_truncwots_n32_reproduces_s4_wots",
+     "description": "test_S6_014_truncwots_n32_reproduces_s4_wots",
+     "status": "PASS",
+     "column": "spec"
+    }
+   ],
+   "summary": "Ran 14 tests in 5.485s",
+   "all_pass": true,
+   "title": "Migration (hybrid combiner, downgrade, ROM roots)"
+  }
+ },
+ "attack_records": [
+  {
+   "attack_id": "S1-G1",
+   "component": "LMS n=32",
+   "game": "second preimage of the message hash Q = H(I||q||D_MESG||C||m) for a signed (C,m)",
+   "capabilities": "chosen-message signatures, public key",
+   "queries_log2": 128.0,
+   "gates_log2": 146.0,
+   "counts_toward_bound": true,
+   "assumption": "A-Grover, A-SHA256",
+   "measured": null,
+   "note": "Grover on a fixed function, single target (C fixed by signer)"
+  },
+  {
+   "attack_id": "S1-G2",
+   "component": "LMS n=32",
+   "game": "invert one LM-OTS chain node H(I||q||i||j||.) to lower a digit",
+   "capabilities": "chosen-message signatures, public key",
+   "queries_log2": 128.0,
+   "gates_log2": 146.0,
+   "counts_toward_bound": true,
+   "assumption": "A-Grover, A-SHA256",
+   "measured": null,
+   "note": "single-target Grover; (I,q,i,j) prefix makes each node its own function"
+  },
+  {
+   "attack_id": "S1-G3",
+   "component": "LMS n=32",
+   "game": "hash collision on Q to sign two messages with one OTS leaf",
+   "capabilities": "chosen-message signatures, public key",
+   "queries_log2": 85.33333333333333,
+   "gates_log2": 103.33333333333333,
+   "counts_toward_bound": false,
+   "assumption": "A-Grover, A-SHA256",
+   "measured": null,
+   "note": "BHT with QRAM; but the attacker does not choose C, so a collision gives no forgery in EUF-CMA (recorded, not counted)"
+  },
+  {
+   "attack_id": "S1-G4",
+   "component": "LMS n=32",
+   "game": "forge a Merkle path to a fresh leaf (second preimage on an interior node)",
+   "capabilities": "chosen-message signatures, public key",
+   "queries_log2": 128.0,
+   "gates_log2": 146.0,
+   "counts_toward_bound": true,
+   "assumption": "A-Grover, A-SHA256",
+   "measured": null,
+   "note": "node prefix (I, r, D_INTR) fixes the function"
+  },
+  {
+   "attack_id": "S1-G5",
+   "component": "LMS n=32",
+   "game": "find a message whose digit vector dominates a signed one (no inversion)",
+   "capabilities": "chosen-message signatures, public key",
+   "queries_log2": Infinity,
+   "gates_log2": null,
+   "counts_toward_bound": true,
+   "assumption": "A-Grover, A-SHA256",
+   "measured": null,
+   "note": "impossible: checksum strictly decreases when any digit increases"
+  },
+  {
+   "attack_id": "S1-G2-sim-n8",
+   "component": "LM-OTS chain (reduced n)",
+   "game": "chain inversion, exact Grover",
+   "measured": "k=7 (pred 7), p=0.996846",
+   "queries_log2": 4.0,
+   "assumption": "none (exact simulation)"
+  },
+  {
+   "attack_id": "S1-G2-sim-n10",
+   "component": "LM-OTS chain (reduced n)",
+   "game": "chain inversion, exact Grover",
+   "measured": "k=17 (pred 17), p=0.999448",
+   "queries_log2": 5.0,
+   "assumption": "none (exact simulation)"
+  },
+  {
+   "attack_id": "S1-G2-sim-n12",
+   "component": "LM-OTS chain (reduced n)",
+   "game": "chain inversion, exact Grover",
+   "measured": "k=35 (pred 35), p=0.999997",
+   "queries_log2": 6.0,
+   "assumption": "none (exact simulation)"
+  },
+  {
+   "attack_id": "S1-G2-sim-n14",
+   "component": "LM-OTS chain (reduced n)",
+   "game": "chain inversion, exact Grover",
+   "measured": "k=100 (pred 100), p=1.000000",
+   "queries_log2": 7.0,
+   "assumption": "none (exact simulation)"
+  },
+  {
+   "attack_id": "S2-MT-n=16,T=64",
+   "component": "MTL node hash",
+   "game": "multi-target second preimage",
+   "measured": "unprefixed 90 (exp 97.7) / prefixed 1 (exp 1.5) per 100k queries",
+   "assumption": "MM-SPR"
+  },
+  {
+   "attack_id": "S2-MT-n=16,T=256",
+   "component": "MTL node hash",
+   "game": "multi-target second preimage",
+   "measured": "unprefixed 401 (exp 390.6) / prefixed 2 (exp 1.5) per 100k queries",
+   "assumption": "MM-SPR"
+  },
+  {
+   "attack_id": "S2-MT-n256",
+   "component": "MTL node hash n=256, T=2^40",
+   "game": "multi-target second preimage (quantum)",
+   "gates_log2": 126.0,
+   "passes_qpt128": false,
+   "note": "UNPREFIXED (v2.0 as built) \u2014 FAILS",
+   "assumption": "MM-SPR, A-Grover"
+  },
+  {
+   "attack_id": "S2-MT-n256-fixed",
+   "component": "MTL node hash n=256, prefixed",
+   "game": "same",
+   "gates_log2": 146.0,
+   "passes_qpt128": true,
+   "note": "with (ladder id, rung, level, index) prefix \u2014 PASSES",
+   "assumption": "A-Grover"
+  },
+  {
+   "attack_id": "S2-WC-NXDOMAIN/realistic",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "1839 B (EDNS-only (fragmentation risk))",
+   "params": {
+    "n_names": 2000,
+    "label_len": 1,
+    "n_labels": 3,
+    "apex_len": 30,
+    "n_keys": 1,
+    "n_sigs": 2,
+    "denial": "nsec3",
+    "bitmap_windows": 2,
+    "cname_len": 0,
+    "shard_log2": 10
+   }
+  },
+  {
+   "attack_id": "S2-WC-CNAME/realistic",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "1513 B (EDNS-only (fragmentation risk))",
+   "params": {
+    "n_names": 1024,
+    "label_len": 20,
+    "n_labels": 3,
+    "apex_len": 30,
+    "n_keys": 2,
+    "n_sigs": 2,
+    "denial": "nsec",
+    "bitmap_windows": 2,
+    "cname_len": 4,
+    "shard_log2": 14
+   }
+  },
+  {
+   "attack_id": "S2-WC-DNSKEY/realistic",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "822 B (UDP-safe)",
+   "params": {
+    "n_names": 2000,
+    "label_len": 1,
+    "n_labels": 3,
+    "apex_len": 30,
+    "n_keys": 3,
+    "n_sigs": 2,
+    "denial": "nsec3",
+    "bitmap_windows": 2,
+    "cname_len": 0,
+    "shard_log2": 12
+   }
+  },
+  {
+   "attack_id": "S2-WC-WILDCARD/realistic",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "1260 B (UDP-safe (RFC 9715 1400))",
+   "params": {
+    "n_names": 2000,
+    "label_len": 20,
+    "n_labels": 3,
+    "apex_len": 30,
+    "n_keys": 2,
+    "n_sigs": 2,
+    "denial": "nsec",
+    "bitmap_windows": 1,
+    "cname_len": 0,
+    "shard_log2": 14
+   }
+  },
+  {
+   "attack_id": "S2-WC-A/realistic",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "661 B (UDP-safe)",
+   "params": {
+    "n_names": 2000,
+    "label_len": 20,
+    "n_labels": 3,
+    "apex_len": 30,
+    "n_keys": 2,
+    "n_sigs": 2,
+    "denial": "nsec",
+    "bitmap_windows": 1,
+    "cname_len": 0,
+    "shard_log2": 14
+   }
+  },
+  {
+   "attack_id": "S2-WC-NXDOMAIN/pathological",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "2120 B (EDNS-only (fragmentation risk))",
+   "params": {
+    "n_names": 2000,
+    "label_len": 1,
+    "n_labels": 4,
+    "apex_len": 60,
+    "n_keys": 1,
+    "n_sigs": 2,
+    "denial": "nsec3",
+    "bitmap_windows": 3,
+    "cname_len": 0,
+    "shard_log2": 10
+   }
+  },
+  {
+   "attack_id": "S2-WC-CNAME/pathological",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "3830 B (EDNS-only (fragmentation risk))",
+   "params": {
+    "n_names": 16,
+    "label_len": 63,
+    "n_labels": 3,
+    "apex_len": 30,
+    "n_keys": 2,
+    "n_sigs": 2,
+    "denial": "nsec",
+    "bitmap_windows": 3,
+    "cname_len": 8,
+    "shard_log2": 14
+   }
+  },
+  {
+   "attack_id": "S2-WC-DNSKEY/pathological",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "912 B (UDP-safe)",
+   "params": {
+    "n_names": 2000,
+    "label_len": 1,
+    "n_labels": 3,
+    "apex_len": 60,
+    "n_keys": 3,
+    "n_sigs": 2,
+    "denial": "nsec3",
+    "bitmap_windows": 2,
+    "cname_len": 0,
+    "shard_log2": 12
+   }
+  },
+  {
+   "attack_id": "S2-WC-WILDCARD/pathological",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "1597 B (EDNS-only (fragmentation risk))",
+   "params": {
+    "n_names": 2000,
+    "label_len": 40,
+    "n_labels": 4,
+    "apex_len": 60,
+    "n_keys": 1,
+    "n_sigs": 2,
+    "denial": "compact",
+    "bitmap_windows": 2,
+    "cname_len": 1,
+    "shard_log2": 10
+   }
+  },
+  {
+   "attack_id": "S2-WC-A/pathological",
+   "component": "DNS response size",
+   "game": "worst-case search",
+   "measured": "790 B (UDP-safe)",
+   "params": {
+    "n_names": 2000,
+    "label_len": 63,
+    "n_labels": 3,
+    "apex_len": 30,
+    "n_keys": 2,
+    "n_sigs": 2,
+    "denial": "nsec",
+    "bitmap_windows": 1,
+    "cname_len": 0,
+    "shard_log2": 14
+   }
+  },
+  {
+   "attack_id": "S3-POSITIVE-CONTROL",
+   "component": "KEMTLS + MTC handshake",
+   "game": "POSITIVE-CONTROL",
+   "capabilities": "none (honest network)",
+   "outcome": "HANDSHAKE COMPLETED: both accept, keys_equal=True",
+   "mechanism": "n/a",
+   "assumption": "n/a"
+  },
+  {
+   "attack_id": "S3-MITM",
+   "component": "KEMTLS + MTC handshake",
+   "game": "MITM",
+   "capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; substitutes its own ephemeral KEM key share and re-encapsulates (knows both ephemeral secrets)",
+   "outcome": "BLOCKED: server: decrypt_error (client Finished MAC)",
+   "mechanism": "server authentication = decapsulation of ct_S under pk_S (only the server holds sk_S) + Finished over the full transcript",
+   "assumption": "IND-CCA of the long-term KEM; collision resistance of the transcript hash"
+  },
+  {
+   "attack_id": "S3-SERVER-KEY-SUBSTITUTION",
+   "component": "KEMTLS + MTC handshake",
+   "game": "SERVER-KEY-SUBSTITUTION",
+   "capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; owns a legitimately certified key in another batch",
+   "outcome": "BLOCKED: pk_S -> pk_A, proof unchanged: client: bad_certificate (inclusion proof fails) | pk_S -> pk_A, proof from A's own batch-1 cert: client: bad_certificate (inclusion proof fails)",
+   "mechanism": "Merkle inclusion proof binds (claims, pk) as one leaf under a trusted batch root",
+   "assumption": "second-preimage resistance of H; CA root distribution"
+  },
+  {
+   "attack_id": "S3-TRANSCRIPT-ALTERATION",
+   "component": "KEMTLS + MTC handshake",
+   "game": "TRANSCRIPT-ALTERATION",
+   "capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; flips one byte of any field of any message",
+   "outcome": "BLOCKED: 13 single-field mutations across 7 messages all rejected by the receiver",
+   "mechanism": "Finished MACs over the hash of the full transcript; implicit rejection for altered ciphertexts; proof check for altered certs",
+   "assumption": "PRF security of HMAC-SHA3; collision resistance of SHA3-256"
+  },
+  {
+   "attack_id": "S3-REPLAY",
+   "component": "KEMTLS + MTC handshake",
+   "game": "REPLAY",
+   "capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; recorded a full previous session INCLUDING that client's ephemeral secret key and all derived keys",
+   "outcome": "BLOCKED: forwarded to server: server: decrypt_error (client Finished MAC) | forged Finished from old keys: client: decrypt_error (server Finished MAC)",
+   "mechanism": "client freshness: ct_e was encapsulated to the OLD ephemeral pk (new sk decapsulates to an implicit-rejection key) and ss_S is fresh per session",
+   "assumption": "IND-CCA of both KEMs; fresh client randomness"
+  },
+  {
+   "attack_id": "S3-DOWNGRADE",
+   "component": "KEMTLS + MTC handshake",
+   "game": "DOWNGRADE",
+   "capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; removes the Category-5 group from the offer and supplies a Cat-3 key share",
+   "outcome": "BLOCKED: delete Cat-5 group: client: illegal_parameter (selected group has no key share) | delete Cat-5 group and rewrite SH.group back: server: decrypt_error (client Finished MAC)",
+   "mechanism": "client policy (selected group must be the one it sent a key share for) AND the ClientHello bytes are in both transcripts",
+   "assumption": "collision resistance of the transcript hash"
+  },
+  {
+   "attack_id": "S3-CROSS-SERVER-KEY-CONFUSION",
+   "component": "KEMTLS + MTC handshake",
+   "game": "CROSS-SERVER-KEY-CONFUSION",
+   "capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; IS server b.example (holds sk_B and a valid cert/proof for b.example)",
+   "outcome": "BLOCKED: client: bad_certificate (hostname not in assertion claims)",
+   "mechanism": "hostname binding: the SNI hostname must appear in the assertion's dns claims (the ONLY barrier: all MACs verify)",
+   "assumption": "the CA only certifies names the applicant controls"
+  },
+  {
+   "attack_id": "S3-CERT-SUBSTITUTION",
+   "component": "KEMTLS + MTC handshake",
+   "game": "CERT-SUBSTITUTION",
+   "capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; runs its own CA/batch and issues itself a cert for a.example",
+   "outcome": "BLOCKED: rogue batch, unknown trust anchor: client: unknown_ca (trust anchor id not in store) | rogue assertion under the legit trust anchor id: client: bad_certificate (inclusion proof fails) | rogue assertion with the legit proof: client: bad_certificate (inclusion proof fails)",
+   "mechanism": "trust-anchor id lookup + Merkle inclusion proof against the stored root",
+   "assumption": "root distribution is authentic; second-preimage resistance of H"
+  },
+  {
+   "attack_id": "S3-KEM-CIPHERTEXT-SUBSTITUTION",
+   "component": "KEMTLS + MTC handshake",
+   "game": "KEM-CIPHERTEXT-SUBSTITUTION",
+   "capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; replaces ct_S with its own encapsulation to pk_S (knows that shared secret)",
+   "outcome": "BLOCKED: server: decrypt_error (client Finished MAC)",
+   "mechanism": "ct_S is in the transcript and its shared secret keys both Finished MACs; the adversary lacks ss_e for the server-side key",
+   "assumption": "IND-CCA of the ephemeral KEM; PRF security of the key schedule"
+  },
+  {
+   "attack_id": "S3-WC",
+   "component": "Certificate message",
+   "game": "largest legal certificate",
+   "measured": "{\"x509\": {\"form\": \"x509\", \"config\": \"X.509 + SQIsign-V, Cat 5\", \"max_certificate_bytes\": 29636, \"params\": {\"subject_cn\": 64, \"issuer_cn\": 64, \"subject_o\": 64, \"issuer_o\": 64, \"k_san\": 100, \"san_len\": 253, \"serial_len\": 20, \"n_inter\": 2, \"scts\": 3, \"ocsp_len\": 100}, \"samples\": 2000, \"analytic_max\": 29636}, \"mtc\": {\"form\": \"mtc\", \"config\": \"MTC + SQIsign-V, Cat 5\", \"max_certificate_bytes\": 26628, \"p"
+  },
+  {
+   "attack_id": "S4-FORGE",
+   "component": "TESLA broadcast",
+   "game": "FORGE",
+   "capabilities": "all disclosed keys K_1..K_{c-d}, full transcript, injection, bit-flips of in-flight packet",
+   "measured": "0/463",
+   "mechanism": "MAC keyed by an undisclosed chain key; disclosed keys verified by chain walk; bit-flips fail MAC/key"
+  },
+  {
+   "attack_id": "S4-REPLAY",
+   "component": "TESLA broadcast",
+   "game": "REPLAY",
+   "capabilities": "record and re-deliver authenticated packets, any time",
+   "measured": "0/3",
+   "mechanism": "late replay -> 'key may already be disclosed'; immediate replay -> post-auth duplicate (2 replay rejections); S4 original rejects both via (index, body) seen-set (['replay', 'replay'])"
+  },
+  {
+   "attack_id": "S4-LATE",
+   "component": "TESLA broadcast",
+   "game": "LATE",
+   "capabilities": "delay a genuine packet until its key is public (sender ahead of receiver by eps)",
+   "measured": "0/8",
+   "mechanism": "RFC 4082 \u00a73.5 safe-packet test with sync = ceil(eps/T); boundary rows: [{\"eps\": 0, \"sync\": 0, \"late_rejected\": [[\"key may already be disclosed\"], [\"key may already be disclosed\"]], \"edge_interval\": 7, \"edge_accepted\": true, \"past_edge_accepted\": false}, {\"eps\": 250, \"sync\": 1, \"late_rejected\": [[\"key may already be disclosed\"], [\"key may already be disclosed\"]], \"edge_interval\": 6, \"edge_accepted\": true, \"past_edge_accepted\": false}, {\"eps\": 500, \"sync\": 1, \"late_rejected\": [[\"key may already be disclosed\"], [\"key may already be disclosed\"]], \"edge_interval\": 6, \"edge_accepted\": true, \"past_edge_accepted\": false}, {\"eps\": 1000, \"sync\": 1, \"late_rejected\": [[\"key may already be disclosed\"], [\"key may already be disclosed\"]], \"edge_interval\": 6, \"edge_accepted\": true, \"past_edge_accepted\": false}]"
+  },
+  {
+   "attack_id": "S4-REORDER",
+   "component": "TESLA broadcast",
+   "game": "REORDER",
+   "capabilities": "reorder, swap, drop disclosure packets; substitute disclosed keys",
+   "measured": "0/4",
+   "mechanism": "chain walk to the latest known key handles gaps; S4 original accepted [1, 2, 3, 4, 5, 6, 12], stranded [7, 8] (BUG-1); rejections ['bad disclosed key', 'bad disclosed key', 'bad disclosed key', 'bad disclosed key']"
+  },
+  {
+   "attack_id": "S4-KEY",
+   "component": "TESLA broadcast",
+   "game": "KEY",
+   "capabilities": "all disclosed keys; relabel K_j as K_{j'}; MAC with K_j for interval j'",
+   "measured": "0/78",
+   "mechanism": "H^(j'-j0)(K_j) equals the known K_{j0} iff j == j'; MAC key is bound to the packet index via the chain position"
+  },
+  {
+   "attack_id": "S4-ANCHOR",
+   "component": "TESLA broadcast",
+   "game": "ANCHOR",
+   "capabilities": "inject anchors: forged, re-signed with own key, key-substituted, rolled back (validly signed), replayed",
+   "measured": "0/5",
+   "mechanism": "MerkleSigner(h=4) signature over chain_id||anchor||L||T||start (52 B) + monotonic (chain_id, start) rule; log=['anchor installed', 'bad anchor signature', 'bad anchor signature', 'bad anchor signature', 'anchor rollback/replay', 'anchor rollback/replay', 'anchor installed']"
+  },
+  {
+   "attack_id": "S6-S6-A",
+   "component": "hybrid combiner / negotiation / ROM root",
+   "game": "IND-combined-key, classical component fully compromised",
+   "capabilities": "knows sk_cl, ss_cl, ct_cl, pk_cl, label; PQ shared secret truncated to n bits",
+   "measured": "5250/10240",
+   "expected": "IND wins <= 1/2 + Q/2^(n+1); real-world hit rate = Q/2^n (measured, slope vs n fitted)",
+   "mechanism": "combine(): the unknown n-bit ss_pq enters the hash; without it K is a fresh RO output",
+   "assumption": "H (SHA3-256 in combine()) modelled as a random oracle / PRF (GHP18 Thm 3.1; X-Wing 2024); independence of the two KEM components (keys, randomness, implementation)"
+  },
+  {
+   "attack_id": "S6-S6-B",
+   "component": "hybrid combiner / negotiation / ROM root",
+   "game": "IND-combined-key, PQ component compromised",
+   "capabilities": "knows sk_pq, ss_pq, ct_cl, pk_cl, label; classical shared secret truncated to n bits",
+   "measured": "5372/10240",
+   "expected": "as S6-A with the roles swapped",
+   "mechanism": "combine() is symmetric in which component survives",
+   "assumption": "H (SHA3-256 in combine()) modelled as a random oracle / PRF (GHP18 Thm 3.1; X-Wing 2024); independence of the two KEM components (keys, randomness, implementation)"
+  },
+  {
+   "attack_id": "S6-S6-C",
+   "component": "hybrid combiner / negotiation / ROM root",
+   "game": "NEGATIVE: correlated randomness across the two components",
+   "capabilities": "public data only (pk_cl, ct_cl); knows both components share one n_seed-bit seed",
+   "measured": "6144/6144",
+   "expected": "combiner theorem gives Q/2^256 = 2^(n_seed-256) ONLY IF components are independent; hypothesis violated -> no bound applies; measured 1.0",
+   "mechanism": "none: the combiner cannot manufacture independence; fix is at the RNG/implementation layer",
+   "assumption": "independence of the two KEM components (keys, randomness, implementation) -- shown NECESSARY, not just sufficient"
+  },
+  {
+   "attack_id": "S6-S6-D",
+   "component": "hybrid combiner / negotiation / ROM root",
+   "game": "TLS group downgrade (offer [Cat5, Cat3, classical])",
+   "capabilities": "MITM edits the ClientHello group list in transit; may guess a t-bit Finished tag; quantum variant: breaks X25519 online and learns ss_cl",
+   "measured": "850/7424",
+   "expected": "bound transcript: 2^-t per Finished guess (t=256 -> 0); unbound: 1 (downgrade succeeds); bound + quantum X25519 break: 1 unless client refuses Cat 0 (policy, not binding)",
+   "mechanism": "key schedule hashes the exact ClientHello bytes as sent; Finished = HMAC(K, transcript hash)",
+   "assumption": "HMAC-SHA3 is a PRF; the negotiated key is unknown to the adversary"
+  },
+  {
+   "attack_id": "S6-S6-E",
+   "component": "hybrid combiner / negotiation / ROM root",
+   "game": "ROM root configuration substitution / rollback",
+   "capabilities": "chooses typecode, root record, signature and version; own key sets under n=24, n=16, toy n=1",
+   "measured": "8/3365",
+   "expected": "strict: 2^-256 per keygen (Grover 2^128 x 2^18 gates); lax prefix: 2^-(8n) per keygen -> n=24: 2^114 gates, n=16: 2^82 gates (both below QPT-128); toy n=1: 2^-8 measured",
+   "mechanism": "pinned typecode checked before parsing; full-length root compare; monotonic root version",
+   "assumption": "ROM immutability (verifier code and pinned typecode/root/counter cannot be changed); second-preimage resistance of the n=32 hash"
+  },
+  {
+   "attack_id": "S6-S6-F",
+   "component": "hybrid combiner / negotiation / ROM root",
+   "game": "algorithm agility ledger + QPT-128 gate margins",
+   "capabilities": "reference attacks of the v1.43 ledger; Grover with 2^18 gates per hash query",
+   "measured": "0/0",
+   "expected": "every target Cat 5; no deployed entry passes; margins n=128: -46, n=192: -14, n=256: +18 bits",
+   "mechanism": "per-layer migration ledger; ROM layer chosen Cat 5 at manufacture because it cannot rotate",
+   "assumption": "v1.43 gate accounting (2^18 gates/query); category reference attack costs"
+  }
+ ],
+ "security_exponents": [
+  {
+   "layer": "S1 firmware LMS n=32",
+   "cheapest_game": "second preimage / chain inversion (single target)",
+   "gates_log2": 146,
+   "source": "S1-010",
+   "passes_qpt128": true
+  },
+  {
+   "layer": "S1 firmware LMS n=24 (NSA-preferred)",
+   "cheapest_game": "same",
+   "gates_log2": 114,
+   "source": "S1-010",
+   "passes_qpt128": false
+  },
+  {
+   "layer": "S2 DNSSEC MTL nodes, UNPREFIXED (v2.0 as built), T=2^40",
+   "cheapest_game": "multi-target second preimage",
+   "gates_log2": 126.0,
+   "source": "S2-006",
+   "passes_qpt128": false
+  },
+  {
+   "layer": "S2 DNSSEC MTL nodes, prefixed (fix)",
+   "cheapest_game": "second preimage",
+   "gates_log2": 146.0,
+   "source": "S2-006",
+   "passes_qpt128": true
+  },
+  {
+   "layer": "S3 TLS KEM ML-KEM-1024",
+   "cheapest_game": "Category-5 reference attack",
+   "gates_log2": 148,
+   "source": "v1.43 ledger",
+   "passes_qpt128": true
+  },
+  {
+   "layer": "S3 MTC inclusion proof (RFC 6962-style nodes, no index)",
+   "cheapest_game": "multi-target second preimage (same issue as S2-006; T = certs/batch\u00b7batches)",
+   "gates_log2": null,
+   "source": "flagged, not measured here",
+   "passes_qpt128": null
+  },
+  {
+   "layer": "S4 TESLA 256-bit chain",
+   "cheapest_game": "chain preimage",
+   "gates_log2": 146,
+   "source": "S4 report / S1-010 law",
+   "passes_qpt128": true
+  },
+  {
+   "layer": "S4 TESLA MAC 128-bit tag",
+   "cheapest_game": "online tag guess (no offline speed-up)",
+   "gates_log2": null,
+   "source": "per-attempt 2^-128, online only",
+   "passes_qpt128": null
+  },
+  {
+   "layer": "S5 card LMS n=32",
+   "cheapest_game": "= S1",
+   "gates_log2": 146,
+   "source": "S1-010",
+   "passes_qpt128": true
+  },
+  {
+   "layer": "S6 hybrid KEM (PQ component Cat 5)",
+   "cheapest_game": "Category-5 reference attack",
+   "gates_log2": 148,
+   "source": "S6-010",
+   "passes_qpt128": true
+  }
+ ],
+ "composition": {
+  "same_goal_union": {
+   "goal": "break one TLS session (confidentiality or authentication)",
+   "parts_gates_log2": {
+    "ephemeral KEM ML-KEM-1024": 148,
+    "server long-term KEM ML-KEM-1024": 148,
+    "MTC/transcript hash (prefixed nodes)": 146
+   },
+   "union_gates_log2": 145.42,
+   "form": "Pr[break] <= G * 2^-(union) in D2 units"
+  },
+  "refused": [
+   "S1 firmware + S2 DNSSEC",
+   "S2 DNSSEC + S3 TLS",
+   "S4 TESLA + S5 card",
+   "any cross-layer sum"
+  ],
+  "why": "a union bound is defined for events in one probability space with one winning condition; the layers have different adversaries, keys and goals, so epsilon_total is NOT their sum"
+ },
+ "untestable_assumptions": {
+  "S1": [
+   "A-NoExport: the private key state never leaves the hardware module (SP 800-208 \u00a78.1); S1-009 shows the consequence if it does.",
+   "A-Grover: 2^(n/2) queries is optimal for unstructured search (BBBV 1997 lower bound \u2014 a theorem in the query model); the >= 2^18 gates/query floor is an engineering assumption.",
+   "A-SHA256: SHA-256 truncated to n bytes behaves as a random function for (second-)preimage; no structural attack better than generic is known."
+  ],
+  "S2": [
+   "MM-SPR of the node hash (MTL Thm 2) \u2014 measured only at n \u2264 14 bits",
+   "resolver behaviour above 1,232/1,400 B (fragmentation/TCP fallback) is from literature, not measured here",
+   "the batch-reference RRSIG encoding (MTL-Type 2/3) is this audit's protocol decision, not an IETF draft"
+  ],
+  "S3": {
+   "cipher_suite": "TLS_AES_256_GCM_SHA384 (Finished 48 B) when the KEM is Category 5, else TLS_AES_128_GCM_SHA256 (32 B)",
+   "client_hello": "SNI www.example.com, 3 suites, 5 groups, 10 sig schemes, 1 hybrid key share (X25519||ML-KEM), 32-B legacy_session_id (compat), one 32-B trust anchor id (draft-ietf-tls-trust-anchor-ids)",
+   "x509": "DER v3: 20-B serial, 9-B algorithm OIDs (NIST arc; assumed for schemes without one), C/O/CN names, UTCTime, SKI/AKI 20 B, KU, EKU, SAN, OCSP AIA; chain = leaf + 1 intermediate; ECDSA sizes taken raw (64 B)",
+   "mtc": "Assertion{subject_type u16, TLSSubjectInfo{scheme u16, public_key<1..2^16-1>}, Claim{dns names}} + Proof{trust_anchor<1..2^8-1> (12 B), proof_data<0..2^16-1> = index u64, landmark u32, path<0..2^16-1>}; CertificateEntry carries a trust_anchors ext with the batch id",
+   "records": "ServerHello plaintext record, 6-B compat CCS, one AEAD record (5+1+16 B) per <=2^14-B fragment of each later message",
+   "quic": "Initial: 30-B long header (DCID/SCID 8/8, empty token, 2-B length, 4-B pkt no) + 16-B tag; Handshake: 29 + 16; 5-B ACK frame in the first server Initial; datagrams holding an Initial are capped and padded to 1,200 B, later ones 1,252 (v4) / 1,232 (v6)",
+   "kemtls": "server first flight = SH, EE, Certificate; NO CertificateVerify and NO Finished (server Finished follows the client's KEM ciphertext); client 2nd flight carries ClientKemCiphertext + Finished"
+  },
+  "S4": [
+   "Loose time synchronisation: the receiver holds a TRUE bound eps on |receiver clock - sender clock|; a violated bound is undetectable from inside the protocol and breaks the safe-packet test.",
+   "PRF security of HMAC-SHA3-256 (truncated to 128 bits): forgery probability 2^-128 per online attempt; no offline advantage.",
+   "One-wayness (preimage resistance) of the SHAKE256-256 chain hash: recovering K_{i+1} from K_i costs 2^256 classically / 2^128 Grover queries.",
+   "Second-preimage resistance of the hash inside the WOTS/Merkle anchor signature and correct one-time-key state management at the signer."
+  ],
+  "S5": [
+   "atomic persistence of the {q, bds} record (a real card must use a journaling NVM write)",
+   "hardware SHA-256 throughput (~1 us/hash) used to convert hash counts to time"
+  ],
+  "S6": [
+   {
+    "assumption": "random-oracle / PRF modelling of the combiner hash (SHA3-256 in combine())",
+    "used_by": [
+     "S6-A",
+     "S6-B",
+     "S6-D"
+    ],
+    "why_untestable": "the reduction treats H as a random oracle; no experiment on outputs can separate \"SHA3 is a PRF\" from \"SHA3 is a random oracle\" -- the games measure scaling under the model, not the model"
+   },
+   {
+    "assumption": "independence of the two KEM components (key material, randomness, implementation)",
+    "used_by": [
+     "S6-A",
+     "S6-B"
+    ],
+    "why_untestable": "S6-C shows the bound collapses when violated, but whether a deployment shares a DRBG, entropy pool or code path is a property of the implementation, not of the algorithm"
+   },
+   {
+    "assumption": "ROM immutability: verifier code, pinned typecode, root and version counter cannot be altered",
+    "used_by": [
+     "S6-E",
+     "S6-F"
+    ],
+    "why_untestable": "a mask-ROM / OTP property of the silicon; software can only assume the verifier runs as written"
+   },
+   {
+    "assumption": "ToyKEM stands in for ML-KEM-1024 / X25519; IND-CCA of ML-KEM (Module-LWE) and the v1.43 category gate costs",
+    "used_by": [
+     "S6-A",
+     "S6-B",
+     "S6-D",
+     "S6-F"
+    ],
+    "why_untestable": "lattice hardness and the reference attack costs are inputs from the QPT-128 ledger, not re-derived"
+   }
+  ]
+ },
+ "model_discrepancies": {
+  "S2": {
+   "NXDOMAIN/realistic": {
+    "bytes": 1839,
+    "class": "EDNS-only (fragmentation risk)",
+    "params": {
+     "n_names": 2000,
+     "label_len": 1,
+     "n_labels": 3,
+     "apex_len": 30,
+     "n_keys": 1,
+     "n_sigs": 2,
+     "denial": "nsec3",
+     "bitmap_windows": 2,
+     "cname_len": 0,
+     "shard_log2": 10
+    }
+   },
+   "CNAME/realistic": {
+    "bytes": 1513,
+    "class": "EDNS-only (fragmentation risk)",
+    "params": {
+     "n_names": 1024,
+     "label_len": 20,
+     "n_labels": 3,
+     "apex_len": 30,
+     "n_keys": 2,
+     "n_sigs": 2,
+     "denial": "nsec",
+     "bitmap_windows": 2,
+     "cname_len": 4,
+     "shard_log2": 14
+    }
+   },
+   "DNSKEY/realistic": {
+    "bytes": 822,
+    "class": "UDP-safe",
+    "params": {
+     "n_names": 2000,
+     "label_len": 1,
+     "n_labels": 3,
+     "apex_len": 30,
+     "n_keys": 3,
+     "n_sigs": 2,
+     "denial": "nsec3",
+     "bitmap_windows": 2,
+     "cname_len": 0,
+     "shard_log2": 12
+    }
+   },
+   "WILDCARD/realistic": {
+    "bytes": 1260,
+    "class": "UDP-safe (RFC 9715 1400)",
+    "params": {
+     "n_names": 2000,
+     "label_len": 20,
+     "n_labels": 3,
+     "apex_len": 30,
+     "n_keys": 2,
+     "n_sigs": 2,
+     "denial": "nsec",
+     "bitmap_windows": 1,
+     "cname_len": 0,
+     "shard_log2": 14
+    }
+   },
+   "A/realistic": {
+    "bytes": 661,
+    "class": "UDP-safe",
+    "params": {
+     "n_names": 2000,
+     "label_len": 20,
+     "n_labels": 3,
+     "apex_len": 30,
+     "n_keys": 2,
+     "n_sigs": 2,
+     "denial": "nsec",
+     "bitmap_windows": 1,
+     "cname_len": 0,
+     "shard_log2": 14
+    }
+   },
+   "NXDOMAIN/pathological": {
+    "bytes": 2120,
+    "class": "EDNS-only (fragmentation risk)",
+    "params": {
+     "n_names": 2000,
+     "label_len": 1,
+     "n_labels": 4,
+     "apex_len": 60,
+     "n_keys": 1,
+     "n_sigs": 2,
+     "denial": "nsec3",
+     "bitmap_windows": 3,
+     "cname_len": 0,
+     "shard_log2": 10
+    }
+   },
+   "CNAME/pathological": {
+    "bytes": 3830,
+    "class": "EDNS-only (fragmentation risk)",
+    "params": {
+     "n_names": 16,
+     "label_len": 63,
+     "n_labels": 3,
+     "apex_len": 30,
+     "n_keys": 2,
+     "n_sigs": 2,
+     "denial": "nsec",
+     "bitmap_windows": 3,
+     "cname_len": 8,
+     "shard_log2": 14
+    }
+   },
+   "DNSKEY/pathological": {
+    "bytes": 912,
+    "class": "UDP-safe",
+    "params": {
+     "n_names": 2000,
+     "label_len": 1,
+     "n_labels": 3,
+     "apex_len": 60,
+     "n_keys": 3,
+     "n_sigs": 2,
+     "denial": "nsec3",
+     "bitmap_windows": 2,
+     "cname_len": 0,
+     "shard_log2": 12
+    }
+   },
+   "WILDCARD/pathological": {
+    "bytes": 1597,
+    "class": "EDNS-only (fragmentation risk)",
+    "params": {
+     "n_names": 2000,
+     "label_len": 40,
+     "n_labels": 4,
+     "apex_len": 60,
+     "n_keys": 1,
+     "n_sigs": 2,
+     "denial": "compact",
+     "bitmap_windows": 2,
+     "cname_len": 1,
+     "shard_log2": 10
+    }
+   },
+   "A/pathological": {
+    "bytes": 790,
+    "class": "UDP-safe",
+    "params": {
+     "n_names": 2000,
+     "label_len": 63,
+     "n_labels": 3,
+     "apex_len": 30,
+     "n_keys": 2,
+     "n_sigs": 2,
+     "denial": "nsec",
+     "bitmap_windows": 1,
+     "cname_len": 0,
+     "shard_log2": 14
+    }
+   }
+  },
+  "S3": [
+   {
+    "item": "KEMTLS first flight",
+    "model": "adds FINISHED=40 B",
+    "measured": "no Finished in the first flight (server Finished follows the client KEM ciphertext); the client 2nd flight carries ClientKemCiphertext+Finished",
+    "client_second_flight_bytes": 1626
+   },
+   {
+    "item": "MTC + OV-V (pk in handshake)",
+    "model": "449972 B",
+    "measured": "NOT ENCODABLE: MTC TLSSubjectInfo.public_key is opaque<1..2^16-1>; a 446,992-B key overflows"
+   },
+   {
+    "item": "ServerHello with hybrid ML-KEM-1024 (and X25519MLKEM768)",
+    "model": "no packet count",
+    "measured": "exceeds one 1,200-B Initial datagram: the server spends 2 padded Initial datagrams (2,400 B) of the 7,200-B budget on ServerHello"
+   },
+   {
+    "item": "classical today",
+    "model_server_flight": 1520,
+    "exact_handshake_bytes": 1554,
+    "delta": 34,
+    "exact_tcp_bytes": 1653,
+    "exact_quic_udp_bytes": 1708,
+    "verdict_changes": []
+   },
+   {
+    "item": "deployed hybrid (2024-26)",
+    "model_server_flight": 2608,
+    "exact_handshake_bytes": 2642,
+    "delta": 34,
+    "exact_tcp_bytes": 2741,
+    "exact_quic_udp_bytes": 2847,
+    "verdict_changes": []
+   },
+   {
+    "item": "naive PQ chain, Cat 2/3",
+    "model_server_flight": 16884,
+    "exact_handshake_bytes": 16930,
+    "delta": 46,
+    "exact_tcp_bytes": 17029,
+    "exact_quic_udp_bytes": 17735,
+    "verdict_changes": []
+   },
+   {
+    "item": "naive PQ chain, Cat 5",
+    "model_server_flight": 30959,
+    "exact_handshake_bytes": 31021,
+    "delta": 62,
+    "exact_tcp_bytes": 31142,
+    "exact_quic_udp_bytes": 32396,
+    "verdict_changes": []
+   },
+   {
+    "item": "X.509 + SQIsign-V, Cat 5",
+    "model_server_flight": 4358,
+    "exact_handshake_bytes": 4416,
+    "delta": 58,
+    "exact_tcp_bytes": 4515,
+    "exact_quic_udp_bytes": 4671,
+    "verdict_changes": []
+   },
+   {
+    "item": "MTC + ML-DSA-87, Cat 5",
+    "model_server_flight": 9939,
+    "exact_handshake_bytes": 9859,
+    "delta": -80,
+    "exact_tcp_bytes": 9958,
+    "exact_quic_udp_bytes": 10364,
+    "verdict_changes": []
+   },
+   {
+    "item": "MTC + SQIsign-V, Cat 5",
+    "model_server_flight": 3141,
+    "exact_handshake_bytes": 3061,
+    "delta": -80,
+    "exact_tcp_bytes": 3160,
+    "exact_quic_udp_bytes": 3266,
+    "verdict_changes": []
+   },
+   {
+    "item": "MTC + MAYO-5, Cat 5",
+    "model_server_flight": 9238,
+    "exact_handshake_bytes": 9158,
+    "delta": -80,
+    "exact_tcp_bytes": 9257,
+    "exact_quic_udp_bytes": 9613,
+    "verdict_changes": []
+   },
+   {
+    "item": "MTC + KEMTLS ML-KEM-1024, Cat 5",
+    "model_server_flight": 4280,
+    "exact_handshake_bytes": 4148,
+    "delta": -132,
+    "exact_tcp_bytes": 4203,
+    "exact_quic_udp_bytes": 4403,
+    "verdict_changes": []
+   }
+  ],
+  "S4": [
+   "\"52 B per message\" holds for intervals i > d only; packets for i <= d carry no disclosed key and are 20 B (measured).",
+   "TeslaReceiver docstring says the receiver clock \"may lead the sender by at most sync\"; the code (and RFC 4082) bound the SENDER leading the receiver: the dangerous direction is receiver lag.",
+   "The S4 receiver is interval-granular: with sync = ceil(eps/T) it needs ceil((dt+eps)/T)+ceil(eps/T) <= d-1, stricter than RFC 4082 continuous ceil((dt+2eps)/T) <= d-1 whenever eps is not a multiple of T (grid points differing counted in report).",
+   "The 1,772 B anchor figure is the LMS w8 size formula (WOTS(256).sig_bytes); the only executable Merkle signer in the repo is WOTS w16 (2,820 B at h=20 incl. randomiser).",
+   "pending buckets are never pruned: any injected index in the safe window allocates receiver memory (DoS surface, not a forgery)."
+  ],
+  "S5": null
+ }
+}

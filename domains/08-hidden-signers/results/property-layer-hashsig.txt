@@ -1,0 +1,13 @@
+
+==================================== ERRORS ====================================
+_________________ ERROR collecting test_props_hashsig_fixed.py _________________
+test_props_hashsig_fixed.py:98: in <module>
+    _k = T4.LmsPrivate(_pair[0], _pair[1], I=b'\xA5' * 16, seed=(bytes(_pair) * 16)[:32])   # dedicated, never re-used
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../../../PQT/pq_audit_s1_lms_v2.2.py:149: in __init__
+    raise ValueError('F3: LMS m and LM-OTS n must match (SP 800-208 approved sets pair n with m; '
+E   ValueError: F3: LMS m and LM-OTS n must match (SP 800-208 approved sets pair n with m; RFC 8554 5.1: the two hash functions SHOULD be the same)
+=========================== short test summary info ============================
+ERROR test_props_hashsig_fixed.py - ValueError: F3: LMS m and LM-OTS n must m...
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 1.91s

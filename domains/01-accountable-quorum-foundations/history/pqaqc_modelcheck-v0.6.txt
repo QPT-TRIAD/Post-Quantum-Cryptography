@@ -1,0 +1,11 @@
+PQAQC v0.6 bounded verification record
+======================================
+
+PASS vote/seal/epoch states=15633 transitions=44388
+PASS preprocessing states=2401 transitions=10976
+PASS evidence/anchor states=90 transitions=233
+PASS post-seal partition before_cert=False after_heal_cert=True
+
+TLC status: NOT RUN in this environment.
+Reason: Java is installed, but tla2tools.jar is not available locally and external binary acquisition is blocked.
+These PASS results are from the independent exhaustive Python checker, not TLC/TLAPS.

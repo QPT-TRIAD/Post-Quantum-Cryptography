@@ -1,0 +1,33 @@
+== hashsig_fixed ==
+
+==================================== ERRORS ====================================
+_________________ ERROR collecting test_props_hashsig_fixed.py _________________
+<stack root>/fixes/property_fixed/test_props_hashsig_fixed.py:100: in <module>
+    _k = T4.LmsPrivate(_pair[0], _pair[1], I=b'\xA5' * 16, seed=(bytes(_pair) * 16)[:32])   # dedicated, never re-used
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<source-tree>/pq_audit_s1_lms_v2.2.py:149: in __init__
+    raise ValueError('F3: LMS m and LM-OTS n must match (SP 800-208 approved sets pair n with m; '
+E   ValueError: F3: LMS m and LM-OTS n must match (SP 800-208 approved sets pair n with m; RFC 8554 5.1: the two hash functions SHOULD be the same)
+=========================== short test summary info ============================
+ERROR ../..<stack root>/fixes/property_fixed/test_props_hashsig_fixed.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 3.85s
+exit=0
+== v151 --self-test ==
+test_relation (__main__.V150Tests.test_relation) ... ok
+test_f5_domain_canonicality (__main__.AuditFixTests.test_f5_domain_canonicality) ... ok
+test_f5_parse_requires_bytes (__main__.AuditFixTests.test_f5_parse_requires_bytes) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 23.041s
+
+OK
+
+real	0m23.149s
+user	0m19.041s
+sys	0m0.030s
+exit=0
+== modeB_fixed ==
+................                                                         [100%]
+16 passed in 202.13s (0:03:22)
+exit=0

@@ -1,0 +1,12 @@
+test_false_witness_refused_by_prover (__main__.ToyTests.test_false_witness_refused_by_prover) ... ok
+test_ggm_open_reconstruct (__main__.ToyTests.test_ggm_open_reconstruct) ... ok
+test_measured_size_matches_formula (__main__.ToyTests.test_measured_size_matches_formula) ... ok
+test_pipeline_end_to_end (__main__.ToyTests.test_pipeline_end_to_end) ... ok
+test_r7_table_matches_field (__main__.ToyTests.test_r7_table_matches_field) ... ok
+test_tampered_proof_rejected (__main__.ToyTests.test_tampered_proof_rejected) ... ok
+test_wrong_statement_rejected (__main__.ToyTests.test_wrong_statement_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 133.436s
+
+OK

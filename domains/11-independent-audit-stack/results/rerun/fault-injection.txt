@@ -1,0 +1,29 @@
+{
+ "schedules": 300,
+ "failures": 0,
+ "fault_classes": [
+  "loss",
+  "duplication",
+  "reorder",
+  "delay",
+  "clock_skew",
+  "restart",
+  "rollback",
+  "corrupt_message",
+  "corrupt_signature",
+  "corrupt_certificate",
+  "equivocation"
+ ],
+ "checks_total": 1717,
+ "p1_corruptions_attempted": 3700,
+ "p1_accepted_on_invalid": 0,
+ "conflicts_extracted": 33,
+ "honest_named_total": 0,
+ "verdict": "REPRODUCED",
+ "first_failures": []
+}
+
+real	0m0.822s
+user	0m0.772s
+sys	0m0.011s
+exit=0

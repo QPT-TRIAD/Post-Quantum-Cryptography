@@ -1,0 +1,196 @@
+{
+  "module": "modeB_rigorous_ledger_v1.47",
+  "settings": [
+    {
+      "log2_parties": 24,
+      "grinding_bits": 16,
+      "tau_rigorous": 9,
+      "certificate_bytes": 37646,
+      "fits_32KiB": false,
+      "ledger": {
+        "rows": {
+          "R1 framing (public pair search, tight)": -145.0,
+          "R2 evasion (linear-trick collision, extraction charged)": -209.0,
+          "R3 proof soundness (DFMS-modelled)": -135.67807190511263,
+          "R4 simulation (GHHM Thm 3)": -159.41503749927887,
+          "R5 pair-search false positive": -181.18141782251917
+        },
+        "total_ratio_log2": -135.676,
+        "D2_pass": true,
+        "D2_margin_bits": 5.676,
+        "params": {
+          "tau": 9,
+          "log2_parties": 24,
+          "grinding_bits": 16,
+          "expansion": 512,
+          "domains_per_epoch": 1024
+        }
+      }
+    },
+    {
+      "log2_parties": 24,
+      "grinding_bits": 32,
+      "tau_rigorous": 9,
+      "certificate_bytes": 37134,
+      "fits_32KiB": false,
+      "ledger": {
+        "rows": {
+          "R1 framing (public pair search, tight)": -145.0,
+          "R2 evasion (linear-trick collision, extraction charged)": -209.0,
+          "R3 proof soundness (DFMS-modelled)": -151.67807190511263,
+          "R4 simulation (GHHM Thm 3)": -159.41503749927887,
+          "R5 pair-search false positive": -181.18141782251917
+        },
+        "total_ratio_log2": -144.986,
+        "D2_pass": true,
+        "D2_margin_bits": 14.986,
+        "params": {
+          "tau": 9,
+          "log2_parties": 24,
+          "grinding_bits": 32,
+          "expansion": 512,
+          "domains_per_epoch": 1024
+        }
+      }
+    },
+    {
+      "log2_parties": 32,
+      "grinding_bits": 16,
+      "tau_rigorous": 7,
+      "certificate_bytes": 31322,
+      "fits_32KiB": true,
+      "ledger": {
+        "rows": {
+          "R1 framing (public pair search, tight)": -145.0,
+          "R2 evasion (linear-trick collision, extraction charged)": -209.0,
+          "R3 proof soundness (DFMS-modelled)": -143.67807190511263,
+          "R4 simulation (GHHM Thm 3)": -159.41503749927887,
+          "R5 pair-search false positive": -181.18141782251917
+        },
+        "total_ratio_log2": -143.193,
+        "D2_pass": true,
+        "D2_margin_bits": 13.193,
+        "params": {
+          "tau": 7,
+          "log2_parties": 32,
+          "grinding_bits": 16,
+          "expansion": 512,
+          "domains_per_epoch": 1024
+        }
+      }
+    },
+    {
+      "log2_parties": 32,
+      "grinding_bits": 32,
+      "tau_rigorous": 7,
+      "certificate_bytes": 30810,
+      "fits_32KiB": true,
+      "ledger": {
+        "rows": {
+          "R1 framing (public pair search, tight)": -145.0,
+          "R2 evasion (linear-trick collision, extraction charged)": -209.0,
+          "R3 proof soundness (DFMS-modelled)": -159.67807190511263,
+          "R4 simulation (GHHM Thm 3)": -159.41503749927887,
+          "R5 pair-search false positive": -181.18141782251917
+        },
+        "total_ratio_log2": -145.0,
+        "D2_pass": true,
+        "D2_margin_bits": 15.0,
+        "params": {
+          "tau": 7,
+          "log2_parties": 32,
+          "grinding_bits": 32,
+          "expansion": 512,
+          "domains_per_epoch": 1024
+        }
+      }
+    },
+    {
+      "log2_parties": 40,
+      "grinding_bits": 32,
+      "tau_rigorous": 5,
+      "certificate_bytes": 23462,
+      "fits_32KiB": true,
+      "ledger": {
+        "rows": {
+          "R1 framing (public pair search, tight)": -145.0,
+          "R2 evasion (linear-trick collision, extraction charged)": -209.0,
+          "R3 proof soundness (DFMS-modelled)": -135.67807190511263,
+          "R4 simulation (GHHM Thm 3)": -159.41503749927887,
+          "R5 pair-search false positive": -181.18141782251917
+        },
+        "total_ratio_log2": -135.676,
+        "D2_pass": true,
+        "D2_margin_bits": 5.676,
+        "params": {
+          "tau": 5,
+          "log2_parties": 40,
+          "grinding_bits": 32,
+          "expansion": 512,
+          "domains_per_epoch": 1024
+        }
+      }
+    }
+  ],
+  "expansion_sweep_R2_ratio_log2": {
+    "300": 3.0,
+    "400": -97.0,
+    "430": -127.0,
+    "512": -209.0,
+    "600": -297.0
+  },
+  "domains_sweep_R1_ratio_log2": {
+    "1": -155.0,
+    "1024": -145.0,
+    "65536": -139.0,
+    "1048576": -135.0
+  },
+  "comparison_mode_s_v1.43": "Mode S needed 512-bit credentials for the search row; Mode B keeps 256",
+  "faest_qrom_R3_variant_v1.49": [
+    {
+      "log2_parties": 16,
+      "grinding_bits": 16,
+      "tau": 14,
+      "tau_b_plus_wg": 240,
+      "R3_faest_qrom_log2": -142.1,
+      "total_with_faest_row_log2": -141.541,
+      "D2_margin_bits": 11.541
+    },
+    {
+      "log2_parties": 20,
+      "grinding_bits": 16,
+      "tau": 11,
+      "tau_b_plus_wg": 236,
+      "R3_faest_qrom_log2": -138.1,
+      "total_with_faest_row_log2": -137.669,
+      "D2_margin_bits": 7.669
+    },
+    {
+      "log2_parties": 24,
+      "grinding_bits": 16,
+      "tau": 9,
+      "tau_b_plus_wg": 232,
+      "R3_faest_qrom_log2": -134.1,
+      "total_with_faest_row_log2": -133.678,
+      "D2_margin_bits": 3.678
+    },
+    {
+      "log2_parties": 20,
+      "grinding_bits": 32,
+      "tau": 10,
+      "tau_b_plus_wg": 232,
+      "R3_faest_qrom_log2": -134.1,
+      "total_with_faest_row_log2": -133.678,
+      "D2_margin_bits": 3.678
+    },
+    {
+      "log2_parties": 32,
+      "grinding_bits": 32,
+      "tau": 7,
+      "tau_b_plus_wg": 256,
+      "R3_faest_qrom_log2": -157.9,
+      "total_with_faest_row_log2": -145.0,
+      "D2_margin_bits": 15.0
+    }
+  ]
+}

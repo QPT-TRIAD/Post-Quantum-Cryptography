@@ -1,0 +1,6 @@
+PASS valid_private_wrapper_relation
+EXPECTED-FAIL aggregate_bitmap_mismatch
+EXPECTED-FAIL bitmap_cet_set_mismatch
+EXPECTED-FAIL hidden_below_threshold
+PASS conflict_extracts_exact_intersection intersection=[0, 1, 2]
+NOTE: logical relation mock only; no MPA or NIZK implemented.

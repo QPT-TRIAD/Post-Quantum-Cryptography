@@ -1,0 +1,7 @@
+PASS challenge_encoding_injective toy_bits=16
+PASS same_key_conflict_extract
+EXPECTED-FAIL cross_key_false_trace blocked_by=unique_link_base
+PASS setup_sampled_domain_base_immutable
+EXPECTED-FAIL domain_budget_exhaustion safe_halt
+PASS outer_witness_no_signer_secrets
+NOTE: structural toy model only; QLWR/LWE/NIZK/QCR security not executed.

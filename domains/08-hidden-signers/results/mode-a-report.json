@@ -1,0 +1,97 @@
+{
+  "module": "hidden_signer_modeA_v1.45",
+  "frame": {
+    "prefix_bytes": 2014,
+    "proof_slot_bytes": 30754,
+    "handle_bytes": 42,
+    "field_bits": 336,
+    "s_bits": 224
+  },
+  "faest_v2_reproduction_bytes": {
+    "FAEST-256s": 20696,
+    "FAEST-256f": 26548,
+    "FAEST-EM-256s": 17984,
+    "FAEST-EM-256f": 23476
+  },
+  "sizing_attack_gates_log2": 24,
+  "settings": [
+    {
+      "log2_parties": 16,
+      "grinding_bits": 0,
+      "chain_log2": 0,
+      "max_keymap_witness_bits": -1,
+      "certificates": {
+        "shake256_one_block (executable reference)": 2943310,
+        "rain3_256_two_blocks (published primitive, unanalyzed mode)": 130766,
+        "aes256_em_two_blocks (FAEST witness)": 419726,
+        "hypothetical_witness_free": 53710
+      }
+    },
+    {
+      "log2_parties": 24,
+      "grinding_bits": 16,
+      "chain_log2": 16,
+      "max_keymap_witness_bits": 80,
+      "certificates": {
+        "shake256_one_block (executable reference)": 1474544,
+        "rain3_256_two_blocks (published primitive, unanalyzed mode)": 68272,
+        "aes256_em_two_blocks (FAEST witness)": 212752,
+        "hypothetical_witness_free": 29744
+      }
+    },
+    {
+      "log2_parties": 32,
+      "grinding_bits": 16,
+      "chain_log2": 16,
+      "max_keymap_witness_bits": 193,
+      "certificates": {
+        "shake256_one_block (executable reference)": 1264940,
+        "rain3_256_two_blocks (published primitive, unanalyzed mode)": 59564,
+        "aes256_em_two_blocks (FAEST witness)": 183404,
+        "hypothetical_witness_free": 26540
+      }
+    },
+    {
+      "log2_parties": 32,
+      "grinding_bits": 32,
+      "chain_log2": 16,
+      "max_keymap_witness_bits": 370,
+      "certificates": {
+        "shake256_one_block (executable reference)": 1054824,
+        "rain3_256_two_blocks (published primitive, unanalyzed mode)": 50344,
+        "aes256_em_two_blocks (FAEST witness)": 153544,
+        "hypothetical_witness_free": 22824
+      }
+    },
+    {
+      "log2_parties": 40,
+      "grinding_bits": 32,
+      "chain_log2": 16,
+      "max_keymap_witness_bits": 611,
+      "certificates": {
+        "shake256_one_block (executable reference)": 845219,
+        "rain3_256_two_blocks (published primitive, unanalyzed mode)": 41635,
+        "aes256_em_two_blocks (FAEST witness)": 124195,
+        "hypothetical_witness_free": 19619
+      }
+    },
+    {
+      "log2_parties": 44,
+      "grinding_bits": 32,
+      "chain_log2": 24,
+      "max_keymap_witness_bits": 1045,
+      "certificates": {
+        "shake256_one_block (executable reference)": 635103,
+        "rain3_256_two_blocks (published primitive, unanalyzed mode)": 32415,
+        "aes256_em_two_blocks (FAEST witness)": 94335,
+        "hypothetical_witness_free": 15903
+      }
+    }
+  ],
+  "registry_bytes_per_epoch_of_2^16_domains": 268435456,
+  "flags": {
+    "compact_hidden_signer_certificate_produced": false,
+    "zero_knowledge_backend": false,
+    "collaborative_prover": false
+  }
+}

@@ -1,0 +1,55 @@
+================================================================
+$ python3 slh_dsa_signature_reduction.py
+----------------------------------------------------------------
+usage: slh_dsa_signature_reduction.py [-h] (--explain | --self-test)
+slh_dsa_signature_reduction.py: error: one of the arguments --explain --self-test is required
+----------------------------------------------------------------
+# exit_code: 2
+
+================================================================
+$ python3 slh_dsa_signature_reduction.py --self-test
+----------------------------------------------------------------
+test_01_worst_case_single_honest_common_seat (__main__.ReductionTests.test_01_worst_case_single_honest_common_seat) ... ok
+test_02_exact_adaptive_target_probability (__main__.ReductionTests.test_02_exact_adaptive_target_probability) ... ok
+test_03_known_static_corruption_probability (__main__.ReductionTests.test_03_known_static_corruption_probability) ... ok
+test_04_all_fault_counts_and_multi_target_gain (__main__.ReductionTests.test_04_all_fault_counts_and_multi_target_gain) ... ok
+test_05_selector_can_choose_either_side_without_guessing (__main__.ReductionTests.test_05_selector_can_choose_either_side_without_guessing) ... ok
+test_06_new_signature_on_queried_message_is_not_EUF (__main__.ReductionTests.test_06_new_signature_on_queried_message_is_not_EUF) ... ok
+test_07_other_use_of_key_must_remain_in_raw_log (__main__.ReductionTests.test_07_other_use_of_key_must_remain_in_raw_log) ... ok
+test_08_external_context_is_part_of_freshness (__main__.ReductionTests.test_08_external_context_is_part_of_freshness) ... ok
+test_09_corruption_through_end_excludes_candidate (__main__.ReductionTests.test_09_corruption_through_end_excludes_candidate) ... ok
+test_10_signature_and_projection_tampering (__main__.ReductionTests.test_10_signature_and_projection_tampering) ... ok
+test_11_slot_and_conflict_checks (__main__.ReductionTests.test_11_slot_and_conflict_checks) ... ok
+test_12_role_domain_separation_by_signed_bytes (__main__.ReductionTests.test_12_role_domain_separation_by_signed_bytes) ... ok
+test_13_forced_body_hash_collision_blocks_freshness_bridge (__main__.ReductionTests.test_13_forced_body_hash_collision_blocks_freshness_bridge) ... ok
+test_14_original_approval_bytes_and_cached_hashes (__main__.ReductionTests.test_14_original_approval_bytes_and_cached_hashes) ... ok
+test_15_loss_factors_and_error_placement (__main__.ReductionTests.test_15_loss_factors_and_error_placement) ... ok
+test_16_parameter_validation_and_clipping (__main__.ReductionTests.test_16_parameter_validation_and_clipping) ... ok
+test_17_small_universe_quorum_intersections_exhaustive (__main__.ReductionTests.test_17_small_universe_quorum_intersections_exhaustive) ... ok
+test_18_exact_expected_fresh_fraction_without_independence (__main__.ReductionTests.test_18_exact_expected_fresh_fraction_without_independence) ... ok
+test_19_embedding_forwards_only_target_queries (__main__.ReductionTests.test_19_embedding_forwards_only_target_queries) ... ok
+test_20_target_corruption_aborts_without_secret_key (__main__.ReductionTests.test_20_target_corruption_aborts_without_secret_key) ... ok
+test_21_duplicate_key_setup_aborts_without_resampling (__main__.ReductionTests.test_21_duplicate_key_setup_aborts_without_resampling) ... ok
+test_22_query_and_registry_canonicality (__main__.ReductionTests.test_22_query_and_registry_canonicality) ... ok
+test_23_discarded_branch_query_cannot_be_erased (__main__.ReductionTests.test_23_discarded_branch_query_cannot_be_erased) ... ok
+test_24_native_api_order_and_no_double_framing (__main__.ReplacementTests.test_24_native_api_order_and_no_double_framing) ... ok
+test_25_context_encoding_is_injective_on_small_domain (__main__.ReplacementTests.test_25_context_encoding_is_injective_on_small_domain) ... ok
+test_26_and_requires_both_components (__main__.ReplacementTests.test_26_and_requires_both_components) ... ok
+test_27_or_has_no_slh_projection_guarantee (__main__.ReplacementTests.test_27_or_has_no_slh_projection_guarantee) ... ok
+test_28_fresh_projection_preserves_slh_signature (__main__.ReplacementTests.test_28_fresh_projection_preserves_slh_signature) ... ok
+test_29_component_only_query_disqualifies_forgery (__main__.ReplacementTests.test_29_component_only_query_disqualifies_forgery) ... ok
+test_30_other_context_does_not_erase_freshness (__main__.ReplacementTests.test_30_other_context_does_not_erase_freshness) ... ok
+test_31_p384_component_cannot_bypass_invalid_slh (__main__.ReplacementTests.test_31_p384_component_cannot_bypass_invalid_slh) ... ok
+test_32_component_encodings_and_bad_contexts (__main__.ReplacementTests.test_32_component_encodings_and_bad_contexts) ... ok
+test_33_legacy_and_mixed_suites_rejected (__main__.ReplacementTests.test_33_legacy_and_mixed_suites_rejected) ... ok
+test_34_hybrid_suite_slh_projection_uses_exact_new_messages (__main__.ReplacementTests.test_34_hybrid_suite_slh_projection_uses_exact_new_messages) ... ok
+test_35_honest_slh_component_suffices_even_when_ec_is_unrestricted (__main__.ReplacementTests.test_35_honest_slh_component_suffices_even_when_ec_is_unrestricted) ... ok
+test_36_queries_must_be_canonical_and_checks_exact_booleans (__main__.ReplacementTests.test_36_queries_must_be_canonical_and_checks_exact_booleans) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 0.078s
+
+OK
+----------------------------------------------------------------
+# exit_code: 0
+

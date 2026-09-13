@@ -1,0 +1,647 @@
+{
+  "audit": "pq_audit_s3_tls_wire_v2.1",
+  "model": "s3_tls_pki.py",
+  "assumptions": {
+    "cipher_suite": "TLS_AES_256_GCM_SHA384 (Finished 48 B) when the KEM is Category 5, else TLS_AES_128_GCM_SHA256 (32 B)",
+    "client_hello": "SNI www.example.com, 3 suites, 5 groups, 10 sig schemes, 1 hybrid key share (X25519||ML-KEM), 32-B legacy_session_id (compat), one 32-B trust anchor id (draft-ietf-tls-trust-anchor-ids)",
+    "x509": "DER v3: 20-B serial, 9-B algorithm OIDs (NIST arc; assumed for schemes without one), C/O/CN names, UTCTime, SKI/AKI 20 B, KU, EKU, SAN, OCSP AIA; chain = leaf + 1 intermediate; ECDSA sizes taken raw (64 B)",
+    "mtc": "Assertion{subject_type u16, TLSSubjectInfo{scheme u16, public_key<1..2^16-1>}, Claim{dns names}} + Proof{trust_anchor<1..2^8-1> (12 B), proof_data<0..2^16-1> = index u64, landmark u32, path<0..2^16-1>}; CertificateEntry carries a trust_anchors ext with the batch id",
+    "records": "ServerHello plaintext record, 6-B compat CCS, one AEAD record (5+1+16 B) per <=2^14-B fragment of each later message",
+    "quic": "Initial: 30-B long header (DCID/SCID 8/8, empty token, 2-B length, 4-B pkt no) + 16-B tag; Handshake: 29 + 16; 5-B ACK frame in the first server Initial; datagrams holding an Initial are capped and padded to 1,200 B, later ones 1,252 (v4) / 1,232 (v6)",
+    "kemtls": "server first flight = SH, EE, Certificate; NO CertificateVerify and NO Finished (server Finished follows the client's KEM ciphertext); client 2nd flight carries ClientKemCiphertext + Finished"
+  },
+  "part_a": {
+    "ledger": [
+      {
+        "config": "classical today",
+        "client_hello": 243,
+        "client_initial_datagrams": 1,
+        "quic_budget": 3600,
+        "model_server_flight": 1520,
+        "encodable": true,
+        "handshake_bytes": 1554,
+        "messages": {
+          "ServerHello": 122,
+          "EncryptedExtensions": 19,
+          "Certificate": 1305,
+          "CertificateVerify": 72,
+          "Finished": 36
+        },
+        "records": 6,
+        "tcp_bytes": 1653,
+        "tcp_segments": 2,
+        "tcp_fits_initcwnd": true,
+        "quic_datagrams": 2,
+        "quic_datagrams_v6": 2,
+        "quic_udp_bytes": 1708,
+        "wire_ipv4": 1764,
+        "wire_ipv6": 1804,
+        "quic_fits_3x": true,
+        "delta_handshake_vs_model": 34,
+        "verdict_changes": []
+      },
+      {
+        "config": "deployed hybrid (2024-26)",
+        "client_hello": 1427,
+        "client_initial_datagrams": 2,
+        "quic_budget": 7200,
+        "model_server_flight": 2608,
+        "encodable": true,
+        "handshake_bytes": 2642,
+        "messages": {
+          "ServerHello": 1210,
+          "EncryptedExtensions": 19,
+          "Certificate": 1305,
+          "CertificateVerify": 72,
+          "Finished": 36
+        },
+        "records": 6,
+        "tcp_bytes": 2741,
+        "tcp_segments": 2,
+        "tcp_fits_initcwnd": true,
+        "quic_datagrams": 3,
+        "quic_datagrams_v6": 3,
+        "quic_udp_bytes": 2847,
+        "wire_ipv4": 2931,
+        "wire_ipv6": 2991,
+        "quic_fits_3x": true,
+        "delta_handshake_vs_model": 34,
+        "verdict_changes": []
+      },
+      {
+        "config": "naive PQ chain, Cat 2/3",
+        "client_hello": 1427,
+        "client_initial_datagrams": 2,
+        "quic_budget": 7200,
+        "model_server_flight": 16884,
+        "encodable": true,
+        "handshake_bytes": 16930,
+        "messages": {
+          "ServerHello": 1210,
+          "EncryptedExtensions": 19,
+          "Certificate": 13237,
+          "CertificateVerify": 2428,
+          "Finished": 36
+        },
+        "records": 6,
+        "tcp_bytes": 17029,
+        "tcp_segments": 12,
+        "tcp_fits_initcwnd": false,
+        "quic_datagrams": 15,
+        "quic_datagrams_v6": 15,
+        "quic_udp_bytes": 17735,
+        "wire_ipv4": 18155,
+        "wire_ipv6": 18455,
+        "quic_fits_3x": false,
+        "delta_handshake_vs_model": 46,
+        "verdict_changes": []
+      },
+      {
+        "config": "naive PQ chain, Cat 5",
+        "client_hello": 1811,
+        "client_initial_datagrams": 2,
+        "quic_budget": 7200,
+        "model_server_flight": 30959,
+        "encodable": true,
+        "handshake_bytes": 31021,
+        "messages": {
+          "ServerHello": 1690,
+          "EncryptedExtensions": 19,
+          "Certificate": 24625,
+          "CertificateVerify": 4635,
+          "Finished": 52
+        },
+        "records": 7,
+        "tcp_bytes": 31142,
+        "tcp_segments": 22,
+        "tcp_fits_initcwnd": false,
+        "quic_datagrams": 26,
+        "quic_datagrams_v6": 27,
+        "quic_udp_bytes": 32396,
+        "wire_ipv4": 33124,
+        "wire_ipv6": 33744,
+        "quic_fits_3x": false,
+        "delta_handshake_vs_model": 62,
+        "verdict_changes": []
+      },
+      {
+        "config": "X.509 + SQIsign-V, Cat 5",
+        "client_hello": 1811,
+        "client_initial_datagrams": 2,
+        "quic_budget": 7200,
+        "model_server_flight": 4358,
+        "encodable": true,
+        "handshake_bytes": 4416,
+        "messages": {
+          "ServerHello": 1690,
+          "EncryptedExtensions": 19,
+          "Certificate": 2355,
+          "CertificateVerify": 300,
+          "Finished": 52
+        },
+        "records": 6,
+        "tcp_bytes": 4515,
+        "tcp_segments": 4,
+        "tcp_fits_initcwnd": true,
+        "quic_datagrams": 4,
+        "quic_datagrams_v6": 4,
+        "quic_udp_bytes": 4671,
+        "wire_ipv4": 4783,
+        "wire_ipv6": 4863,
+        "quic_fits_3x": true,
+        "delta_handshake_vs_model": 58,
+        "verdict_changes": []
+      },
+      {
+        "config": "MTC + ML-DSA-87, Cat 5",
+        "client_hello": 1811,
+        "client_initial_datagrams": 2,
+        "quic_budget": 7200,
+        "model_server_flight": 9939,
+        "encodable": true,
+        "handshake_bytes": 9859,
+        "messages": {
+          "ServerHello": 1690,
+          "EncryptedExtensions": 19,
+          "Certificate": 3463,
+          "CertificateVerify": 4635,
+          "Finished": 52
+        },
+        "records": 6,
+        "tcp_bytes": 9958,
+        "tcp_segments": 7,
+        "tcp_fits_initcwnd": true,
+        "quic_datagrams": 9,
+        "quic_datagrams_v6": 9,
+        "quic_udp_bytes": 10364,
+        "wire_ipv4": 10616,
+        "wire_ipv6": 10796,
+        "quic_fits_3x": false,
+        "delta_handshake_vs_model": -80,
+        "verdict_changes": []
+      },
+      {
+        "config": "MTC + SQIsign-V, Cat 5",
+        "client_hello": 1811,
+        "client_initial_datagrams": 2,
+        "quic_budget": 7200,
+        "model_server_flight": 3141,
+        "encodable": true,
+        "handshake_bytes": 3061,
+        "messages": {
+          "ServerHello": 1690,
+          "EncryptedExtensions": 19,
+          "Certificate": 1000,
+          "CertificateVerify": 300,
+          "Finished": 52
+        },
+        "records": 6,
+        "tcp_bytes": 3160,
+        "tcp_segments": 3,
+        "tcp_fits_initcwnd": true,
+        "quic_datagrams": 3,
+        "quic_datagrams_v6": 3,
+        "quic_udp_bytes": 3266,
+        "wire_ipv4": 3350,
+        "wire_ipv6": 3410,
+        "quic_fits_3x": true,
+        "delta_handshake_vs_model": -80,
+        "verdict_changes": []
+      },
+      {
+        "config": "MTC + MAYO-5, Cat 5",
+        "client_hello": 1811,
+        "client_initial_datagrams": 2,
+        "quic_budget": 7200,
+        "model_server_flight": 9238,
+        "encodable": true,
+        "handshake_bytes": 9158,
+        "messages": {
+          "ServerHello": 1690,
+          "EncryptedExtensions": 19,
+          "Certificate": 6425,
+          "CertificateVerify": 972,
+          "Finished": 52
+        },
+        "records": 6,
+        "tcp_bytes": 9257,
+        "tcp_segments": 7,
+        "tcp_fits_initcwnd": true,
+        "quic_datagrams": 8,
+        "quic_datagrams_v6": 8,
+        "quic_udp_bytes": 9613,
+        "wire_ipv4": 9837,
+        "wire_ipv6": 9997,
+        "quic_fits_3x": false,
+        "delta_handshake_vs_model": -80,
+        "verdict_changes": []
+      },
+      {
+        "config": "MTC + KEMTLS ML-KEM-1024, Cat 5",
+        "client_hello": 1811,
+        "client_initial_datagrams": 2,
+        "quic_budget": 7200,
+        "model_server_flight": 4280,
+        "encodable": true,
+        "handshake_bytes": 4148,
+        "messages": {
+          "ServerHello": 1690,
+          "EncryptedExtensions": 19,
+          "Certificate": 2439
+        },
+        "records": 4,
+        "tcp_bytes": 4203,
+        "tcp_segments": 3,
+        "tcp_fits_initcwnd": true,
+        "quic_datagrams": 4,
+        "quic_datagrams_v6": 4,
+        "quic_udp_bytes": 4403,
+        "wire_ipv4": 4515,
+        "wire_ipv6": 4595,
+        "quic_fits_3x": true,
+        "delta_handshake_vs_model": -132,
+        "kemtls_client_second_flight": 1626,
+        "verdict_changes": []
+      },
+      {
+        "config": "MTC + OV-V (pk in handshake)",
+        "client_hello": 1811,
+        "client_initial_datagrams": 2,
+        "quic_budget": 7200,
+        "model_server_flight": 449972,
+        "encodable": false,
+        "why": "vector of 446992 B exceeds opaque<0..2^16-1>",
+        "quic_fits_3x": false,
+        "tcp_fits_initcwnd": false
+      }
+    ],
+    "verdict_changes": [],
+    "worst_case": {
+      "x509": {
+        "form": "x509",
+        "config": "X.509 + SQIsign-V, Cat 5",
+        "max_certificate_bytes": 29636,
+        "params": {
+          "subject_cn": 64,
+          "issuer_cn": 64,
+          "subject_o": 64,
+          "issuer_o": 64,
+          "k_san": 100,
+          "san_len": 253,
+          "serial_len": 20,
+          "n_inter": 2,
+          "scts": 3,
+          "ocsp_len": 100
+        },
+        "samples": 2000,
+        "analytic_max": 29636
+      },
+      "mtc": {
+        "form": "mtc",
+        "config": "MTC + SQIsign-V, Cat 5",
+        "max_certificate_bytes": 26628,
+        "params": {
+          "k_san": 100,
+          "san_len": 253,
+          "depth": 32
+        },
+        "samples": 2000,
+        "analytic_max": 26628
+      },
+      "recommended_under_worst_case": [
+        {
+          "config": "MTC + SQIsign-V, Cat 5",
+          "worst_case": {
+            "handshake_bytes": 28689,
+            "quic_datagrams": 25,
+            "quic_fits_3x": false,
+            "tcp_fits_initcwnd": false
+          },
+          "typical_25x30char_sans": {
+            "handshake_bytes": 3808,
+            "quic_datagrams": 4,
+            "quic_fits_3x": true,
+            "tcp_fits_initcwnd": true
+          }
+        },
+        {
+          "config": "MTC + KEMTLS ML-KEM-1024, Cat 5",
+          "worst_case": {
+            "handshake_bytes": 29776,
+            "quic_datagrams": 25,
+            "quic_fits_3x": false,
+            "tcp_fits_initcwnd": false
+          },
+          "typical_25x30char_sans": {
+            "handshake_bytes": 4895,
+            "quic_datagrams": 5,
+            "quic_fits_3x": true,
+            "tcp_fits_initcwnd": true
+          }
+        },
+        {
+          "config": "X.509 + SQIsign-V, Cat 5",
+          "worst_case": {
+            "handshake_bytes": 31134,
+            "quic_datagrams": 27,
+            "quic_fits_3x": false,
+            "tcp_fits_initcwnd": false
+          },
+          "typical_25x30char_sans": {
+            "handshake_bytes": 5194,
+            "quic_datagrams": 5,
+            "quic_fits_3x": true,
+            "tcp_fits_initcwnd": true
+          }
+        }
+      ]
+    }
+  },
+  "model_discrepancies": [
+    {
+      "item": "KEMTLS first flight",
+      "model": "adds FINISHED=40 B",
+      "measured": "no Finished in the first flight (server Finished follows the client KEM ciphertext); the client 2nd flight carries ClientKemCiphertext+Finished",
+      "client_second_flight_bytes": 1626
+    },
+    {
+      "item": "MTC + OV-V (pk in handshake)",
+      "model": "449972 B",
+      "measured": "NOT ENCODABLE: MTC TLSSubjectInfo.public_key is opaque<1..2^16-1>; a 446,992-B key overflows"
+    },
+    {
+      "item": "ServerHello with hybrid ML-KEM-1024 (and X25519MLKEM768)",
+      "model": "no packet count",
+      "measured": "exceeds one 1,200-B Initial datagram: the server spends 2 padded Initial datagrams (2,400 B) of the 7,200-B budget on ServerHello"
+    },
+    {
+      "item": "classical today",
+      "model_server_flight": 1520,
+      "exact_handshake_bytes": 1554,
+      "delta": 34,
+      "exact_tcp_bytes": 1653,
+      "exact_quic_udp_bytes": 1708,
+      "verdict_changes": []
+    },
+    {
+      "item": "deployed hybrid (2024-26)",
+      "model_server_flight": 2608,
+      "exact_handshake_bytes": 2642,
+      "delta": 34,
+      "exact_tcp_bytes": 2741,
+      "exact_quic_udp_bytes": 2847,
+      "verdict_changes": []
+    },
+    {
+      "item": "naive PQ chain, Cat 2/3",
+      "model_server_flight": 16884,
+      "exact_handshake_bytes": 16930,
+      "delta": 46,
+      "exact_tcp_bytes": 17029,
+      "exact_quic_udp_bytes": 17735,
+      "verdict_changes": []
+    },
+    {
+      "item": "naive PQ chain, Cat 5",
+      "model_server_flight": 30959,
+      "exact_handshake_bytes": 31021,
+      "delta": 62,
+      "exact_tcp_bytes": 31142,
+      "exact_quic_udp_bytes": 32396,
+      "verdict_changes": []
+    },
+    {
+      "item": "X.509 + SQIsign-V, Cat 5",
+      "model_server_flight": 4358,
+      "exact_handshake_bytes": 4416,
+      "delta": 58,
+      "exact_tcp_bytes": 4515,
+      "exact_quic_udp_bytes": 4671,
+      "verdict_changes": []
+    },
+    {
+      "item": "MTC + ML-DSA-87, Cat 5",
+      "model_server_flight": 9939,
+      "exact_handshake_bytes": 9859,
+      "delta": -80,
+      "exact_tcp_bytes": 9958,
+      "exact_quic_udp_bytes": 10364,
+      "verdict_changes": []
+    },
+    {
+      "item": "MTC + SQIsign-V, Cat 5",
+      "model_server_flight": 3141,
+      "exact_handshake_bytes": 3061,
+      "delta": -80,
+      "exact_tcp_bytes": 3160,
+      "exact_quic_udp_bytes": 3266,
+      "verdict_changes": []
+    },
+    {
+      "item": "MTC + MAYO-5, Cat 5",
+      "model_server_flight": 9238,
+      "exact_handshake_bytes": 9158,
+      "delta": -80,
+      "exact_tcp_bytes": 9257,
+      "exact_quic_udp_bytes": 9613,
+      "verdict_changes": []
+    },
+    {
+      "item": "MTC + KEMTLS ML-KEM-1024, Cat 5",
+      "model_server_flight": 4280,
+      "exact_handshake_bytes": 4148,
+      "delta": -132,
+      "exact_tcp_bytes": 4203,
+      "exact_quic_udp_bytes": 4403,
+      "verdict_changes": []
+    }
+  ],
+  "part_b": {
+    "games": [
+      {
+        "id": "POSITIVE-CONTROL",
+        "attacker_capabilities": "none (honest network)",
+        "winning_condition": "n/a: both parties must accept with equal keys",
+        "blocked": null,
+        "outcome": "HANDSHAKE COMPLETED: both accept, keys_equal=True",
+        "mechanism_that_blocked_it": "n/a",
+        "assumption_invoked": "n/a",
+        "both_accept_equal_keys": true
+      },
+      {
+        "id": "MITM",
+        "attacker_capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; substitutes its own ephemeral KEM key share and re-encapsulates (knows both ephemeral secrets)",
+        "winning_condition": "client accepts a key the adversary knows, or server accepts the honest client Finished on a split transcript",
+        "blocked": true,
+        "outcome": "BLOCKED: server: decrypt_error (client Finished MAC)",
+        "mechanism_that_blocked_it": "server authentication = decapsulation of ct_S under pk_S (only the server holds sk_S) + Finished over the full transcript",
+        "assumption_invoked": "IND-CCA of the long-term KEM; collision resistance of the transcript hash",
+        "adversary_knows_both_ephemeral_secrets": true
+      },
+      {
+        "id": "SERVER-KEY-SUBSTITUTION",
+        "attacker_capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; owns a legitimately certified key in another batch",
+        "winning_condition": "client accepts pk_A for a.example",
+        "blocked": true,
+        "outcome": "BLOCKED: pk_S -> pk_A, proof unchanged: client: bad_certificate (inclusion proof fails) | pk_S -> pk_A, proof from A's own batch-1 cert: client: bad_certificate (inclusion proof fails)",
+        "mechanism_that_blocked_it": "Merkle inclusion proof binds (claims, pk) as one leaf under a trusted batch root",
+        "assumption_invoked": "second-preimage resistance of H; CA root distribution"
+      },
+      {
+        "id": "TRANSCRIPT-ALTERATION",
+        "attacker_capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; flips one byte of any field of any message",
+        "winning_condition": "the honest party receiving a modified message accepts",
+        "blocked": true,
+        "outcome": "BLOCKED: 13 single-field mutations across 7 messages all rejected by the receiver",
+        "mechanism_that_blocked_it": "Finished MACs over the hash of the full transcript; implicit rejection for altered ciphertexts; proof check for altered certs",
+        "assumption_invoked": "PRF security of HMAC-SHA3; collision resistance of SHA3-256",
+        "mutations_tried": 13,
+        "mutations_accepted": 0
+      },
+      {
+        "id": "REPLAY",
+        "attacker_capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; recorded a full previous session INCLUDING that client's ephemeral secret key and all derived keys",
+        "winning_condition": "new client accepts the replayed server flight",
+        "blocked": true,
+        "outcome": "BLOCKED: forwarded to server: server: decrypt_error (client Finished MAC) | forged Finished from old keys: client: decrypt_error (server Finished MAC)",
+        "mechanism_that_blocked_it": "client freshness: ct_e was encapsulated to the OLD ephemeral pk (new sk decapsulates to an implicit-rejection key) and ss_S is fresh per session",
+        "assumption_invoked": "IND-CCA of both KEMs; fresh client randomness"
+      },
+      {
+        "id": "DOWNGRADE",
+        "attacker_capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; removes the Category-5 group from the offer and supplies a Cat-3 key share",
+        "winning_condition": "a handshake completes on the Cat-3 group",
+        "blocked": true,
+        "outcome": "BLOCKED: delete Cat-5 group: client: illegal_parameter (selected group has no key share) | delete Cat-5 group and rewrite SH.group back: server: decrypt_error (client Finished MAC)",
+        "mechanism_that_blocked_it": "client policy (selected group must be the one it sent a key share for) AND the ClientHello bytes are in both transcripts",
+        "assumption_invoked": "collision resistance of the transcript hash"
+      },
+      {
+        "id": "CROSS-SERVER-KEY-CONFUSION",
+        "attacker_capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; IS server b.example (holds sk_B and a valid cert/proof for b.example)",
+        "winning_condition": "client connecting to a.example accepts b.example's certificate",
+        "blocked": true,
+        "outcome": "BLOCKED: client: bad_certificate (hostname not in assertion claims)",
+        "mechanism_that_blocked_it": "hostname binding: the SNI hostname must appear in the assertion's dns claims (the ONLY barrier: all MACs verify)",
+        "assumption_invoked": "the CA only certifies names the applicant controls",
+        "without_hostname_check_attack_succeeds": true
+      },
+      {
+        "id": "CERT-SUBSTITUTION",
+        "attacker_capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; runs its own CA/batch and issues itself a cert for a.example",
+        "winning_condition": "client accepts a cert not issued under a trusted root",
+        "blocked": true,
+        "outcome": "BLOCKED: rogue batch, unknown trust anchor: client: unknown_ca (trust anchor id not in store) | rogue assertion under the legit trust anchor id: client: bad_certificate (inclusion proof fails) | rogue assertion with the legit proof: client: bad_certificate (inclusion proof fails)",
+        "mechanism_that_blocked_it": "trust-anchor id lookup + Merkle inclusion proof against the stored root",
+        "assumption_invoked": "root distribution is authentic; second-preimage resistance of H"
+      },
+      {
+        "id": "KEM-CIPHERTEXT-SUBSTITUTION",
+        "attacker_capabilities": "controls the network; holds all public keys, ciphertexts and transcripts; oracle access to honest client and server; replaces ct_S with its own encapsulation to pk_S (knows that shared secret)",
+        "winning_condition": "server accepts the honest client Finished, or client accepts",
+        "blocked": true,
+        "outcome": "BLOCKED: server: decrypt_error (client Finished MAC)",
+        "mechanism_that_blocked_it": "ct_S is in the transcript and its shared secret keys both Finished MACs; the adversary lacks ss_e for the server-side key",
+        "assumption_invoked": "IND-CCA of the ephemeral KEM; PRF security of the key schedule"
+      }
+    ]
+  },
+  "part_c": {
+    "ghz": 3.4,
+    "constants_mcycles": {
+      "SQIsign-V sign": {
+        "mcycles": 507.5,
+        "source": "SQIsign specification v2.0 (2025), Table 2, NIST level V, Intel i7-13700K"
+      },
+      "SQIsign-V verify": {
+        "mcycles": 35.7,
+        "source": "SQIsign specification v2.0 (2025), Table 2, NIST level V, Intel i7-13700K"
+      },
+      "ML-KEM-1024 encaps": {
+        "mcycles": null,
+        "source": "not verified here"
+      },
+      "ML-KEM-1024 decaps": {
+        "mcycles": null,
+        "source": "not verified here"
+      },
+      "ML-DSA-87 sign": {
+        "mcycles": null,
+        "source": "not verified here"
+      },
+      "ML-DSA-87 verify": {
+        "mcycles": null,
+        "source": "not verified here"
+      },
+      "MAYO-5 sign": {
+        "mcycles": null,
+        "source": "not verified here"
+      },
+      "MAYO-5 verify": {
+        "mcycles": null,
+        "source": "not verified here"
+      }
+    },
+    "rows": [
+      {
+        "config": "MTC + SQIsign-V, Cat 5",
+        "server_ops": [
+          "SQIsign-V sign"
+        ],
+        "server_mcycles_per_handshake": 507.5,
+        "server_handshakes_per_s_per_core_at_3.4GHz": 6.7,
+        "client_verify_mcycles": 35.7,
+        "note": null
+      },
+      {
+        "config": "X.509 + SQIsign-V, Cat 5",
+        "server_ops": [
+          "SQIsign-V sign"
+        ],
+        "server_mcycles_per_handshake": 507.5,
+        "server_handshakes_per_s_per_core_at_3.4GHz": 6.7,
+        "client_verify_mcycles": 178.5,
+        "note": null
+      },
+      {
+        "config": "MTC + KEMTLS ML-KEM-1024, Cat 5",
+        "server_ops": [
+          "ML-KEM-1024 decaps"
+        ],
+        "server_mcycles_per_handshake": null,
+        "server_handshakes_per_s_per_core_at_3.4GHz": null,
+        "client_verify_mcycles": null,
+        "note": "KEM/signature cycle count not verified here; excluded (no number invented)"
+      },
+      {
+        "config": "MTC + ML-DSA-87, Cat 5",
+        "server_ops": [
+          "ML-DSA-87 sign"
+        ],
+        "server_mcycles_per_handshake": null,
+        "server_handshakes_per_s_per_core_at_3.4GHz": null,
+        "client_verify_mcycles": null,
+        "note": "KEM/signature cycle count not verified here; excluded (no number invented)"
+      },
+      {
+        "config": "MTC + MAYO-5, Cat 5",
+        "server_ops": [
+          "MAYO-5 sign"
+        ],
+        "server_mcycles_per_handshake": null,
+        "server_handshakes_per_s_per_core_at_3.4GHz": null,
+        "client_verify_mcycles": null,
+        "note": "KEM/signature cycle count not verified here; excluded (no number invented)"
+      }
+    ],
+    "axes_note": "B (bytes on the wire, Part A) and T (server CPU, Part C) are independent axes reported separately; no combined score is formed."
+  },
+  "refuted_hypotheses": [
+    "H1 \"exact framing flips a fits/does-not-fit verdict\": refuted \u2014 0 verdict changes; |delta| <= 132 B against 7,200 / 14,600-B budgets",
+    "H2 \"the KEMTLS server first flight carries a Finished\" (model): refuted \u2014 the server Finished follows the client KEM ciphertext",
+    "H3 \"the ServerHello fits one Initial packet\" (implicit in a flat byte budget): refuted \u2014 2 padded Initial datagrams for any ML-KEM hybrid",
+    "H4 \"OV-V (447-KB pk) can be an MTC subject\": refuted \u2014 TLSSubjectInfo.public_key is bounded by 2^16-1",
+    "H5 \"hostname binding is redundant given the Finished MACs\": refuted \u2014 with the check off, server B is accepted for A with equal keys (S3-016)"
+  ],
+  "axes": "B (bytes) from Part A and T (CPU) from Part C are reported separately."
+}

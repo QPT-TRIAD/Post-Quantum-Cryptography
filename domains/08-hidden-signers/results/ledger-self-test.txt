@@ -1,0 +1,12 @@
+test_faest_qrom_row (__main__.Tests.test_faest_qrom_row) ... ok
+test_faest_reproduction (__main__.Tests.test_faest_reproduction) ... ok
+test_full_ledger_passes (__main__.Tests.test_full_ledger_passes) ... ok
+test_r1_tight_passes_at_256_bits (__main__.Tests.test_r1_tight_passes_at_256_bits) ... ok
+test_r2_needs_expansion_over_430 (__main__.Tests.test_r2_needs_expansion_over_430) ... ok
+test_r3_tau_and_fit (__main__.Tests.test_r3_tau_and_fit) ... ok
+test_r5_handle_coincidence_dominates (__main__.Tests.test_r5_handle_coincidence_dominates) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.004s
+
+OK

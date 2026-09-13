@@ -1,0 +1,3 @@
+$ gcc -O3 -march=native -fopenmp -Wall -o modeB_prover mode_b_prover.c   # src/mode_b_prover.c is modeB_prover_v1.51.c
+exit 0, no warnings
+gcc (Ubuntu 14.2.0-4ubuntu2~24.04.1) 14.2.0
