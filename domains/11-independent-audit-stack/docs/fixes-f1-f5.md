@@ -8,6 +8,21 @@ a **new** file derived from its reference by exact, verified string replacement 
 `python3 fixes/make_fixes.py`; it writes into the research tree (`PQT_SRC`) and is therefore **not
 run** when building or verifying this repository (see `docs/inputs-and-provenance.md` §1).
 
+**What the derivation reproduces, and what it no longer reproduces.** It reproduces the four fix
+files of the 2026-09-13 fix stage byte for byte from the frozen references, and those are the files
+the logs in `fixes/` were produced from. It does **not** reproduce the S1/S2 model as published in
+`domains/10-digital-infrastructure/src/s1s2_hashsig_dnssec.py`, and has not since **2026-09-21**,
+when the S2-006 position-prefix fix was applied there — every interior Merkle node bound to
+(structure id, level, parent index), with a regression class for it. That change was made downstream
+of this derivation, on the published copy, and not on the frozen v2.0 reference the script reads; it
+is not one of F1–F5, and it leaves the published file eleven hunks and roughly 130 lines beyond what
+the replacements produce. The script was deliberately **not** extended to cover it: its output is the
+v2.2 audit-fix release, described by the archived `fixes/pq_infra_s1s2_hashsig_dnssec_v2.2.py.log`
+(15 tests), and folding a later design change into it would emit a file that log does not describe
+and would date a 2026-09-21 change to the 2026-09-13 fix stage. Read the derivation for how F2 and
+F4 were made; read the published file, whose header records S2-006 and its reason, for the current
+S1/S2 model.
+
 ## 1. The five fixes
 
 | finding | reference (immutable) | fixed file | root cause | impact | fix | regression result |

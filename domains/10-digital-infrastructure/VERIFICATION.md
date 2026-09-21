@@ -93,14 +93,14 @@ disk and the diff in §5 below are both from a completed run.
 | S2 | `python3 src/s2_dns_worstcase.py --self-test` | pinned venv + `dnspython` 2.8.0 | 6 tests, ALL PASS | `Ran 6 tests in 54.848s` … `OK` | **reproduced** | |
 | S3 | `python3 src/s3_tls_wire.py --self-test` | pinned venv | 20 tests, ALL PASS | `Ran 20 tests in 0.972s` … `OK` | **reproduced** | |
 | S4 | `python3 src/s4_tesla_adversarial.py --self-test` | pinned venv | 14 tests, ALL PASS | `Ran 14 tests in 2.158s` … `OK` | **reproduced** | |
-| S5 | `python3 src/s5_bds_faults.py --self-test` | pinned venv | 5 tests, ALL PASS | `Ran 5 tests in 48.669s` … `OK` | **reproduced** | |
+| S5 | `python3 src/s5_bds_faults.py --self-test` | pinned venv | 5 tests, ALL PASS | `Ran 7 tests in 14.713s` … `OK` | **reproduced-with-difference** | 5 until the S2-006 position prefix was applied to the card tree, which added two regressions (`PositionPrefixTests`) that fail against the previous hashing. They are named outside the `test_S5_0NN` form `src/audit_ledger.py` parses, so the ledger's S5 rows and the 70/70 total are unchanged; only this suite's own `Ran N tests` line moves |
 | S6 | `python3 src/s6_hybrid_games.py --self-test` | pinned venv | 14 tests, ALL PASS | `Ran 14 tests in 11.535s` … `OK` | **reproduced** | |
 | S1 model, current revision | `python3 src/s1_lms.py --self-test` | pinned venv + `numpy` + `hsslms` | not in the ledger; 12 tests (11 + the v2.2 F3 regression S1-012) | `Ran 12 tests in 23.405s` … `OK` | **reproduced** | v2.2 revision; not one of the 70 |
-| S1/S2 design model, v2.2 | `python3 src/s1s2_hashsig_dnssec.py --self-test` | pinned venv | 15 tests | `Ran 15 tests in 0.261s` … `OK` | **reproduced** | not one of the 70 |
+| S1/S2 design model, v2.2 | `python3 src/s1s2_hashsig_dnssec.py --self-test` | pinned venv | 19 tests | `Ran 19 tests in 0.453s` … `OK` | **reproduced** | not one of the 70; 15 until the S2-006 position prefix was applied, which added four regressions (`PositionPrefixTests`) that fail against the previous hashing |
 | S1/S2 design model, v2.0 | `python3 src/s1s2_hashsig_dnssec-v2.0.py --self-test` | pinned venv | 10 tests | `Ran 10 tests in 0.240s` … `OK` | **reproduced** | the revision `src/s3_tls_pki.py` and `src/s4_embedded_broadcast.py` still load |
-| S3 design model | `python3 src/s3_tls_pki.py --self-test` | pinned venv | 5 tests | `Ran 5 tests in 0.065s` … `OK` | **reproduced** | |
+| S3 design model | `python3 src/s3_tls_pki.py --self-test` | pinned venv | 6 tests | `Ran 6 tests in 0.098s` … `OK` | **reproduced** | 5 until the S2-006 position prefix was applied to the MTC prototype, which added `test_mtc_node_hash_is_position_prefixed` |
 | S4 design model | `python3 src/s4_embedded_broadcast.py --self-test` | pinned venv | 5 tests | `Ran 5 tests in 0.047s` … `OK` | **reproduced** | |
-| S5 design model | `python3 src/s5_smartcard_hsm.py --self-test` | pinned venv | 4 tests | `Ran 4 tests in 6.204s` … `OK` | **reproduced** | |
+| S5 design model | `python3 src/s5_smartcard_hsm.py --self-test` | pinned venv | 4 tests | `Ran 7 tests in 6.981s` … `OK` | **reproduced-with-difference** | not one of the 70; 4 until the S2-006 position prefix was applied, which added three regressions (`PositionPrefixTests`) that fail against the previous hashing |
 | S6 design model | `python3 src/s6_migration_agility.py --self-test` | pinned venv | 4 tests | `Ran 4 tests in 0.015s` … `OK` | **reproduced** | |
 | `hsslms` interop (S1-003, S1-004) | inside the S1 suites | `hsslms` 0.1.3 installed | PASS both directions | PASS both directions; `independent_implementation: "hsslms 0.1.3"` in `results/s1_audit_report.json` | **reproduced** | byte-format agreement between two implementations of RFC 8554; not a security evaluation |
 | S1-011 as recorded (single-draw slope) | `python3 history/s1_lms-v2.1.py --self-test` | pinned venv | PASS | PASS on the rewritten test; the **original** assertion is a coin flip | **reproduced-with-difference** | see §4 — this is the one recorded result that does not reproduce as stated |
@@ -381,10 +381,28 @@ timings and the two random draws (§5.1).
   are measured on a 2^15-signature prefix window, as the source states.
 - **The reduced-size experiments were not extended.** They run at n ≤ 16 bits by construction; raising
   n would not make them a measurement of the deployed parameters, it would just make them slower.
-- **The multi-target fix was not applied to the design files.** `prefixed_multiproof_build` /
-  `prefixed_multiproof_verify` exist inside the S2 audit file only. Editing the design files was out of
-  scope for this domain, and the exposure is flagged in `README.md` and `docs/studies.md` §2.6 rather
-  than quietly repaired.
+- **The multi-target fix is applied to the design files, but was not re-measured at n = 256.**
+  `prefixed_multiproof_build` / `prefixed_multiproof_verify` in the S2 audit file remain the reference
+  convention; `src/s1s2_hashsig_dnssec.py` (S1 Merkle tree, MTL ladder, condensed proof, multiproof),
+  `src/s3_tls_pki.py` (MTC prototype) and the card tree in `src/s5_smartcard_hsm.py` /
+  `src/s5_bds_faults.py` now hash an interior node as
+  `H("node", structure id, level, parent index, l, r)`, with regressions in each file that fail
+  against the previous hashing. The structure id is the ladder rung for MTL, the public seed for the
+  XMSS-style tree and for the card tree, and the batch id for MTC; all are already held by the
+  verifier, so no wire size changes and no `--report` byte count moves. The 2^126 / 2^146 separation
+  behind the fix is still a ledger computation over a game run at n ≤ 16 bits, as §5.1 of
+  `docs/audit-method.md` states.
+- **Two measured hash-call means in S5 moved, and are recorded rather than re-recorded.**
+  `composition_check` in `results/s5_audit_report.json` holds 30,445.5 (h = 8) and 39,109.9 (h = 10)
+  hashes per signature; re-running `src/s5_bds_faults.py --report` against the current source gives
+  **30,477.4** and **39,097.0**, and `v2_0_claims_remeasured.hashes_30466_h8.measured` follows the
+  first. Nothing else in that report moves. The cause is the position prefix: it changed the tree
+  root, the message digest is `H("msg", root, addr, msg)`, and the number of WOTS chain steps is a
+  function of that digest, so a per-signature hash count is a draw and not a constant — the same
+  effect S1 records in `docs/pq-infra-program.md` for its 471 → 531 verify count. The counted
+  quantities are bit-identical before and after: leaf computations per signature, node hashes per
+  signature, every peak-state figure and every h = 20 row. The recorded report is left as recorded;
+  it is the v2.1 measurement of the code as it then stood.
 - **The S4 receiver fixes were not applied to the design file.** They exist only in the audit's
   `FixedTeslaReceiver` subclass, as the source intends.
 - **Nothing under the read-only source tree was created, modified or deleted.** The build writes only

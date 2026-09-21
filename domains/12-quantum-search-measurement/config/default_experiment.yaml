@@ -1,0 +1,76 @@
+# Default experiment configuration.
+#
+# Validated on load by grover_emulator.config.schema, which mirrors this file exactly and forbids
+# unknown keys: a typo here is a load failure naming the key, not a key that nothing reads.
+#
+# Every width in this file is a SEARCH-REGISTER width. The total circuit width is derived per
+# lowering as n_search + ancilla_width(lowering) and is never written down here, because the same
+# search width is 13 qubits under one lowering and 50 under the other.
+
+run:
+  seed: 20260913
+  # truth_table: the oracle of record at simulable widths — ancilla-free, and the only lowering that
+  # is statevector-simulable above n_search = 12. arithmetic: the circuit the gate-count
+  # extrapolation is about, validated by classical bitmask simulation, not simulated on a
+  # statevector engine. See scripts/sweep_scaling.py.
+  lowering: truth_table
+
+oracle:
+  type: qlwr
+  # Two other types are selectable here, and both read target_qubits as their search-register width
+  # just as qlwr does, so a sweep's widths mean the same thing for all three:
+  #   lmots_chain  the audit corpus's own reduced-size LM-OTS game, the preimage of a keyed chain
+  #                value. chain_length: 1 (the default) is the corpus's single-hash behaviour,
+  #                reproduced call for call; above 1 the chain index advances per application.
+  #                Every run's report pins which reading its numbers were measured under.
+  #   key_map      the corpus's expanding quadratic key map. key_map_mode B (the default, and the
+  #                register the corpus's production map is instantiated in) searches 4n qubits and
+  #                A searches 2n; key_map_outputs is how many equations the flag spans.
+  # Neither takes marked_fraction: their marked sets are fixed by the relation — a hash preimage
+  # count, a quadratic form's zero set — and are measured and reported rather than aimed at. The
+  # defaults below belong to the qlwr run and are unaffected by either.
+  # Search-register width of the single run. At 20 this is 1,048,576 basis states and
+  # k_opt = 804.
+  target_qubits: 20
+  # Design target for the marked-set density M/N, never an input to a computation. QLWR's marked set
+  # is measured by exhaustive enumeration and required to be exactly 1, so at 20 qubits the measured
+  # fraction is 9.54e-7 — the value below is that target, recorded so a deviation is visible.
+  marked_fraction: 1.0e-6
+  seed: 20260913
+  # Dimension of the secret; 2 is the smallest value with genuine matrix structure.
+  nu: 2
+  # Minimum q_l / p. This is what decides which search widths are admissible at all: at nu = 2 no
+  # generic prime pair fits in n_search / nu bits per component below n_search = 12, so the 4 and 8
+  # sweep points are recorded as "not run, with reason" rather than crashing or being papered over.
+  min_rounding_gap: 3.0
+
+sweep:
+  # Search-register widths, ascending.
+  qubit_range: [4, 8, 12, 16, 20, 24]
+  # NULL MEANS DERIVED PER INSTANCE, from the spec's own optimum: range(0, k_opt + 2). A FIXED VALUE
+  # HERE IS A BUG. The plan this project was built from carried [0, 40]; at the smallest structurally
+  # faithful QLWR instance the optimum is 50 and at n_search = 24 it is 3216. Over [0, 40] every
+  # sweep point returns a smooth, monotone, entirely plausible rising curve that never reaches its
+  # peak and supports no conclusion — and nothing raises. The loader warns if this is ever set, and
+  # quotes the optimum the rest of this configuration implies.
+  iteration_range: null
+
+backend:
+  preference: [qiskit_aer, cirq_qsim]
+  # Ceiling on a single simulation's allocation. A run over it is refused and recorded as a refusal;
+  # the arithmetic lowering at n_search = 12 is 50 qubits wide, i.e. 2**50 amplitudes, which is
+  # ~16 PiB at complex128 and is not statevector-simulable at any sweep point. That is a documented
+  # property of the lowering, not something to work around.
+  ram_budget_gb: 6
+  shots: 20000
+
+probes:
+  # Both probes run against the same oracle circuit the success curve ran against. A probe suite
+  # that has never fired is indistinguishable from a broken one, which is what the random_control
+  # and hidden_period oracles are for.
+  run_simon_style: true
+  run_qft_period: true
+
+output:
+  dir: results/
+  formats: [markdown, json, png]

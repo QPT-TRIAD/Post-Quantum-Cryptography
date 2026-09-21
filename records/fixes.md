@@ -36,3 +36,51 @@ gives **16 passed for Mode B**, but the **hash-signature property module fails a
 (0 tests executed)**: it constructs a mixed m ≠ n LMS key at import, which the F3 fix correctly
 refuses. The hash-signature "16/16" is withdrawn; see `FAILED_ASSUMPTIONS.md` A28. The Mode B v1.51
 self-test re-runs 7/7.
+
+## Correction (2026-09-21): position-prefixed Merkle nodes, and the category table's provenance
+
+Two defects recorded by the v2.1 audit but left unrepaired in the constructions have now been
+repaired, and one attribution has been corrected.
+
+**S2-006, position-prefixed node hashing, applied to the design files.** The audit measured that
+interior nodes hashed as `H('node', l, r)` carry no position commitment, so an adversary facing `T`
+structures signed under one key tests one hash evaluation against all `T` at once. At n = 256 with
+T = 2^40 the ledger's own formula gives 128 - 20 + 18 = 2^126 gates, inside the 2^128 budget: the
+construction as built failed its own target, against 2^146 for the prefixed variant. The fix had been
+implemented inside the S2 audit file only (`prefixed_multiproof_build` / `prefixed_multiproof_verify`)
+and the verification record stated it was not applied to the constructions. It is now applied, using
+the convention `H('node', <structure id>, level, parent index, l, r)`, with the structure id being the
+rung for the ladder, the public seed for the tree, and the batch id for the certificate batch:
+
+| file | sites | structure id |
+|---|---|---|
+| `s1s2_hashsig_dnssec.py` | tree construction and verification, ladder construction and verification, multiproof verification | public seed, rung |
+| `s3_tls_pki.py` | batch construction and verification | batch id |
+| `s5_smartcard_hsm.py`, `s5_bds_faults.py` | traversal, authentication path, root, verification | per-device seed |
+
+The tree in S1 needed the fix and did not have it: the leaf address reached the chain and compression
+functions only, so interior nodes of every key pair shared one function. The preserved v2.0 file is
+deliberately unchanged, since it is the record of what v2.0 was. Wire sizes are unaffected, the fix
+being zero bytes; three hash-call counts moved and are recorded rather than re-recorded — the S1
+verify count in `docs/studies.md` §1.5 and the two S5 composition means in §5.5 of the same file. In
+each case the position prefix changed the tree root, the message digest is a function of the root,
+and the number of chain steps is a function of the digest, so the count is a draw and not a constant;
+every count that is counted rather than drawn, and every byte count, is unchanged. The new tests were
+checked against a copy with only the hashing reverted, and fail there.
+
+**The category table is a floor, not a lattice cost.** `CATEGORY_ATTACK_GATES = {1: 83, 2: 100,
+3: 116, 5: 148}` was read as the cost of the reference attack on the deployed lattice schemes. The
+values are NIST's category definitions: 64+19, 96+20 and 128+20, Grover key search on AES-128, AES-192
+and AES-256. The figure 148 does appear in the v1.43 constants table, correctly labelled there as an
+AES-256 oracle at 1.17 * 2^148 gates with its citation; what was wrong was re-using it downstream
+under the heading "Category-5 reference attack" for ML-KEM. The entries 83, 100 and 116 appear in
+that source nowhere. The rows now name the floor and say what it is not, and an independent estimator
+run at full scale is recorded in `domains/13-lattice-reduction-stress/results/infra-2026-09-21/`:
+every deployed parameter set clears its floor, and ML-KEM-512 sits below the 2^128 budget.
+
+**Not regenerated, deliberately.** `records/audit-checklist.md`, `records/audit-ledger.json` and the
+copies under `domains/10-digital-infrastructure/results/` still carry the string `v1.43 ledger` at the
+rows above. They are the dated artifacts of the v2.1 release and record what that run produced;
+rewriting them would make the register disagree with the release it documents. The sources they were
+produced from are corrected, so a regeneration under the v2.2 sources will not reproduce them, and
+that is the expected difference rather than a fault.

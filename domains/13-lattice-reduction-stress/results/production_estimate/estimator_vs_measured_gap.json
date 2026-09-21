@@ -1,0 +1,119 @@
+{
+  "anomalies_are_all_clamped": false,
+  "anomalies_flagged": [
+    "synthetic_scaled-d60-s20260913",
+    "synthetic_scaled-d160-s20260913"
+  ],
+  "anomalies_that_are_clamped": [
+    "synthetic_scaled-d60-s20260913"
+  ],
+  "clamped_points": [
+    "synthetic_scaled-d40-s20260913",
+    "synthetic_scaled-d60-s20260913"
+  ],
+  "conclusion": "The estimator over-predicts the block size a reduction actually needs at small dimension, and the over-prediction decays monotonically to zero across the dimensions where the comparison is clean. It therefore does not persist into the extrapolation: the production estimate is taken from d ~ 130, by which point the model has converged onto the measurement. A positive gap means the estimator asked for a *harder* attack than was needed, i.e. it was pessimistic about the attacker and so optimistic about security \u2014 the direction that matters \u2014 but only in a regime the extrapolation does not start from.",
+  "gap_at_largest_dimension": -1,
+  "gap_is_monotone_non_increasing": true,
+  "largest_gap": 10,
+  "note": "The discrepancy is the pipeline's own (`analysis.empirical_vs_theoretical`), read from the run records rather than recomputed. What is added here is the search floor, which a per-run comparison cannot see: a measured block size equal to the bottom of `block_size_range` is clamped, so its gap is a lower bound rather than a measurement. A run whose attack recovered nothing is reported as unmeasured, not as agreement.",
+  "points": [
+    {
+      "anomaly_flagged_by_the_pipeline": null,
+      "at_search_floor": true,
+      "dimension": 41,
+      "estimator_beta": null,
+      "estimator_minus_measured": null,
+      "m": 40,
+      "measured_at_all": true,
+      "measured_min_block_size": 10,
+      "nu": 17,
+      "relative_discrepancy": 0.0,
+      "run": "synthetic_scaled-d40-s20260913",
+      "search_floor": 10
+    },
+    {
+      "anomaly_flagged_by_the_pipeline": "the primal_usvp attack needed block size 10 where the model predicts 40 \u2014 75% below the prediction, outside the 25% tolerance. A disagreement of this size is a result, not noise: it means either the model's assumptions do not hold for this instance's structure, or the embedding or the engine has a defect. Check the planted-vector test first \u2014 it is the cheapest of those to rule out.",
+      "at_search_floor": true,
+      "dimension": 61,
+      "estimator_beta": 40,
+      "estimator_minus_measured": 30,
+      "m": 60,
+      "measured_at_all": true,
+      "measured_min_block_size": 10,
+      "nu": 25,
+      "relative_discrepancy": -0.75,
+      "run": "synthetic_scaled-d60-s20260913",
+      "search_floor": 10
+    },
+    {
+      "anomaly_flagged_by_the_pipeline": null,
+      "at_search_floor": false,
+      "dimension": 81,
+      "estimator_beta": 40,
+      "estimator_minus_measured": 10,
+      "m": 80,
+      "measured_at_all": true,
+      "measured_min_block_size": 30,
+      "nu": 34,
+      "relative_discrepancy": -0.25,
+      "run": "synthetic_scaled-d80-s20260913",
+      "search_floor": 10
+    },
+    {
+      "anomaly_flagged_by_the_pipeline": null,
+      "at_search_floor": false,
+      "dimension": 101,
+      "estimator_beta": 44,
+      "estimator_minus_measured": 4,
+      "m": 100,
+      "measured_at_all": true,
+      "measured_min_block_size": 40,
+      "nu": 42,
+      "relative_discrepancy": -0.09090909090909091,
+      "run": "synthetic_scaled-d100-s20260913",
+      "search_floor": 10
+    },
+    {
+      "anomaly_flagged_by_the_pipeline": null,
+      "at_search_floor": false,
+      "dimension": 131,
+      "estimator_beta": 69,
+      "estimator_minus_measured": -1,
+      "m": 130,
+      "measured_at_all": true,
+      "measured_min_block_size": 70,
+      "nu": 55,
+      "relative_discrepancy": 0.014492753623188406,
+      "run": "synthetic_scaled-d130-s20260913",
+      "search_floor": 10
+    },
+    {
+      "anomaly_flagged_by_the_pipeline": "the primal_usvp attack recovered nothing anywhere in the swept block-size range, where the model predicts success at 88. Either the sweep did not reach far enough or the instance is harder than the model says.",
+      "at_search_floor": false,
+      "dimension": 161,
+      "estimator_beta": 88,
+      "estimator_minus_measured": null,
+      "m": 160,
+      "measured_at_all": false,
+      "measured_min_block_size": null,
+      "nu": 67,
+      "relative_discrepancy": null,
+      "run": "synthetic_scaled-d160-s20260913",
+      "search_floor": 10
+    }
+  ],
+  "trustworthy_dimensions": [
+    81,
+    101,
+    131
+  ],
+  "trustworthy_gaps": [
+    10,
+    4,
+    -1
+  ],
+  "trustworthy_points": 3,
+  "unmeasured_points": [
+    "synthetic_scaled-d160-s20260913"
+  ]
+}

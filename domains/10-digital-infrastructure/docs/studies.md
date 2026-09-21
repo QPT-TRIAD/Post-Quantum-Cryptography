@@ -30,6 +30,16 @@ figure can be found again. Where a figure comes from a regenerated report, the p
 QPT-128: an attacker with fewer than 2^128 *gates*, where each hash query costs at least 2^18 gates,
 succeeds with probability below 1/3. Reference attack costs per NIST category: Cat 1 = 2^83,
 Cat 2 = 2^100, Cat 3 = 2^116, Cat 5 = 2^148 gates (`docs/pq-infra-program.md` §1).
+Those four figures are category **floors**, not attack costs on any particular scheme: 83, 116 and
+148 are Grover key search on AES-128 / AES-192 / AES-256, half the key length in Grover iterations
+charged at the gate cost of one AES evaluation (64+19, 96+20, 128+20), the AES-256 entry being the
+G-cost 1.17·2^148 of Jaques–Naehrig–Roetteler–Virdia Tables 9 and 11; 100 is the Category-2
+collision entry and nothing in these studies uses it. Reading a floor as a scheme's own attack cost
+is the conservative direction only while the best known attack on that scheme costs at least the
+floor. Analytic cross-check at full parameters, not measured: an independent estimator run
+(lattice-estimator, ADPS16 core-SVP, quantum) puts ML-KEM-1024 near 2^231.6 quantum / 2^255.2
+classical and ML-KEM-512 near 2^107.6 quantum, in core-SVP operations rather than these gate units,
+so Category 5 is conservative at the deployed parameter sets and Category 1 sits below the budget.
 Only Category 5 passes, so every layer in these studies is asked for a Category-5 target.
 `src/s6_hybrid_games.py` prints the margins directly
 (`results/s6_audit_report.json` → `games` S6-F, and `s1` gate margins below).
@@ -147,7 +157,7 @@ QPT-128".
 | LMS M24_H20 / N24_W8 (NSA-preferred) | 1,140 B | 4 + (4+24+26·24 = 652) + 4 + 20·24 | S1-001, `sizes["LMS_tc13/OTS_tc8"]` |
 | LMS public key (m = 32) | 56 B | 4 + 4 + 16 (I) + 32 | S1-001, `sizes[...]["pub"]` |
 | Pre-fix LMS size (bug I6) | 1,768 B | 4+4+32+34·32+20·32 — one of RFC 8554's two type fields omitted | `docs/pq-infra-program.md` §9 |
-| Verify hashes, WOTS+ w = 16, h = 4 | measured **471** vs bound **1,009** | bound = LEN·(W−1) + 4 = 67·15 + 4 | v2.0 report |
+| Verify hashes, WOTS+ w = 16, h = 4 | measured **471** vs bound **1,009**; **531** in the v2.2 report | bound = LEN·(W−1) + 4 = 67·15 + 4. The measured count is a draw, not a constant: the chain steps are `Σ(W−1−d_i)` over the base-w digits of `H("msg", root, addr, msg)`, so it moves when the root moves. The v2.2 root differs from v2.0's because the interior nodes carry their position (§2.6); the bound is unchanged and both counts sit well inside it | v2.0 report; `src/s1s2_hashsig_dnssec.py --report` |
 | Verify hash bound, w = 256, h = 20 | **8,692** | 34·255 + 1 + 20 + 1 | v2.0 report |
 | Verifier resources | LMS256H20W8: code 2.15 KB, stack 1.81 KB, 2.857 Mcycles | Kampanakis et al., ePrint 2021/041 Table 2 — **literature, not measured** | `docs/pq-infra-program.md` §7 |
 
@@ -329,10 +339,32 @@ the ledger gives an unprefixed cost of 2^(n/2)/√T queries → 128 − 20 + 18 
 is *inside* the 2^128 budget, i.e. it **fails QPT-128**; the prefixed variant is 2^146 and passes
 (`results/s2_audit_report.json` → `multi_target_ledger_n256`).
 
-The proposed fix costs zero bytes: hash `H(node, ladder_id, rung, level, index, l, r)` — exactly
-what RFC 8554's (I, r) and XMSS-T's addresses already do. **It is implemented only inside the audit
-file (`prefixed_multiproof_build` / `prefixed_multiproof_verify`). It was not applied to the design
-files, and the MTC prototype in S3 has the same exposure.** The caveat is stated in the source: the
+The fix costs zero bytes: hash `H(node, ladder_id, rung, level, index, l, r)` — exactly
+what RFC 8554's (I, r) and XMSS-T's addresses already do. It was first implemented inside the audit
+file (`prefixed_multiproof_build` / `prefixed_multiproof_verify`) and **is now applied to the design
+files as well**:
+
+| file | structure | prefix on an interior node |
+|---|---|---|
+| `src/s1s2_hashsig_dnssec.py` | XMSS-style Merkle tree (S1) | `H('node', public seed, level, parent index, l, r)` |
+| `src/s1s2_hashsig_dnssec.py` | MTL ladder, condensed proof, multiproof (S2) | `H('node', rung, level, parent index, l, r)` |
+| `src/s3_tls_pki.py` | MTC batch tree (S3) | `H('mtc-node', batch id, level, parent index, l, r)` |
+| `src/s5_smartcard_hsm.py`, `src/s5_bds_faults.py` | on-card LMS tree under BDS traversal (S5) | `H('node', public seed, level, parent index, l, r)` |
+
+Every prefix field is already held by the verifier (the public seed is half the S1 and S5 public key,
+and the rung, batch id and leaf index travel in the proof), so nothing was added to the wire and no
+`--report` byte count moves. The S1 tree needed it too: the WOTS+ address `addr` binds the *leaves*
+of a tree and never reaches the interior nodes, so before this every key pair's interior nodes sat in
+one function. The S5 card tree is the same tree under a different traversal, and needed it for the
+same reason with T counted over fielded devices rather than zones. `src/s1s2_hashsig_dnssec-v2.0.py`
+keeps the unprefixed hashing as the record of what v2.0 was. Each file carries regressions
+(`test_s2_006_*`, `test_s1_006_*`, `test_s5_006_*`,
+`test_mtc_node_hash_is_position_prefixed`) that fail against the previous hashing: a node at one
+position no longer equals the same child pair at another, a condensed proof built for one leaf no
+longer verifies at another leaf whose subtree repeats, an authentication path lifted to another leaf
+of a tree whose subtrees repeat is refused where the card's own self-check used to accept it, and the
+multiproof verifier rejects a proof whose nodes were computed without prefixes. The caveat is stated
+in the source: the
 prefixed variant of the measured game assigns each query to one target position by construction, so
 it demonstrates the counting argument rather than independently discovering it, and MM-SPR is
 "measured only at n ≤ 14 bits" while the same file runs the game at n = 16 — a wording
@@ -505,8 +537,10 @@ fits one Initial packet; **H4** OV-V can be an MTC subject (a 446,992-B key over
 
 - The KEM is a toy; IND-CCA of ML-KEM is an input, not re-derived.
 - No CPU number is measured. Six of the eight primitives in the CPU table are `None`.
-- The MTC prototype hashes `H('mtc-node', l, r)` with no index — the same multi-target exposure as
-  S2-006, **flagged but not measured, and not fixed**.
+- The MTC prototype hashed `H('mtc-node', l, r)` with no index — the same multi-target exposure as
+  S2-006. **Flagged, still not measured at n = 256, and now fixed**: the prototype binds each node
+  to (batch id, level, parent index), §2.6. The separation it rests on is still the ledger
+  computation over a game run at n ≤ 16 bits.
 - The largest legal certificate breaks every recommended configuration; a name-count cap is
   proposed, not standardised.
 - The `10 kB cliff` and the failure-rate curve are Cloudflare/Chrome web posts cited by title only.
@@ -678,6 +712,21 @@ between signatures. `CardSigner` commits the index before release and derives on
 secret — 34 hashes. The alternative in the literature is ML-DSA-87 in 8.1 KiB, which fits the P71
 but not the SLE 78.
 
+Interior nodes carry their position, the S2-006 fix of §2.6: `H('node', public seed, level of the
+two children, index of the parent, l, r)`. The card tree is the S1 tree under a different traversal
+and had the same exposure, with T counted over fielded devices rather than zones — at n = 256 and
+T = 2^40 the unprefixed multi-target second preimage is 2^126 gates, inside the budget the card
+claims through S1. What makes the fix practicable here is that BDS already tracks both coordinates:
+the key-generation stack carries (node, height, index); the round that rebuilds `auth[tau]` knows
+tau and the leaf index s, and the node it builds is the one at level tau with index ((s+1) >> tau) ^ 1;
+and a treehash node's index is `last leaf consumed >> height`, because a completed subtree ends at
+the leaf that completed it. Five places in `src/s5_smartcard_hsm.py` form or refold a node — those
+three, the independent naive recomputation the tests compare against, and the card's verifier — and
+one more in `src/s5_bds_faults.py`, the self-check that folds a leaf up its stored path. All six
+must produce identical bytes at the same position, since BDS reaches one node by several routes;
+that is what the h = 2…12 exhaustive comparison (S5-001) checks. Serialised BDS state carries the
+public seed, so a card restored from NVM rebuilds the same nodes.
+
 ### 5.5 Every size and cost, with the corrected values
 
 | quantity | value | derivation | pointer |
@@ -701,9 +750,19 @@ Three claims are corrected, not overwritten: state is 828 B at h = 8 (not 664 B 
 computations in the worst round); and the persistent state at h = 20 is 2,148 B, i.e. 2.1 KB, which
 is **above** the claimed "< 2 KB". The 30,466 figure is confirmed (30,445 measured).
 
+The table is the v2.1 record and stays as recorded. Two of its *measured* means move when the
+suites are re-run against the current source, and only those two: 30,445.5 → **30,477.4** at h = 8
+and 39,109.9 → **39,097.0** at h = 10. The position prefix changed the tree root, the message
+digest is `H('msg', root, addr, msg)`, and the number of WOTS chain steps is a function of that
+digest — so a per-signature hash count is a draw around 34·127.5, not a fixed number (S1 records
+the same effect, `docs/pq-infra-program.md`). Everything counted rather than drawn is unchanged to
+the bit: leaf computations per signature, node hashes per signature (mean 2.066, max 6 at h = 8),
+every peak-state figure, every h = 20 row and every byte count in the domain.
+
 ### 5.6 Tests
 
-`src/s5_bds_faults.py --self-test` (5 tests).
+`src/s5_bds_faults.py --self-test` (7 tests: the five below and two S2-006 regressions);
+`src/s5_smartcard_hsm.py --self-test` (7: T1–T3, the APDU table and three S2-006 regressions).
 
 | test | what it asserts |
 |---|---|
@@ -712,6 +771,7 @@ is **above** the claimed "< 2 KB". The 30,466 figure is confirmed (30,445 measur
 | S5-003 | measured leaf computations per signature for h = 8…12 against the composed model and the (h−k)/2 + 1 bound |
 | S5-004 | power loss after **every** hash call of a signing operation (h = 4, w = 16), roughly 120 injection points: no leaf is ever reused and every later signature still verifies |
 | S5-005 | the 2^h + 1-th signature is refused and the index is monotone |
+| `test_s5_006_*` | the S2-006 regressions: a node binds the public seed, the level and the parent index, so the same child pair one position over is a different node; the traversal state survives serialise/restore with the prefix intact; and an authentication path lifted to another leaf of a tree whose subtrees repeat is refused, where the self-check accepted it before. Each fails against the previous hashing. They are named outside the `S5-0NN` range deliberately: `src/audit_ledger.py` collects a suite's findings by that ID form, and these are regressions on a design-file fix rather than new audit findings, so the ledger's per-finding rows and its 70-test total do not move |
 
 Test-quality notes kept from the source: `src/s5_bds_faults.py` contains one **vacuous** assertion
 (an `… or True` clause); the effective check is the following one. The card inherits S1's security;
@@ -745,7 +805,7 @@ What is deployed — X25519MLKEM768, Category 3 — sits 12 bits inside the QPT-
 | Giacon–Heuer–Poettering 2018 Thm 3.1; X-Wing (2024) | "IND-CCA if EITHER component is IND-CCA and H is a random oracle / PRF" [T as cited, in the ROM] | the combiner theorem, applied in the random-oracle model | the proof; and the sentence in the theorem that the components must be *independent* is the one the audit attacks |
 | draft-ietf-tls-ecdhe-mlkem-05 | the deployed group and the label/secret ordering style | the combiner's input order | the draft's wire encoding |
 | RFC 6781 | DNSSEC algorithm rollover window | the double-signing period used as a field-rotation lever | — |
-| QPT-128 gate accounting (the programme's own) | category reference attacks 83/100/116/148 gates; 2^18 gates per query | the margins | — |
+| QPT-128 gate accounting (the programme's own) | category reference attacks 83/100/116/148 gates; 2^18 gates per query | the margins | the four figures as costs of attacking ML-KEM: they are NIST category floors (Grover on AES), and §0.1 gives the estimator cross-check |
 
 ### 6.3 The construction
 
@@ -766,8 +826,11 @@ What is deployed — X25519MLKEM768, Category 3 — sits 12 bits inside the QPT-
 | Cards / SE / HSM | RSA-1984, ECDSA (Cat 0) | no | on-card LMS + BDS, or ML-DSA-87 at 8.1 KiB | state 2,148 B (not < 2 KB); 95,775 hashes max (not 86,720); 7 short APDUs | partial (GlobalPlatform applet) |
 | Constrained broadcast | none, or 128-bit TESLA (OSNMA) | no | 256-bit TESLA + LMS anchor | 52 B/message steady state; one 1,772-B anchor per chain | yes (new anchor per epoch) |
 
-The ledger strings in the design file still carry superseded v2.0 figures for the DNSSEC and card
-rows; the corrected values are in the audit and in this table.
+The ledger strings in the design file now carry the v2.1 figures for the four rows v2.1 superseded
+(TLS authentication, DNSSEC, cards, broadcast), each naming the v2.0 figure it replaces, so the
+design file, the audit and this table agree. The design file also loads the S1/S2 model at revision
+v2.2 rather than the v2.0 file kept beside it; `sharded_zone_answer`, the only function it uses, is
+byte-identical between the two, so the DNSSEC row's model figure is unchanged by that.
 
 ### 6.4 The audit games
 
@@ -811,7 +874,8 @@ are 26/18/4.
 - The KEMs are toys; IND-CCA of ML-KEM and X25519 is an input, not re-derived.
 - ROM immutability is an assumption.
 - The agility ledger is a static table; no migration was executed.
-- The design file's ledger strings still carry superseded v2.0 numbers.
+- The ledger rows quote the v2.1 measurements where v2.1 superseded a v2.0 figure, but S6 does not
+  re-derive them: they come from the S2, S3, S4 and S5 audits.
 
 ---
 

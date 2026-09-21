@@ -175,7 +175,13 @@ def ledger():
 class MTCBatch:
     """A batch of assertions (domain, key) under one Merkle root. The CA signs
     the root once per batch (signature size is a parameter, never sent in the
-    handshake); each server gets an inclusion proof."""
+    handshake); each server gets an inclusion proof.
+    S2-006: interior nodes are hashed as H('mtc-node', batch id, level, parent
+    index, l, r). Leaves were already bound to the batch id; the interior nodes
+    were not, so every node of every batch lived in one function and T signed
+    batches gave a multi-target second preimage at 2^(n/2)/sqrt(T) queries:
+    2^126 gates at n = 256, T = 2^40, inside the QPT-128 budget. The batch id
+    and the index already travel in the proof, so the fix costs zero bytes."""
 
     def __init__(self, assertions, batch_id):
         self.batch_id = batch_id
@@ -188,8 +194,9 @@ class MTCBatch:
         leaves += [H(b'mtc-pad', batch_id, i.to_bytes(4, 'big')) for i in range(n, size)]
         self.levels = [leaves]
         while len(self.levels[-1]) > 1:
-            p = self.levels[-1]
-            self.levels.append([H(b'mtc-node', p[i], p[i + 1]) for i in range(0, len(p), 2)])
+            lvl, p = len(self.levels) - 1, self.levels[-1]
+            self.levels.append([H(b'mtc-node', batch_id, lvl.to_bytes(1, 'big'), (i // 2).to_bytes(4, 'big'),
+                                  p[i], p[i + 1]) for i in range(0, len(p), 2)])
         self.root = self.levels[-1][0]
         self.depth = len(self.levels) - 1
 
@@ -204,8 +211,10 @@ class MTCBatch:
     def verify(root, assertion, proof):
         node = H(b'mtc-leaf', proof['batch_id'], assertion)
         idx = proof['index']
-        for sib in proof['path']:
-            node = H(b'mtc-node', node, sib) if idx & 1 == 0 else H(b'mtc-node', sib, node)
+        for lvl, sib in enumerate(proof['path']):
+            left, right = (node, sib) if idx & 1 == 0 else (sib, node)
+            node = H(b'mtc-node', proof['batch_id'], lvl.to_bytes(1, 'big'), (idx >> 1).to_bytes(4, 'big'),
+                     left, right)
             idx >>= 1
         return node == root and idx == 0
 
@@ -276,6 +285,44 @@ class Tests(unittest.TestCase):
         other = MTCBatch(assertions, batch_id=b'2026-09-11T13')             # cross-batch replay
         self.assertFalse(MTCBatch.verify(other.root, assertions[7], p))
         self.assertLess(mtc_proof_bytes(24), 900)                            # 2^24 certs per batch
+
+    def test_mtc_node_hash_is_position_prefixed(self):
+        """S2-006: the v2.0 MTC nodes were H('mtc-node', l, r), so every interior
+        node of every batch sat in one function and T signed batches gave a
+        multi-target second preimage. Each assertion here fails against that."""
+        bid = b'2026-09-21T09'
+        batch = MTCBatch([b'example%05d.test' % i for i in range(8)], batch_id=bid)
+        lv, z4, z1 = batch.levels, b'\x00\x00\x00\x00', b'\x00'
+        self.assertEqual(lv[1][0], H(b'mtc-node', bid, z1, z4, lv[0][0], lv[0][1]))
+        self.assertEqual(lv[1][1], H(b'mtc-node', bid, z1, b'\x00\x00\x00\x01', lv[0][2], lv[0][3]))
+        self.assertEqual(lv[2][0], H(b'mtc-node', bid, b'\x01', z4, lv[1][0], lv[1][1]))
+        # same children at a different index, a different level, another batch, and
+        # the v2.0 shape are four different nodes
+        for dropped in (H(b'mtc-node', lv[0][0], lv[0][1]),
+                        H(b'mtc-node', bid, z1, b'\x00\x00\x00\x01', lv[0][0], lv[0][1]),
+                        H(b'mtc-node', bid, b'\x01', z4, lv[0][0], lv[0][1]),
+                        H(b'mtc-node', b'2026-09-21T10', z1, z4, lv[0][0], lv[0][1])):
+            self.assertNotEqual(lv[1][0], dropped)
+        # a path lifted to another index: rejected, though v2.0 accepted it because
+        # the repeated assertions make every subtree of the batch the same bytes
+        rep = [b'repeat|a', b'repeat|b'] * 4
+        r = MTCBatch(rep, batch_id=bid)
+        p0 = r.proof(0)
+        self.assertTrue(MTCBatch.verify(r.root, rep[0], p0))
+        self.assertFalse(MTCBatch.verify(r.root, rep[2], {**p0, 'index': 2}))
+        old, path, idx = [[H(b'mtc-leaf', bid, a) for a in rep]], [], 0
+        while len(old[-1]) > 1:
+            p = old[-1]
+            old.append([H(b'mtc-node', p[i], p[i + 1]) for i in range(0, len(p), 2)])
+        for lvl in range(3):
+            path.append(old[lvl][idx ^ 1])
+            idx >>= 1
+        for j in (0, 2, 4):
+            node, idx = H(b'mtc-leaf', bid, rep[j]), j
+            for sib in path:
+                node = H(b'mtc-node', node, sib) if idx & 1 == 0 else H(b'mtc-node', sib, node)
+                idx >>= 1
+            self.assertEqual(node, old[-1][0])
 
 
 def report():

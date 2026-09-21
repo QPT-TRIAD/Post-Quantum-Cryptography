@@ -1,0 +1,541 @@
+{
+  "note": "Model output, not a measurement. `returned_attains_the_model_minimum` being false means the block size the estimator returned was bounded by something other than the attack \u2014 at the rows reading, by the sample count left after the normal form \u2014 and the cost beside it is therefore an upper bound imposed by the data available rather than the model's minimum.",
+  "readings": {
+    "exposure": {
+      "estimator_saw_m": 672096,
+      "gap_to_the_model_minimum_bits": 0.0,
+      "lowest_on_the_walked_range": {
+        "beta": 387,
+        "d": 836,
+        "log2_rop": 113.004,
+        "m_used": 580
+      },
+      "minimum_sits_at_the_edge_of_the_walk": false,
+      "returned_attains_the_model_minimum": true,
+      "returned_beta": 387,
+      "returned_log2_rop": 113.004,
+      "samples_after_normal_form": 672096,
+      "samples_available": 672352,
+      "surface": [
+        {
+          "beta": 327,
+          "d": 790,
+          "log2_rop": 202.599,
+          "m_used": 534
+        },
+        {
+          "beta": 332,
+          "d": 794,
+          "log2_rop": 191.022,
+          "m_used": 538
+        },
+        {
+          "beta": 337,
+          "d": 798,
+          "log2_rop": 180.444,
+          "m_used": 542
+        },
+        {
+          "beta": 342,
+          "d": 802,
+          "log2_rop": 170.282,
+          "m_used": 546
+        },
+        {
+          "beta": 347,
+          "d": 806,
+          "log2_rop": 161.289,
+          "m_used": 550
+        },
+        {
+          "beta": 352,
+          "d": 809,
+          "log2_rop": 153.712,
+          "m_used": 553
+        },
+        {
+          "beta": 357,
+          "d": 813,
+          "log2_rop": 146.134,
+          "m_used": 557
+        },
+        {
+          "beta": 362,
+          "d": 817,
+          "log2_rop": 139.557,
+          "m_used": 561
+        },
+        {
+          "beta": 367,
+          "d": 821,
+          "log2_rop": 132.979,
+          "m_used": 565
+        },
+        {
+          "beta": 372,
+          "d": 825,
+          "log2_rop": 127.402,
+          "m_used": 569
+        },
+        {
+          "beta": 377,
+          "d": 829,
+          "log2_rop": 121.825,
+          "m_used": 573
+        },
+        {
+          "beta": 382,
+          "d": 832,
+          "log2_rop": 117.272,
+          "m_used": 576
+        },
+        {
+          "beta": 387,
+          "d": 836,
+          "log2_rop": 113.004,
+          "m_used": 580
+        },
+        {
+          "beta": 392,
+          "d": 840,
+          "log2_rop": 114.464,
+          "m_used": 584
+        },
+        {
+          "beta": 397,
+          "d": 844,
+          "log2_rop": 115.924,
+          "m_used": 588
+        },
+        {
+          "beta": 402,
+          "d": 847,
+          "log2_rop": 117.384,
+          "m_used": 591
+        },
+        {
+          "beta": 407,
+          "d": 851,
+          "log2_rop": 118.844,
+          "m_used": 595
+        },
+        {
+          "beta": 412,
+          "d": 854,
+          "log2_rop": 120.304,
+          "m_used": 598
+        },
+        {
+          "beta": 417,
+          "d": 858,
+          "log2_rop": 121.764,
+          "m_used": 602
+        },
+        {
+          "beta": 422,
+          "d": 862,
+          "log2_rop": 123.224,
+          "m_used": 606
+        },
+        {
+          "beta": 427,
+          "d": 865,
+          "log2_rop": 124.684,
+          "m_used": 609
+        },
+        {
+          "beta": 432,
+          "d": 869,
+          "log2_rop": 126.144,
+          "m_used": 613
+        },
+        {
+          "beta": 437,
+          "d": 872,
+          "log2_rop": 127.604,
+          "m_used": 616
+        },
+        {
+          "beta": 442,
+          "d": 876,
+          "log2_rop": 129.064,
+          "m_used": 620
+        },
+        {
+          "beta": 447,
+          "d": 879,
+          "log2_rop": 130.524,
+          "m_used": 623
+        },
+        {
+          "beta": 452,
+          "d": 883,
+          "log2_rop": 131.984,
+          "m_used": 627
+        },
+        {
+          "beta": 457,
+          "d": 886,
+          "log2_rop": 133.444,
+          "m_used": 630
+        },
+        {
+          "beta": 462,
+          "d": 889,
+          "log2_rop": 134.904,
+          "m_used": 633
+        },
+        {
+          "beta": 467,
+          "d": 893,
+          "log2_rop": 136.364,
+          "m_used": 637
+        },
+        {
+          "beta": 472,
+          "d": 896,
+          "log2_rop": 137.824,
+          "m_used": 640
+        },
+        {
+          "beta": 477,
+          "d": 899,
+          "log2_rop": 139.284,
+          "m_used": 643
+        },
+        {
+          "beta": 482,
+          "d": 903,
+          "log2_rop": 140.744,
+          "m_used": 647
+        },
+        {
+          "beta": 487,
+          "d": 906,
+          "log2_rop": 142.204,
+          "m_used": 650
+        },
+        {
+          "beta": 492,
+          "d": 909,
+          "log2_rop": 143.664,
+          "m_used": 653
+        },
+        {
+          "beta": 497,
+          "d": 913,
+          "log2_rop": 145.124,
+          "m_used": 657
+        },
+        {
+          "beta": 502,
+          "d": 916,
+          "log2_rop": 146.584,
+          "m_used": 660
+        },
+        {
+          "beta": 507,
+          "d": 919,
+          "log2_rop": 148.044,
+          "m_used": 663
+        },
+        {
+          "beta": 512,
+          "d": 922,
+          "log2_rop": 149.504,
+          "m_used": 666
+        },
+        {
+          "beta": 517,
+          "d": 925,
+          "log2_rop": 150.964,
+          "m_used": 669
+        },
+        {
+          "beta": 522,
+          "d": 929,
+          "log2_rop": 152.424,
+          "m_used": 673
+        },
+        {
+          "beta": 527,
+          "d": 932,
+          "log2_rop": 153.884,
+          "m_used": 676
+        }
+      ],
+      "surface_range": [
+        327,
+        527
+      ]
+    },
+    "rows": {
+      "estimator_saw_m": 352,
+      "gap_to_the_model_minimum_bits": 116.475,
+      "lowest_on_the_walked_range": {
+        "beta": 456,
+        "d": 608,
+        "log2_rop": 133.152,
+        "m_used": 352
+      },
+      "minimum_sits_at_the_edge_of_the_walk": false,
+      "returned_attains_the_model_minimum": false,
+      "returned_beta": 351,
+      "returned_log2_rop": 249.627,
+      "samples_after_normal_form": 352,
+      "samples_available": 608,
+      "surface": [
+        {
+          "beta": 291,
+          "d": 608,
+          "log2_rop": 467.972,
+          "m_used": 352
+        },
+        {
+          "beta": 296,
+          "d": 608,
+          "log2_rop": 439.98,
+          "m_used": 352
+        },
+        {
+          "beta": 301,
+          "d": 608,
+          "log2_rop": 414.402,
+          "m_used": 352
+        },
+        {
+          "beta": 306,
+          "d": 608,
+          "log2_rop": 390.825,
+          "m_used": 352
+        },
+        {
+          "beta": 311,
+          "d": 608,
+          "log2_rop": 369.247,
+          "m_used": 352
+        },
+        {
+          "beta": 316,
+          "d": 608,
+          "log2_rop": 349.67,
+          "m_used": 352
+        },
+        {
+          "beta": 321,
+          "d": 608,
+          "log2_rop": 332.092,
+          "m_used": 352
+        },
+        {
+          "beta": 326,
+          "d": 608,
+          "log2_rop": 314.93,
+          "m_used": 352
+        },
+        {
+          "beta": 331,
+          "d": 608,
+          "log2_rop": 299.937,
+          "m_used": 352
+        },
+        {
+          "beta": 336,
+          "d": 608,
+          "log2_rop": 285.775,
+          "m_used": 352
+        },
+        {
+          "beta": 341,
+          "d": 608,
+          "log2_rop": 272.782,
+          "m_used": 352
+        },
+        {
+          "beta": 346,
+          "d": 608,
+          "log2_rop": 260.62,
+          "m_used": 352
+        },
+        {
+          "beta": 351,
+          "d": 608,
+          "log2_rop": 249.627,
+          "m_used": 352
+        },
+        {
+          "beta": 356,
+          "d": 608,
+          "log2_rop": 239.465,
+          "m_used": 352
+        },
+        {
+          "beta": 361,
+          "d": 608,
+          "log2_rop": 229.887,
+          "m_used": 352
+        },
+        {
+          "beta": 366,
+          "d": 608,
+          "log2_rop": 220.895,
+          "m_used": 352
+        },
+        {
+          "beta": 371,
+          "d": 608,
+          "log2_rop": 212.732,
+          "m_used": 352
+        },
+        {
+          "beta": 376,
+          "d": 608,
+          "log2_rop": 205.155,
+          "m_used": 352
+        },
+        {
+          "beta": 381,
+          "d": 608,
+          "log2_rop": 197.577,
+          "m_used": 352
+        },
+        {
+          "beta": 386,
+          "d": 608,
+          "log2_rop": 191.585,
+          "m_used": 352
+        },
+        {
+          "beta": 391,
+          "d": 608,
+          "log2_rop": 185.007,
+          "m_used": 352
+        },
+        {
+          "beta": 396,
+          "d": 608,
+          "log2_rop": 178.845,
+          "m_used": 352
+        },
+        {
+          "beta": 401,
+          "d": 608,
+          "log2_rop": 173.852,
+          "m_used": 352
+        },
+        {
+          "beta": 406,
+          "d": 608,
+          "log2_rop": 168.275,
+          "m_used": 352
+        },
+        {
+          "beta": 411,
+          "d": 608,
+          "log2_rop": 163.697,
+          "m_used": 352
+        },
+        {
+          "beta": 416,
+          "d": 608,
+          "log2_rop": 159.12,
+          "m_used": 352
+        },
+        {
+          "beta": 421,
+          "d": 608,
+          "log2_rop": 154.957,
+          "m_used": 352
+        },
+        {
+          "beta": 426,
+          "d": 608,
+          "log2_rop": 150.965,
+          "m_used": 352
+        },
+        {
+          "beta": 431,
+          "d": 608,
+          "log2_rop": 147.387,
+          "m_used": 352
+        },
+        {
+          "beta": 436,
+          "d": 608,
+          "log2_rop": 143.81,
+          "m_used": 352
+        },
+        {
+          "beta": 441,
+          "d": 608,
+          "log2_rop": 140.648,
+          "m_used": 352
+        },
+        {
+          "beta": 446,
+          "d": 608,
+          "log2_rop": 137.658,
+          "m_used": 352
+        },
+        {
+          "beta": 451,
+          "d": 608,
+          "log2_rop": 135.151,
+          "m_used": 352
+        },
+        {
+          "beta": 456,
+          "d": 608,
+          "log2_rop": 133.152,
+          "m_used": 352
+        },
+        {
+          "beta": 461,
+          "d": 608,
+          "log2_rop": 134.612,
+          "m_used": 352
+        },
+        {
+          "beta": 466,
+          "d": 608,
+          "log2_rop": 136.072,
+          "m_used": 352
+        },
+        {
+          "beta": 471,
+          "d": 608,
+          "log2_rop": 137.532,
+          "m_used": 352
+        },
+        {
+          "beta": 476,
+          "d": 608,
+          "log2_rop": 138.992,
+          "m_used": 352
+        },
+        {
+          "beta": 481,
+          "d": 608,
+          "log2_rop": 140.452,
+          "m_used": 352
+        },
+        {
+          "beta": 486,
+          "d": 608,
+          "log2_rop": 141.912,
+          "m_used": 352
+        },
+        {
+          "beta": 491,
+          "d": 608,
+          "log2_rop": 143.372,
+          "m_used": 352
+        }
+      ],
+      "surface_range": [
+        291,
+        491
+      ]
+    }
+  }
+}

@@ -8,6 +8,24 @@ project directory; the reference files are never touched.
   F2, F4  pq_infra_s1s2_hashsig_dnssec_v2.0.py -> pq_infra_s1s2_hashsig_dnssec_v2.2.py
   F3  pq_audit_s1_lms_v2.1.py         -> pq_audit_s1_lms_v2.2.py
   F5  hidden_signer_modeB_v1.50.py    -> hidden_signer_modeB_v1.51.py
+
+What this script reproduces, and what it does not. It reproduces the four fix files as
+they stood at the 2026-09-13 fix stage, byte for byte, and those are the files the logs
+beside it were produced from. It does not reproduce the S1/S2 model as published in
+domains/10-digital-infrastructure/src/s1s2_hashsig_dnssec.py, and has not since the
+S2-006 position-prefix fix was applied there on 2026-09-21. That change was made
+downstream of this derivation, on the published copy, not on the frozen v2.0 reference
+this script reads, and it is not one of F1-F5: it binds every interior Merkle node to
+(structure id, level, parent index) and adds a regression class for it, which is eleven
+hunks and about 130 lines beyond what the replacements below produce.
+
+Folding it in here would be wrong on the record. This script's output is the v2.2
+audit-fix release, whose self-test log (pq_infra_s1s2_hashsig_dnssec_v2.2.py.log,
+15 tests) is archived in this directory; rewriting the derivation would make the script
+emit a file that log does not describe and would date a 2026-09-21 design change to the
+2026-09-13 fix stage. A reader who wants the derivation should run it as it is and
+compare against the v2.2 file; a reader who wants the current S1/S2 model should read
+the published copy, whose own header records the S2-006 change and the reason for it.
 """
 import os
 import pathlib

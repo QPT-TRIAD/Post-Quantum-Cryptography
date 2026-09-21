@@ -50,7 +50,7 @@ claim families that survived every attack.
 | `property/` | Hypothesis property suites for B0, Mode B, hash-signatures (LMS/MTL) and TESLA, plus a differential B0 comparison | `property/run_all.sh` | 3.6 min recorded; 2.5 min on re-run |
 | `fault/` | 11 fault classes × 300 seeded schedules over the certificate/extraction pipeline | `fault/fault_injection.py` | < 1 s |
 | `independent-b0/` | the spec-only B0 implementation, its vectors, its checker, 18 specification gaps | `independent-b0/check_vectors.py` | 9.6 s |
-| `fixes/` | F1–F5 fixed as new versions (v1.51 C, v2.2 Python) with regression tests, derived by exact single-match replacement from the frozen references | `fixes/make_fixes.py` | aborts rather than drift |
+| `fixes/` | F1–F5 fixed as new versions (v1.51 C, v2.2 Python) with regression tests, derived by exact single-match replacement from the frozen references. The derivation reproduces those four files; it does not reproduce the S1/S2 model as published in domain 10, which took a later fix — `docs/fixes-f1-f5.md` says why and what to read instead | `fixes/make_fixes.py` | aborts rather than drift |
 | `history/` | the ten v0.1 files that differ from their v0.2 twins, version in the filename | — | — |
 | `results/` | the recorded `run_all.sh` console and log | — | — |
 

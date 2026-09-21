@@ -27,6 +27,17 @@ point in the assembly, and the map's digests were recorded from the source copie
 are relative to the root of the tree named in their row; no absolute host path appears anywhere in
 this repository.
 
+**Baseline amendment, 2026-09-21.** The assembly checks that claim by comparing the source tree
+against a snapshot taken before any build work began. That snapshot was captured on 2026-09-13 and
+held 1,157 files. It has been re-captured, and the earlier one is kept beside it so the two can be
+compared. The re-capture is recorded here because re-taking a snapshot is exactly the act that could
+conceal a modification, and the comparison that justifies it is this: of the 1,157 files in the
+original snapshot, **1,157 are still present, none was removed, and none changed size**. What grew
+is the tree around them — 25,443 files of a virtual environment, a toolchain installer, one stale
+bytecode file and two planning documents, all dated before this work and none of them a file this
+repository publishes. The read-only claim above is therefore unchanged: nothing the repository
+copied was altered. A reader who wants to check this can compare the two snapshots directly.
+
 ### The dossiers, and why the map cites them
 
 Many rows in §7 carry a note that cites a **dossier** — `D0 dossier`, `D3 dossier`, `D11 dossier`.

@@ -7,7 +7,10 @@ fix release.
 QPT-128 is fixed in the programme's security target: an attacker with fewer than 2^128 gates, at
 ≥ 2^18 gates per hash query, succeeds with probability below 1/3. Reference attack costs per NIST
 category are 2^83 (Cat 1), 2^100 (Cat 2), 2^116 (Cat 3) and 2^148 (Cat 5) gates
-(`docs/pq-infra-program.md` §1). Only Category 5 passes. The deployed hybrid ML-KEM-768 (Cat 3)
+(`docs/pq-infra-program.md` §1). Those are category floors, the resource level a scheme in the
+category must match, and not the cost of attacking any particular scheme: 83, 116 and 148 are
+Grover key search on AES-128 / AES-192 / AES-256 (`docs/studies.md` §0.1 derives them and gives the
+lattice-estimator cross-check). Only Category 5 passes. The deployed hybrid ML-KEM-768 (Cat 3)
 therefore sits 12 bits inside the budget and is not the finish line.
 
 Nothing in this domain is a deployment. Everything is measured on Python models and byte encoders,
@@ -59,14 +62,14 @@ must sign *online*, per-transaction work moves to a KEM (KEMTLS) or a MAC chain 
 | `src/s1s2_hashsig_dnssec-v2.0.py` | S1/S2 model, revision v2.0. **Still a live import target**: `src/s3_tls_pki.py` and `src/s4_embedded_broadcast.py` load it by filename as a cross-check oracle. |
 | `src/s3_tls_pki.py` | S3 TLS/Web PKI model (only revision). |
 | `src/s4_embedded_broadcast.py` | S4 constrained-broadcast model (only revision). |
-| `src/s5_smartcard_hsm.py` | S5 smart-card/HSM model (only revision); loads the S4 model for its hash counter. |
+| `src/s5_smartcard_hsm.py` | S5 smart-card/HSM model (only revision); loads the S4 model for its hash counter. Carries the S2-006 position prefix on every interior node of the card tree. |
 | `src/s6_migration_agility.py` | S6 migration/agility model (only revision); loads the S1/S2, S3 and S4 models. |
 | `src/s1_lms.py` | S1 audit, revision v2.2 (current): RFC 8554-exact LMS from the RFC text, hsslms interop, state machine, hardware counter, and S1-012, the regression for the approved-pair fix. Its report is identical to the v2.1 report in every recorded number; only the random Grover draw differs. |
 | `history/s1_lms-v2.1.py` | S1 audit, revision v2.1 — superseded by v2.2, but **the revision the ledger runs as suite S1** (the recorded 70/70 was produced with it). |
 | `src/s2_dns_worstcase.py` | S2 audit: real DNS wire encoder (dnspython), worst-case search, multiproof games, multi-target game. |
 | `src/s3_tls_wire.py` | S3 audit: exact RFC 8446 / QUIC / DER / MTC byte encoders, KEMTLS games on an ideal-KEM toy, CPU from literature. |
 | `src/s4_tesla_adversarial.py` | S4 audit: discrete-event adversarial network, boundary sweep, six attack games, byte accounting. |
-| `src/s5_bds_faults.py` | S5 audit: exhaustive BDS-vs-naive comparison, state manipulation, fault injection after every hash call. |
+| `src/s5_bds_faults.py` | S5 audit: exhaustive BDS-vs-naive comparison, state manipulation, fault injection after every hash call, and the S2-006 regressions on the traversal state and its self-check. |
 | `src/s6_hybrid_games.py` | S6 audit: hybrid-combiner games, downgrade games, ROM root games, agility ledger, gate margins. |
 | `src/audit_ledger.py` | The ledger generator: runs all six suites, parses the test IDs, loads each suite's `--report` JSON, writes the checklist and the ledger into `results/`. |
 | `docs/` | The programme and audit documents, plus the three guides written for this repository. |
@@ -142,8 +145,12 @@ either file. The current revision adds one test, S1-012, the regression for the 
 - The reduced-size experiments run at n ≤ 16 bits. They demonstrate counting arguments; they do
   not measure the deployed parameters.
 - The multi-target weakness in unprefixed Merkle nodes (2^126 gates at T = 2^40, inside the
-  budget) is **flagged and given a zero-byte fix, but the fix is not applied to the design files**
-  — neither the MTL ladders/multiproofs nor the MTC prototype.
+  budget) is **flagged, given a zero-byte fix, and the fix is now applied to the design files**:
+  the S1 Merkle tree, the MTL ladders and the multiproofs in `src/s1s2_hashsig_dnssec.py`, the
+  MTC prototype in `src/s3_tls_pki.py`, and the on-card tree traversed by BDS in
+  `src/s5_smartcard_hsm.py` and `src/s5_bds_faults.py` all bind an interior node to its position.
+  What is still not shown is the 2^146 figure itself: it is a ledger computation over a game run at
+  n ≤ 16 bits, not a measurement at n = 256.
 - The two S4 receiver bugs are fixed only in the audit subclass; no fixed design file exists.
 - S5's claim "state < 2 KB" does not survive; S2's "for any zone size" does not survive; S4's
   "52 B per message" holds only in steady state; S6's ledger strings still carry superseded v2.0

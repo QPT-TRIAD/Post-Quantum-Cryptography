@@ -125,7 +125,10 @@ false, and it can move a verdict.
 - **The one same-goal union formed:** break one TLS session (confidentiality or authentication).
   Parts: ephemeral KEM ML-KEM-1024 (148), server long-term KEM ML-KEM-1024 (148), MTC/transcript hash
   with prefixed nodes (146) → **−log2(2^−148 + 2^−148 + 2^−146) = 145.42** log2 gates. The ledger
-  states the form as `Pr[break] <= G * 2^-(union)` in D2 units.
+  states the form as `Pr[break] <= G * 2^-(union)` in D2 units. The two 148 entries are the NIST
+  Category-5 floor (Grover key search on AES-256), not a measured lattice cost for ML-KEM-1024; 146
+  is the Grover figure for a 256-bit hash (S1-010). `docs/studies.md` §0.1 carries the derivation
+  and the estimator cross-check.
 - **Refused:** `S1 firmware + S2 DNSSEC`, `S2 DNSSEC + S3 TLS`, `S4 TESLA + S5 card`, and any
   cross-layer sum. The reason recorded in the ledger: the layers have different adversaries, keys and
   goals, so `epsilon_total` is **not** their sum.
@@ -140,14 +143,15 @@ only weaken it, and the arithmetic shows by how much.
 
 These are recorded in `results/AUDIT_LEDGER_v2.1.json` → `model_discrepancies`. Below, each is given
 in the shape *the v2.0 claim was X; the v2.1 measurement is Y; the difference is Z*. None of these
-was applied by editing the claim in place.
+was applied by editing the claim in place. Where a discrepancy has since been repaired in code, the
+repair went into the v2.2 design file and the v2.0 file was left as the record of what v2.0 was.
 
 ### 5.1 S2 — the DNS worst case, and the multi-target node hash
 
 | v2.0 | v2.1 | difference |
 |---|---|---|
 | "UDP-safe for any zone size" | realistic worst case **1,839 B** (NSEC3, 3 labels, 30-char apex, shard 2^10); the model's own baseline shape is **954 B**, not 1,129 B | the claim is **withdrawn**. Typical shapes are safe at 1,232 B; realistic worst cases need RFC 9715's 1,400 B and small shards. |
-| MTL ladders and multiproofs hash interior nodes as `H("node", l, r)`, no position prefix | at n = 256 with T = 2^40 signed structures, the multi-target second preimage costs **2^126 gates** — *inside* the 2^128 budget — versus **2^146** for the prefixed variant | the v2.0 construction **fails QPT-128**. The zero-byte fix (`H(node, ladder_id, rung, level, index, l, r)`) is implemented **inside the audit file only** (`prefixed_multiproof_build` / `prefixed_multiproof_verify`) and was **not applied to the design files**. The MTC prototype in S3 has the same exposure, flagged and unmeasured. |
+| MTL ladders and multiproofs hash interior nodes as `H("node", l, r)`, no position prefix | at n = 256 with T = 2^40 signed structures, the multi-target second preimage costs **2^126 gates** — *inside* the 2^128 budget — versus **2^146** for the prefixed variant | the v2.0 construction **fails QPT-128**. The zero-byte fix (`H(node, ladder_id, rung, level, index, l, r)`) was first implemented inside the audit file (`prefixed_multiproof_build` / `prefixed_multiproof_verify`) and is **now applied to the design files**: `src/s1s2_hashsig_dnssec.py` prefixes the S1 Merkle tree with (public seed, level, parent index) and the MTL ladder, condensed proof and multiproof with (rung, level, parent index). The MTC prototype in S3 had the same exposure, flagged and unmeasured; `src/s3_tls_pki.py` now prefixes its nodes with (batch id, level, parent index). The card tree in S5 carried the same defect and now carries the same prefix: `src/s5_smartcard_hsm.py` binds every node the BDS traversal forms, and the self-check in `src/s5_bds_faults.py` binds the node it refolds, to (public seed, level, parent index). The 2^126 / 2^146 separation itself is unchanged and is still a ledger computation over a game run at n ≤ 16 bits. |
 | the multiproof's distinct denials need separate condensed signatures | multiproof 988 B vs 1,071 B at 2^10 names; 1,244 B vs 1,455 B at 2^14 | the multiproof saves 83 B and 211 B at those sizes — a real but modest win, and it does not rescue the worst case. Worst-case rows in the ledger: NXDOMAIN 1,839 / CNAME 1,513 / WILDCARD 1,260 / DNSKEY 822 / A 661 B realistic; 2,120 / 3,830 / 1,597 / 912 / 790 B pathological. |
 
 Also recorded: an earlier reading that unprefixed node hashing loses a factor `log2(depth)` was a
@@ -178,6 +182,16 @@ The mean law `(h−k)/2` is *validated*, at h = 8…16: measured 3.0078, 4.0020,
 against 3, 4, 5, 6, 7 — and the composed model is 0.36 % high at h = 8 (30,555.1 vs 30,445.5) and
 0.26 % high at h = 10 (39,210.0 vs 39,109.9). So the discrepancy is precisely at the **worst round**,
 not in the average.
+
+The four rows above are the v2.1 record and are left as recorded. Re-running `--report` against the
+current source moves two of the *measured* means and nothing else: 30,445.5 → **30,477.4** at h = 8
+and 39,109.9 → **39,097.0** at h = 10. The cause is the S2-006 position prefix, which changed the
+tree root; the message digest is `H('msg', root, addr, msg)` and the number of WOTS chain steps is a
+function of that digest, so the per-signature hash count is a draw from the same distribution rather
+than a fixed number (the same effect is recorded for S1 in `docs/pq-infra-program.md`). Everything
+counted rather than drawn is bit-identical before and after: leaf computations per signature (mean
+3.0078, max 4 at h = 8), node hashes per signature (mean 2.066, max 6), peak state (828 B at h = 8,
+2,148 B at h = 20) and every h = 20 figure. No byte count anywhere in the domain moves.
 
 ### 5.3 S3 — the handshake, four items, no verdict changes
 

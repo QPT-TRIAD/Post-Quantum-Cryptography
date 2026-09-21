@@ -1,0 +1,20 @@
+"""What running a reduction can establish, stated once and printed before every result."""
+
+SCOPE_BOUNDARY = (
+    "A reduction-based security proof has two halves. One is a CONVERSION: a recipe that turns any "
+    "adversary who breaks the scheme into a solver for a named hard problem. The other is a "
+    "HARDNESS ASSUMPTION: that nobody can solve that problem. This runner executes the conversion. "
+    "It builds adversaries that genuinely break toy-sized instances, feeds them to the reduction "
+    "exactly as the proof writes it, and checks three things: that the adversary cannot tell the "
+    "reduction's simulated world from the real one, that whatever the reduction outputs really is "
+    "a solution of the hard problem, and that it succeeds as often as the theorem claims. If those "
+    "hold, the logic of the proof has been confirmed by running it rather than by reading it. If "
+    "they fail, the proof has a hole, and the failure is a finding at any size. What this runner "
+    "CANNOT do is say anything about the hardness assumption: it shows 'if the problem is hard "
+    "then the scheme is secure', never that the problem is hard. It also runs only the reductions "
+    "that can be run. The proof system's own soundness theorem lives in the quantum random-oracle "
+    "model and is replaced here by an ideal prover, so nothing below tests it; and where the "
+    "record gives no constructive reduction at all, the runner lists that as a gap instead of "
+    "passing over it. A reduction that survives every adversary tried here has survived those "
+    "adversaries, not every adversary."
+)

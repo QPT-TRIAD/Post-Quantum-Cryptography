@@ -30,7 +30,10 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent if HERE.name == "checks" else HERE.parent
 TABLES = ROOT / ("records" if HERE.name == "checks" else "maps")
 WORK = HERE.parent
-SKIP = {".git", "__pycache__"}
+# Tool caches, not repository content: the same set `.gitignore` declares and `scrub_repo.py`
+# already skips. A test suite run inside a domain writes these, and listing them as unexplained
+# files would report something the repository never publishes.
+SKIP = {".git", "__pycache__", ".hypothesis", ".pytest_cache", ".mypy_cache", "venv", ".venv"}
 GENERATED_OK = {"README.md", "VERIFICATION.md", "SHA256SUMS.txt", "MANIFEST.json", ".gitignore", ".gitattributes"}
 
 
@@ -104,8 +107,16 @@ def main():
     # formal-verification trace, a re-run of a property suite, a rebuilt cross-validation -- so
     # those trees hold re-derived output as well as copies, and output is what they hold when the
     # map claims nothing there.
+    #
+    # Extended for domains 12-15, which are runnable engines rather than scripts and documents: a
+    # domain may carry a self-contained package, so `tests/`, `scripts/`, `config/` and `notes/` are
+    # part of the convention alongside `src/`, as are the two packaging files that make the package
+    # installable. Excluding them would not have kept anything out of the repository -- the files
+    # would still be published -- it would only have stopped this check from listing them.
     AUTHORED = re.compile(r"^(docs/|records/|tooling/|"
-                          r"domains/[^/]+/(README\.md$|VERIFICATION\.md$|docs/|src/|results/|fixtures/|vectors/|history/)|"
+                          r"domains/[^/]+/(README\.md$|VERIFICATION\.md$|pyproject\.toml$|"
+                          r"requirements\.txt$|docs/|src/|tests/|scripts/|config/|notes/|results/|"
+                          r"fixtures/|vectors/|history/)|"
                           r"domains/11-independent-audit-stack/(formal|math|fault|property|fixes|implementation|"
                           r"independent-b0|primitives)/)")
     unclaimed = [x for x in unclaimed_all if not AUTHORED.match(x)]

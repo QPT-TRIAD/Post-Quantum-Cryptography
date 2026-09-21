@@ -17,15 +17,16 @@ unchanged. That is the point of the exercise; the corrected claims are below.
 | Step | Spec | Numbers | Attack | Bound | Claim after audit |
 |---|---|---|---|---|---|
 | S1 firmware | RFC 8554-exact LMS, **interop both directions with hsslms 0.1.3** (5 typecode pairs incl. n=24), sizes derived from typecodes | 1,772 / 2,828 / 1,140 B reproduced | crash injection at every step, rollback (hardware counter), 16-thread concurrency, exhaustion, clone demo | games G1–G5 enumerated; cheapest = 2^(n/2) single-target (domain separation blocks multi-target); exact Grover on the keyed chain matches closed form at n=8..14 | **Unchanged**: n=32 passes (2^146), NSA-preferred n=24 fails (2^114) |
-| S2 DNSSEC | real wire encoder (dnspython), responses parse back with the right RRSIG counts | baseline shape **954 B** exact (model said 1,129) | automated worst-case search; multiproof manipulation; multi-target game | per-query 2^-n both variants; **multi-target: unprefixed nodes give T·2^-n** | **Narrowed**: "UDP-safe for any zone size" is false as stated — realistic worst 1,530 B (NSEC, rollover) / 1,839 B (NSEC3); ≤1,232 for typical shapes; ≤1,400 with shard ≤2^10 outside rollover. **Fix required**: prefix nodes with (ladder id, rung, level, index) — unprefixed at n=256, T=2^40 is 2^126 gates, inside the budget |
-| S3 TLS/PKI | RFC 8446 / QUIC / DER / MTC exact encoder | KEMTLS flight **4,148 B** exact (model 4,280); no fit verdict flips | 8 KEMTLS games blocked with positive control; hostname claim is load-bearing | B and T reported on separate axes; SQIsign-V configs 6.7 handshakes/s/core | **Unchanged in bytes, qualified**: the largest *legal* certificate (100 × 253-char SANs) breaks every config → a name-count cap belongs in the deployment spec; MTC's index-free node hashing has the same multi-target exposure as S2 (flagged, not measured) |
+| S2 DNSSEC | real wire encoder (dnspython), responses parse back with the right RRSIG counts | baseline shape **954 B** exact (model said 1,129) | automated worst-case search; multiproof manipulation; multi-target game | per-query 2^-n both variants; **multi-target: unprefixed nodes give T·2^-n** | **Narrowed**: "UDP-safe for any zone size" is false as stated — realistic worst 1,530 B (NSEC, rollover) / 1,839 B (NSEC3); ≤1,232 for typical shapes; ≤1,400 with shard ≤2^10 outside rollover. **Fix required, and applied**: prefix nodes with (ladder id, rung, level, index) — unprefixed at n=256, T=2^40 is 2^126 gates, inside the budget; the design files now carry the prefix (see §1 below) |
+| S3 TLS/PKI | RFC 8446 / QUIC / DER / MTC exact encoder | KEMTLS flight **4,148 B** exact (model 4,280); no fit verdict flips | 8 KEMTLS games blocked with positive control; hostname claim is load-bearing | B and T reported on separate axes; SQIsign-V configs 6.7 handshakes/s/core | **Unchanged in bytes, qualified**: the largest *legal* certificate (100 × 253-char SANs) breaks every config → a name-count cap belongs in the deployment spec; MTC's index-free node hashing had the same multi-target exposure as S2 (flagged, never measured, and now carrying the same position prefix) |
 | S4 broadcast | existing TESLA audited, not rewritten | 52 B steady-state; first d packets 20 B; +26–30 B link framing | 6 games, 561 attempts, 0 wins; **2 bugs in the v2.0 receiver** (stranded pending packets; unauthenticated replay filter = DoS) | boundary `ceil((Δt+ε)/T)+ceil(ε/T) ≤ d−1` matched at 270/270 grid points | **Corrected**: use `FixedTeslaReceiver`; overhead claim restated as steady-state |
-| S5 smart card | BDS == naive for every leaf, h=2..12, every k (>20k paths) | full sweeps h=8..16, prefix windows 18/20; mean = (h−k)/2 exactly; composition within 0.4 % of the real signer | power loss after every hash (~120 points), no leaf reuse; rollback / corruption / restore | inherits S1 | **Corrected**: max at h=20 is **95,775** hashes (not 86,720: BDS worst round = (h−k)/2 **+1** leaves); mean 82,700; peak state **2,148 B** at h=20 (828 B at h=8, not 664) |
+| S5 smart card | BDS == naive for every leaf, h=2..12, every k (>20k paths) | full sweeps h=8..16, prefix windows 18/20; mean = (h−k)/2 exactly; composition within 0.4 % of the real signer | power loss after every hash (~120 points), no leaf reuse; rollback / corruption / restore | inherits S1 | **Corrected**: max at h=20 is **95,775** hashes (not 86,720: BDS worst round = (h−k)/2 **+1** leaves); mean 82,700; peak state **2,148 B** at h=20 (828 B at h=8, not 664). **Fix applied**: the card tree hashed interior nodes with no position, the same defect as S2 — all six places the BDS traversal forms or refolds a node now bind (public seed, level, parent index); no byte count and no counted hash moves (§1 below) |
 | S6 migration | — | 768→1024 byte deltas | Games A–E with measured slopes (−0.999 / −0.931); **Game C negative**: correlated components defeat the combiner 2,048/2,048; unbound negotiation downgrades 256/256, bound 0/256; lax root verifier accepts n=24/16 forgeries | gate margins n=128/192/256 = −46 / −14 / +18 bits | **Qualified**: combiner theorem needs independence (untestable); "refuse Cat 0" policy needed against a quantum downgrade that re-MACs; ROM must pin the typecode |
 
 ## The two findings that change the design
 
-1. **Position-prefixed node hashing (S2-006, applies to S3's MTC prototype too).**
+1. **Position-prefixed node hashing (S2-006, applies to S3's MTC prototype and
+   the S5 card tree too).**
    The v2.0 ladders hash interior nodes as H(l‖r). Single-structure security is
    2^-n per query, but an adversary holding T signed nodes across all zones
    tests one evaluation against all T: quantum 2^(n/2)/√T. At n = 256 and
@@ -35,6 +36,20 @@ unchanged. That is the point of the exercise; the corrected claims are below.
    H(node, ladder_id, rung, level, index, l, r) — exactly what RFC 8554's
    (I, r) and XMSS-T's addresses do. Same analysis applies to any RFC 6962-style
    Merkle certificate tree; the MTC drafts should be checked for it.
+   **Applied.** `src/s1s2_hashsig_dnssec.py` binds each interior node of the S1
+   Merkle tree to (public seed, level, parent index) and each node of the MTL
+   ladder, condensed proof and multiproof to (rung, level, parent index);
+   `src/s3_tls_pki.py` binds each MTC node to (batch id, level, parent index);
+   `src/s5_smartcard_hsm.py` binds each node of the card tree to (public seed,
+   level, parent index) at all five places the BDS traversal forms one — the
+   key-generation stack, the round that rebuilds `auth[tau]`, a treehash update,
+   the independent naive recomputation and the card's own verifier — and
+   `src/s5_bds_faults.py` binds the node its state self-check refolds. The six
+   have to agree exactly, because BDS reaches the same node by several routes;
+   the level and index each one needs are already in the traversal state.
+   Every field is already held by the verifier, so no wire size changes. All
+   three files carry regressions that fail against the previous hashing. v2.0
+   keeps the defect as the record of what v2.0 was.
 
 2. **DNSSEC claim narrowed by worst-case search (S2-003).** On real wire format
    with 3×20-char labels, a 30-char apex, two keys double-signing during
@@ -71,7 +86,9 @@ behaviour above 1,232/1,400 B (literature) · all cycle counts (literature).
   second style of the same author's code, which is weaker evidence.
 - **Blockchain integration** (S1–S6 through the TRIAD devnet) was not run; the
   kit's devnet phases C0–C7 remain `not_started`.
-- MTC multi-target exposure is flagged, not measured; SQIsign v3.0 timings,
+- MTC multi-target exposure was flagged and never measured, so the position
+  prefix now in `src/s3_tls_pki.py` rests on the S2 measurement and the counting
+  argument, not on an MTC-specific game; SQIsign v3.0 timings,
   MAYO-5 / ML-DSA-87 signing costs and ML-KEM-1024 decapsulation cycles were
   not verified here (left `None`, never invented).
 - Hardware: no card, no radio, no HSM was touched; every cycle count is from

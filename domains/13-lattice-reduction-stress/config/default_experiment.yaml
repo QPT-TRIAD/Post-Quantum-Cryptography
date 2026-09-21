@@ -1,0 +1,78 @@
+# Default experiment. Every value here is either measured on this host or a deliberate guard; where
+# a value is measured, the measurement is named so a later change can be checked against it.
+
+run_id: null      # derived from the instance and seed when null
+
+instance:
+  # synthetic_scaled | random_lattice_control | published_reference
+  #
+  # There is deliberately no option for the recorded production parameter set. This build is
+  # validated on synthetic instances and published reference sets only; the schema has no member
+  # for anything else, so the excluded run is unrepresentable rather than merely un-run.
+  source: synthetic_scaled
+  # The *lattice* dimension, not a register width. Cost is driven by the reduction block size
+  # rather than by this, but a larger dimension costs more tours and more wall time.
+  target_dimension: 100
+  seed: 20260913
+  # The shape of the instance, as a ratio. 256/608 is the recorded production shape; it is carried
+  # as a ratio because preserving it is the entire purpose of scaling down.
+  nu_over_m: [256, 608]
+  # reference_scheme: Kyber512    # only used when source is published_reference
+
+engine:
+  preference: [g6k, fpylll_bkz]   # falls back automatically, with a warning, never silently
+  # One thread, and this is a correctness setting, not a speed one.
+  #
+  # G6K is bit-reproducible at one thread and is not above it. Measured at dimension 80, block size
+  # 10, four separate processes each: at one thread all four returned root-Hermite 3.11695792; at
+  # four threads they returned 3.78538167, 3.55510025, 1.22330782 and 3.55510025 -- three distinct
+  # values, one of which recovered the planted vector and three of which did not. A sweep minimum
+  # taken above one thread is one draw, not a measurement, and a fit across draws is not a fit.
+  # See notes/09.
+  #
+  # **It is not free.** One thread is ~3x faster at block size 10 and ~5x slower at block sizes
+  # 60-70, because that is where G6K's parallelism actually pays. Per dimension, against the
+  # four-thread sweep: d40 1.1x, d60 0.7x, d80 1.0x, d100 1.9x, d130 5.0x. The sweep's cost is
+  # dominated by its high-block-size points, so the whole-run cost goes up -- d130 alone went from
+  # 120 s to 595 s. Recorded because a reader comparing the two runs' timings would otherwise
+  # conclude the slow one was broken.
+  threads: 1
+  # A runaway guard, not the binding constraint: block size 90 peaks at ~231 MiB against 7.5 GiB
+  # available. On this host an over-budget run does not raise, it makes the machine stop
+  # responding -- swap is already ~90% full.
+  ram_budget_gb: 6.0
+  # A *time* ceiling, not a memory one, and the design document's figure: exceeding block size 60
+  # (or dimension 200) needs sweep.long_run_opt_in. 90 is the hard maximum the opt-in stops at --
+  # it already costs ~193 s at four threads.
+  sieve_block_size_max: 60
+  # G6K's SieverParams.gauss_crossover: below this sieving dimension G6K runs its Gauss sieve.
+  # 50 is G6K's own default; handed to the G6K engine, ignored by enumeration, which has no sieve.
+  gauss_crossover: 50
+
+attack:
+  types: [primal, dual]
+  # 50 stops before the sieving regime, which is the only reason to have G6K at all; 80 reaches it
+  # at a cost of about half a minute per tour.
+  block_size_range: [10, 20, 30, 40, 50, 60, 70, 80]
+  # How far past the model's predicted block size to keep searching before recording a failure:
+  # block sizes above (predicted usvp block size + this) are not attempted, and are recorded as
+  # not run if nothing below them recovered the secret.
+  search_beyond_prediction: 15
+
+sweep:
+  dimension_range: [40, 60, 80, 100, 130, 160]
+  # true, deliberately: attack.block_size_range above runs to 80, past the no-opt-in ceiling of 60
+  # (engine.sieve_block_size_max). The sieving regime is the reason G6K is here at all, so the
+  # shipped range is kept and the opt-in it requires is stated, instead of shrinking the range to
+  # fit. This was false while the ceiling was 90, which is how an 80 got through without it. The
+  # opt-in also lifts the dimension-200 limit; this sweep stops at 160, so that changes nothing.
+  long_run_opt_in: true
+
+cost_model:
+  use_lattice_estimator: true
+  models: [primal_usvp, dual]
+  quantum_sieving_speedup: true
+
+output:
+  dir: results/
+  formats: [markdown, json]

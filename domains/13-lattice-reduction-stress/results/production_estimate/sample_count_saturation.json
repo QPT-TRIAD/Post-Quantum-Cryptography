@@ -1,0 +1,343 @@
+{
+  "beta_at_and_above_saturation": 368,
+  "beta_there": 369,
+  "coarse_step": 10,
+  "coarse_walk": [
+    {
+      "beta_usvp": 426,
+      "m": 608,
+      "m_over_nu": 2.375
+    },
+    {
+      "beta_usvp": 418,
+      "m": 618,
+      "m_over_nu": 2.4141
+    },
+    {
+      "beta_usvp": 412,
+      "m": 628,
+      "m_over_nu": 2.4531
+    },
+    {
+      "beta_usvp": 406,
+      "m": 638,
+      "m_over_nu": 2.4922
+    },
+    {
+      "beta_usvp": 400,
+      "m": 648,
+      "m_over_nu": 2.5312
+    },
+    {
+      "beta_usvp": 396,
+      "m": 658,
+      "m_over_nu": 2.5703
+    },
+    {
+      "beta_usvp": 392,
+      "m": 668,
+      "m_over_nu": 2.6094
+    },
+    {
+      "beta_usvp": 388,
+      "m": 678,
+      "m_over_nu": 2.6484
+    },
+    {
+      "beta_usvp": 385,
+      "m": 688,
+      "m_over_nu": 2.6875
+    },
+    {
+      "beta_usvp": 382,
+      "m": 698,
+      "m_over_nu": 2.7266
+    },
+    {
+      "beta_usvp": 379,
+      "m": 708,
+      "m_over_nu": 2.7656
+    },
+    {
+      "beta_usvp": 377,
+      "m": 718,
+      "m_over_nu": 2.8047
+    },
+    {
+      "beta_usvp": 375,
+      "m": 728,
+      "m_over_nu": 2.8438
+    },
+    {
+      "beta_usvp": 374,
+      "m": 738,
+      "m_over_nu": 2.8828
+    },
+    {
+      "beta_usvp": 372,
+      "m": 748,
+      "m_over_nu": 2.9219
+    },
+    {
+      "beta_usvp": 371,
+      "m": 758,
+      "m_over_nu": 2.9609
+    },
+    {
+      "beta_usvp": 370,
+      "m": 768,
+      "m_over_nu": 3.0
+    },
+    {
+      "beta_usvp": 369,
+      "m": 778,
+      "m_over_nu": 3.0391
+    },
+    {
+      "beta_usvp": 369,
+      "m": 788,
+      "m_over_nu": 3.0781
+    },
+    {
+      "beta_usvp": 368,
+      "m": 798,
+      "m_over_nu": 3.1172
+    },
+    {
+      "beta_usvp": 368,
+      "m": 808,
+      "m_over_nu": 3.1562
+    },
+    {
+      "beta_usvp": 368,
+      "m": 818,
+      "m_over_nu": 3.1953
+    },
+    {
+      "beta_usvp": 368,
+      "m": 828,
+      "m_over_nu": 3.2344
+    },
+    {
+      "beta_usvp": 368,
+      "m": 838,
+      "m_over_nu": 3.2734
+    },
+    {
+      "beta_usvp": 368,
+      "m": 848,
+      "m_over_nu": 3.3125
+    },
+    {
+      "beta_usvp": 368,
+      "m": 858,
+      "m_over_nu": 3.3516
+    },
+    {
+      "beta_usvp": 368,
+      "m": 868,
+      "m_over_nu": 3.3906
+    },
+    {
+      "beta_usvp": 368,
+      "m": 878,
+      "m_over_nu": 3.4297
+    },
+    {
+      "beta_usvp": 368,
+      "m": 888,
+      "m_over_nu": 3.4688
+    },
+    {
+      "beta_usvp": 368,
+      "m": 898,
+      "m_over_nu": 3.5078
+    },
+    {
+      "beta_usvp": 368,
+      "m": 908,
+      "m_over_nu": 3.5469
+    },
+    {
+      "beta_usvp": 368,
+      "m": 918,
+      "m_over_nu": 3.5859
+    },
+    {
+      "beta_usvp": 368,
+      "m": 928,
+      "m_over_nu": 3.625
+    },
+    {
+      "beta_usvp": 368,
+      "m": 938,
+      "m_over_nu": 3.6641
+    },
+    {
+      "beta_usvp": 368,
+      "m": 948,
+      "m_over_nu": 3.7031
+    },
+    {
+      "beta_usvp": 368,
+      "m": 958,
+      "m_over_nu": 3.7422
+    },
+    {
+      "beta_usvp": 368,
+      "m": 968,
+      "m_over_nu": 3.7812
+    },
+    {
+      "beta_usvp": 368,
+      "m": 978,
+      "m_over_nu": 3.8203
+    },
+    {
+      "beta_usvp": 368,
+      "m": 988,
+      "m_over_nu": 3.8594
+    },
+    {
+      "beta_usvp": 368,
+      "m": 998,
+      "m_over_nu": 3.8984
+    },
+    {
+      "beta_usvp": 368,
+      "m": 1008,
+      "m_over_nu": 3.9375
+    },
+    {
+      "beta_usvp": 368,
+      "m": 1018,
+      "m_over_nu": 3.9766
+    },
+    {
+      "beta_usvp": 368,
+      "m": 1028,
+      "m_over_nu": 4.0156
+    },
+    {
+      "beta_usvp": 368,
+      "m": 1038,
+      "m_over_nu": 4.0547
+    },
+    {
+      "beta_usvp": 368,
+      "m": 1048,
+      "m_over_nu": 4.0938
+    },
+    {
+      "beta_usvp": 368,
+      "m": 1058,
+      "m_over_nu": 4.1328
+    },
+    {
+      "beta_usvp": 368,
+      "m": 1068,
+      "m_over_nu": 4.1719
+    }
+  ],
+  "cost_model": "ADPS16(classical)",
+  "estimator_revision": "53da5982597709ba0fdf94ea37a84d822310fd84",
+  "last_sample_count_below_saturation": 790,
+  "noise_bound": 128,
+  "note": "Above `saturation_point` the primal cost is constant, so every sample count from there to 672352 yields one identical estimate. The question a reader needs answered is therefore not which reading was meant but whether any single secret reaches the saturation point: at or above it the exposure reading's cost applies unchanged, below it the cost depends on the count actually reached. Both the saturation point and the cost model's output are properties of this parameter set and estimator revision, not of QLWR.",
+  "nu": 256,
+  "q_l": 65536,
+  "recorded_readings": {
+    "exposure": {
+      "at_or_above_saturation": true,
+      "beta_usvp": 368,
+      "m": 672352
+    },
+    "rows": {
+      "at_or_above_saturation": false,
+      "beta_usvp": 426,
+      "m": 608
+    }
+  },
+  "saturation_m_over_nu": 3.0898,
+  "saturation_point": 791,
+  "scan_from": 608,
+  "scan_to": 1075,
+  "steps_walked": [
+    {
+      "beta_usvp": 426,
+      "first_seen_at_m": 608
+    },
+    {
+      "beta_usvp": 418,
+      "first_seen_at_m": 618
+    },
+    {
+      "beta_usvp": 412,
+      "first_seen_at_m": 628
+    },
+    {
+      "beta_usvp": 406,
+      "first_seen_at_m": 638
+    },
+    {
+      "beta_usvp": 400,
+      "first_seen_at_m": 648
+    },
+    {
+      "beta_usvp": 396,
+      "first_seen_at_m": 658
+    },
+    {
+      "beta_usvp": 392,
+      "first_seen_at_m": 668
+    },
+    {
+      "beta_usvp": 388,
+      "first_seen_at_m": 678
+    },
+    {
+      "beta_usvp": 385,
+      "first_seen_at_m": 688
+    },
+    {
+      "beta_usvp": 382,
+      "first_seen_at_m": 698
+    },
+    {
+      "beta_usvp": 379,
+      "first_seen_at_m": 708
+    },
+    {
+      "beta_usvp": 377,
+      "first_seen_at_m": 718
+    },
+    {
+      "beta_usvp": 375,
+      "first_seen_at_m": 728
+    },
+    {
+      "beta_usvp": 374,
+      "first_seen_at_m": 738
+    },
+    {
+      "beta_usvp": 372,
+      "first_seen_at_m": 748
+    },
+    {
+      "beta_usvp": 371,
+      "first_seen_at_m": 758
+    },
+    {
+      "beta_usvp": 370,
+      "first_seen_at_m": 768
+    },
+    {
+      "beta_usvp": 369,
+      "first_seen_at_m": 778
+    },
+    {
+      "beta_usvp": 368,
+      "first_seen_at_m": 798
+    }
+  ]
+}

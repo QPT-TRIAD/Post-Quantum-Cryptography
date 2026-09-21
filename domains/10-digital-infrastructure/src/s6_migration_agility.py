@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 r"""PQ infrastructure program — step S6: Category 3 -> Category 5 migration and
 crypto-agility, i.e. the hardest item: what is deployed today is ML-KEM-768
-(Category 3), which sits 12 bits INSIDE the QPT-128 gate budget (v1.43 ledger:
-Cat 3 reference attack 2^116 gates), so "deployed" is not "done".
+(Category 3), which sits 12 bits INSIDE the QPT-128 gate budget (the Category-3
+floor is 2^116 gates, Grover key search on AES-192), so "deployed" is not
+"done".
 
 Glued ideas, each tested:
   G1  Hybrid KEM combiner in the X-Wing / draft-ietf-tls-ecdhe-mlkem style:
@@ -42,12 +43,28 @@ def _load(name, fn):
     return m
 
 
-s1s2 = _load('s1s2', 's1s2_hashsig_dnssec-v2.0.py')
+# The S1/S2 model is loaded at revision v2.2, not the v2.0 file kept beside it: v2.2 carries the
+# F2/F4 multiproof-verification fixes and the S2-006 position-prefixed node hashing. Only
+# sharded_zone_answer is used here, and it is byte-identical between the two revisions, so the
+# DNSSEC row's model figure is unchanged by the switch.
+s1s2 = _load('s1s2', 's1s2_hashsig_dnssec.py')
 s3 = _load('s3', 's3_tls_pki.py')
 s4 = _load('s4', 's4_embedded_broadcast.py')
 
-# QPT-128 category verdicts from qpt128_finalization_v1.43 (log2 Pr/G in gate units):
-CATEGORY_ATTACK_GATES = {1: 83, 2: 100, 3: 116, 5: 148}     # reference attack cost, log2 gates
+# NIST category FLOORS in log2 gates: the resource level a scheme in the category has to match,
+# NOT the cost of the best known attack on the scheme deployed in that category. 83, 116 and 148
+# are Grover key search on AES-128 / AES-192 / AES-256, i.e. half the key length in Grover
+# iterations charged at the gate cost of one AES evaluation (64+19, 96+20, 128+20); the AES-256
+# entry is the G-cost 1.17*2^148 of Jaques-Naehrig-Roetteler-Virdia Tables 9 and 11, which is the
+# row the v1.43 constants table carries. 100 is the Category-2 entry (collision search on a
+# 256-bit hash) and nothing below uses it. Reading a floor as a scheme's own attack cost is the
+# conservative direction only while the best known attack on the scheme costs at least the floor.
+# Analytic cross-check, not measured: an independent estimator run (lattice-estimator, ADPS16
+# core-SVP, quantum) puts ML-KEM-1024 near 2^231.6 quantum and 2^255.2 classical, and ML-KEM-512
+# near 2^107.6 quantum, so the Category-5 floor is the conservative side at the deployed
+# Category-5 parameters while Category 1 sits below the 2^128 budget. Those counts are core-SVP
+# operations rather than these gate units and bound the direction, not the number.
+CATEGORY_ATTACK_GATES = {1: 83, 2: 100, 3: 116, 5: 148}
 QPT128_BUDGET_LOG2 = 128
 
 
@@ -100,14 +117,19 @@ def migration_ledger():
                  'deployed_passes_qpt128': False,
                  'target': 'MTC + KEMTLS ML-KEM-1024 (Cat 5; no per-handshake signing)',
                  'target_passes_qpt128': True,
-                 'cost': f"server flight {L['MTC + KEMTLS ML-KEM-1024, Cat 5']['server_flight']} B (+{L['MTC + KEMTLS ML-KEM-1024, Cat 5']['extra_vs_classical']} B), fits QUIC 3x and TCP initcwnd",
+                 'cost': f"server flight {L['MTC + KEMTLS ML-KEM-1024, Cat 5']['server_flight']} B "
+                         f"(+{L['MTC + KEMTLS ML-KEM-1024, Cat 5']['extra_vs_classical']} B) by the design model, superseded by the v2.1 exact "
+                         "encoder at 4,148 B of handshake (4,203 B on TCP); fits QUIC 3x and TCP initcwnd under both figures",
                  'rotatable_in_field': 'yes: trust-anchor IDs / landmark roll (~weekly)'})
     # DNSSEC
     sh = s1s2.sharded_zone_answer(160_000_000, 12)
     rows.append({'layer': 'DNSSEC', 'deployed': 'ECDSA P-256 / RSA (Cat 0)', 'deployed_passes_qpt128': False,
                  'target': 'SLH-DSA-256s-MTL (n=32) ladder, canonical-order shards of 2^12, NSEC + multiproof',
                  'target_passes_qpt128': True,
-                 'cost': f"worst NXDOMAIN {sh['answer_worst']} B (UDP-safe) for any zone size; one 29,792-B ladder fetch per shard per TTL over TCP",
+                 'cost': f"worst NXDOMAIN {sh['answer_worst']} B for this zone shape by the design model, remeasured by the v2.1 wire encoder "
+                         "at 954 B for the same shape; the v2.0 reading 'UDP-safe for any zone size' is withdrawn by v2.1, whose realistic "
+                         "worst case is 1,530 B (NSEC) / 1,839 B (NSEC3), so typical shapes fit 1,232 B and worst cases need RFC 9715's "
+                         "1,400 B with shards of 2^10; one 29,792-B ladder fetch per shard per TTL over TCP",
                  'rotatable_in_field': 'yes: RFC 6781 algorithm rollover (double-signing period)'})
     # Firmware / secure boot
     w = s4.WOTS(256)
@@ -122,14 +144,17 @@ def migration_ledger():
                  'deployed_passes_qpt128': False,
                  'target': 'on-card LMS n=32 w=8 h=20 with BDS (Cat 5) or ML-DSA-87 in 8.1 KiB (2022/323)',
                  'target_passes_qpt128': True,
-                 'cost': 'BDS state < 2 KB NVM; ~85k hashes/sign; 1,772 B sig = 7 short APDUs',
+                 'cost': 'BDS peak state 2,148 B NVM at h=20, superseding the v2.0 bound of < 2 KB; at most 95,775 hashes/sign at h=20 '
+                         '(mean 82,700), superseding the v2.0 bound of <= 86,720; 1,772 B sig = 7 short APDUs',
                  'rotatable_in_field': 'partial: applet update via GlobalPlatform; key state never exported'})
     # Broadcast / constrained links
     rows.append({'layer': 'Constrained broadcast (ICS, satellite, medical)', 'deployed': 'none / 128-bit TESLA (OSNMA)',
                  'deployed_passes_qpt128': s4.qpt128_hash_preimage_ok(128),
                  'target': 'TESLA with 256-bit chain keys anchored by LMS n=32 (Cat 5)',
                  'target_passes_qpt128': s4.qpt128_hash_preimage_ok(256),
-                 'cost': f'{s4.TeslaSender.overhead_bytes()} B per message; one 1,772-B anchor per chain',
+                 'cost': f'{s4.TeslaSender.overhead_bytes()} B per message in steady state, which is the v2.1 restatement of the flat v2.0 '
+                         'figure: the first d packets of a chain carry no disclosed key and are 20 B, and link framing adds 26-30 B; '
+                         'one 1,772-B anchor per chain',
                  'rotatable_in_field': 'yes: new chain anchor per epoch'})
     return rows
 

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Run with an interpreter that has typer; the primitives come from the sibling attack tester.
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PYTHONPATH="$here/src${PYTHONPATH:+:$PYTHONPATH}" exec "${QPT_RR_PYTHON:-$HOME/miniforge3/envs/sage/bin/python}" -m qpt_rr.cli "$@"

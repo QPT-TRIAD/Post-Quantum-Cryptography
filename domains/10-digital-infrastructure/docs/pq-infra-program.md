@@ -61,7 +61,10 @@ for firmware/software signing, "begin transitioning immediately", exclusively by
 **Built and measured.** WOTS+ w=16 (len 67) and LM-OTS w=8 (len 34) with exact
 byte accounting reproduce the standards: XMSS-SHA2_20_256 = **2,820 B** (RFC
 8391), LMS_SHA256_M32_H20 / W8 = **1,772 B** (RFC 8554). Verify at h=4 costs 471
-hashes measured against the 1,009 bound; w=8 verify ≤ 8,692 hashes at h=20.
+hashes measured against the 1,009 bound (531 in the v2.2 revision, whose root
+moved when the interior nodes took their position prefix: the chain steps are a
+function of the message digest, so the count is a draw and the bound is not);
+w=8 verify ≤ 8,692 hashes at h=20.
 Statefulness enforced (65th signature on a 2^6 tree raises).
 
 **QPT-128 finding (tested).** Grover preimage on an n-bit hash costs

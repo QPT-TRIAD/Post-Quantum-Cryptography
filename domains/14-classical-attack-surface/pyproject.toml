@@ -1,0 +1,20 @@
+[project]
+name = "qpt-cart"
+version = "0.1.0"
+description = "Classical Attack Reduction Tester for the QPT-128 primitives"
+requires-python = ">=3.11"
+dependencies = ["numpy", "typer"]
+
+[project.optional-dependencies]
+# SageMath (Groebner attack) and fpylll + the lattice-stress engine (lattice attack) are not pip
+# packages here: they come from the `sage` conda environment. Without them those two attacks are
+# recorded as "not run"; nothing else changes.
+test = ["pytest", "hypothesis"]
+
+[project.scripts]
+qpt-cart = "qpt_cart.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = ["slow: real attacks at sizes that take more than a few seconds"]

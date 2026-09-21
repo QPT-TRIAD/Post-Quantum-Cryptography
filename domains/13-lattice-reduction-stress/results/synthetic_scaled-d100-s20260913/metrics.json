@@ -1,0 +1,303 @@
+{
+  "run_id": "synthetic_scaled-d100-s20260913",
+  "created_utc": "2026-09-14T17:53:37Z",
+  "seed": 20260913,
+  "config": {
+    "run_id": null,
+    "instance": {
+      "source": "synthetic_scaled",
+      "target_dimension": 100,
+      "seed": 20260913,
+      "reference_scheme": null,
+      "nu_over_m": [
+        256,
+        608
+      ]
+    },
+    "engine": {
+      "preference": [
+        "g6k",
+        "fpylll_bkz"
+      ],
+      "threads": 1,
+      "ram_budget_gb": 6.0,
+      "sieve_block_size_max": 90,
+      "gauss_crossover": 50
+    },
+    "attack": {
+      "types": [
+        "primal",
+        "dual"
+      ],
+      "block_size_range": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80
+      ],
+      "search_beyond_prediction": 15,
+      "max_seconds_per_block_size": 600.0
+    },
+    "sweep": {
+      "dimension_range": [
+        40,
+        60,
+        80,
+        100,
+        130,
+        160
+      ],
+      "long_run_opt_in": false
+    },
+    "cost_model": {
+      "use_lattice_estimator": true,
+      "models": [
+        "primal_usvp",
+        "dual"
+      ],
+      "quantum_sieving_speedup": true
+    },
+    "output": {
+      "dir": "results",
+      "formats": [
+        "markdown",
+        "json"
+      ]
+    }
+  },
+  "not_run": [
+    {
+      "step": "dual attack",
+      "reason": "the band ||y||_1*B covers the whole residue space (expected fraction 1); the shortest reduced dual vector has ||y||_1 far above the q/(2B) = 256 budget, so no dual vector can distinguish at this scale. The attack does not apply here rather than having been tried and failed."
+    }
+  ],
+  "notes": [],
+  "instance": {
+    "label": "synthetic_scaled",
+    "nu": 42,
+    "q_l": 65536,
+    "p": 256,
+    "m": 100,
+    "seed": 20260913,
+    "rounding_ratio": 256,
+    "noise_bound": 128,
+    "noise_interval": [
+      -128,
+      127
+    ],
+    "equivalent_gaussian_sigma": 73.9003,
+    "is_bit_shift_rounding": true,
+    "qary_lattice_dimension": 100,
+    "usvp_lattice_dimension": 101
+  },
+  "attacks": [
+    {
+      "family": "primal_usvp",
+      "block_size": 10,
+      "dimension": 101,
+      "recovered": false,
+      "wall_clock_s": 10.841336318990216,
+      "root_hermite_factor": 5.923010364790602,
+      "engine": "g6k_sieve",
+      "threads": 1,
+      "provenance": "measured",
+      "not_run_reason": null
+    },
+    {
+      "family": "primal_usvp",
+      "block_size": 20,
+      "dimension": 101,
+      "recovered": false,
+      "wall_clock_s": 4.411904963009874,
+      "root_hermite_factor": 4.391759409111465,
+      "engine": "g6k_sieve",
+      "threads": 1,
+      "provenance": "measured",
+      "not_run_reason": null
+    },
+    {
+      "family": "primal_usvp",
+      "block_size": 30,
+      "dimension": 101,
+      "recovered": false,
+      "wall_clock_s": 7.426108846993884,
+      "root_hermite_factor": 3.783997289982147,
+      "engine": "g6k_sieve",
+      "threads": 1,
+      "provenance": "measured",
+      "not_run_reason": null
+    },
+    {
+      "family": "primal_usvp",
+      "block_size": 40,
+      "dimension": 101,
+      "recovered": true,
+      "wall_clock_s": 9.9687948589999,
+      "root_hermite_factor": 1.314722829414266,
+      "engine": "g6k_sieve",
+      "threads": 1,
+      "provenance": "measured",
+      "not_run_reason": null
+    },
+    {
+      "family": "dual",
+      "block_size": 58,
+      "dimension": 58,
+      "recovered": false,
+      "advantage": 0.0,
+      "wall_clock_s": 5.376656168999034,
+      "provenance": "not_run",
+      "not_run_reason": "the band ||y||_1*B covers the whole residue space (expected fraction 1); the shortest reduced dual vector has ||y||_1 far above the q/(2B) = 256 budget, so no dual vector can distinguish at this scale. The attack does not apply here rather than having been tried and failed."
+    }
+  ],
+  "minimum_block_sizes": {
+    "primal_usvp": 40,
+    "dual": null
+  },
+  "estimator_same_scale": {
+    "beta_usvp": 44,
+    "beta_dual": 55,
+    "rop_usvp_log2": 12.85,
+    "rop_dual_log2": 18.92,
+    "rop_classical_log2_min": 12.85,
+    "rop_quantum_log2_min": 11.66,
+    "minimum_over_models": "primal_usvp",
+    "model_parameters": {
+      "requested_models": [
+        "primal_usvp",
+        "dual"
+      ],
+      "classical": {
+        "primal_usvp": {
+          "family": "usvp",
+          "applicable": true,
+          "beta": 44,
+          "rop_log2": 12.85
+        },
+        "dual": {
+          "family": "dual",
+          "applicable": true,
+          "beta": 55,
+          "rop_log2": 18.92
+        }
+      },
+      "quantum": {
+        "primal_usvp": {
+          "family": "usvp",
+          "applicable": true,
+          "beta": 44,
+          "rop_log2": 11.66
+        },
+        "dual": {
+          "family": "dual",
+          "applicable": true,
+          "beta": 55,
+          "rop_log2": 17.52
+        }
+      },
+      "inapplicable_models": [],
+      "deny_list": [
+        "arora-gb",
+        "bkw",
+        "bdd",
+        "bdd_hybrid",
+        "bdd_mitm_hybrid"
+      ],
+      "scheme": "synthetic_scaled:nu=42,q=65536,m=100",
+      "n": 42,
+      "q": 65536,
+      "m": 100,
+      "noise": "Uniform(-128, 127) exact; sigma_eq=73.9003"
+    },
+    "estimator_revision": "53da5982597709ba0fdf94ea37a84d822310fd84",
+    "red_cost_model": "ADPS16(classical/quantum), estimator default shape",
+    "red_shape_model": "GSA",
+    "provenance": "theoretical_same_scale",
+    "not_run_reason": null
+  },
+  "comparisons": [
+    {
+      "dimension": 101,
+      "measured_min_block_size": 40,
+      "predicted_min_block_size": 44,
+      "discrepancy": -0.09090909090909091,
+      "tolerance": 0.25,
+      "anomaly": null,
+      "note": null
+    },
+    {
+      "dimension": 58,
+      "measured_min_block_size": 0,
+      "predicted_min_block_size": 55,
+      "discrepancy": 55.0,
+      "tolerance": 0.25,
+      "anomaly": "the dual attack recovered nothing anywhere in the swept block-size range, where the model predicts success at 55. Either the sweep did not reach far enough or the instance is harder than the model says.",
+      "note": null
+    }
+  ],
+  "scaling": {
+    "kind": "block_size_growth",
+    "measured": {
+      "slope": 0.6926229508196722,
+      "intercept": -24.79508196721312,
+      "r_squared": 0.9439780539397145,
+      "fitted_dimension_min": 40,
+      "fitted_dimension_max": 130,
+      "n_points": 5,
+      "points": [
+        [
+          40,
+          10
+        ],
+        [
+          60,
+          10
+        ],
+        [
+          80,
+          30
+        ],
+        [
+          100,
+          40
+        ],
+        [
+          130,
+          70
+        ]
+      ]
+    },
+    "extrapolated": {
+      "target_dimension": 160,
+      "predicted_block_size": 86.02459016393442,
+      "core_svp_log2_cost": 25.11918032786885,
+      "core_svp_c": 0.292,
+      "provenance": "extrapolated"
+    },
+    "scope": "fitted across the sweep: the required block size against lattice dimension, over the dimensions that reached one. Core-SVP is applied afterwards at the target dimension. The two steps are separate and separately labelled."
+  },
+  "seeds": {
+    "root": 20260913,
+    "derived": [
+      {
+        "parts": [
+          "instance",
+          "synthetic_scaled",
+          100
+        ],
+        "seed": 521231932878540419
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.12.14",
+    "fpylll": "0.6.4",
+    "g6k": "0.1.2",
+    "estimator_revision": "53da5982597709ba0fdf94ea37a84d822310fd84"
+  },
+  "run_dir": "results/synthetic_scaled-d100-s20260913"
+}

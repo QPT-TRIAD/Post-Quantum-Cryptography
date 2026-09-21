@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Run the tester with the interpreter that has SageMath and fpylll, without installing anything.
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PYTHONPATH="$here/src${PYTHONPATH:+:$PYTHONPATH}" exec "${QPT_CART_PYTHON:-$HOME/miniforge3/envs/sage/bin/python}" -m qpt_cart.cli "$@"

@@ -1,5 +1,12 @@
 # pq_infra_s1s2_hashsig_dnssec_v2.2.py — audit-fix release of v2.0 (2026-09-13): F2 (empty/extra-node multiproof
 # accepted) and F4 (merkle_verify raised on malformed input). v2.0 is preserved immutably.
+# S2-006 (2026-09-21): interior Merkle nodes are hashed with their position. v2.0 used H('node', l, r)
+# for every node of every structure, so an adversary holding T signed structures tested one evaluation
+# against all T targets: at n = 256 and T = 2^40 that is 2^108 quantum queries = 2^126 gates, inside the
+# 2^128 budget. Binding each node to (structure id, level, parent index) puts each target in its own
+# function, restoring 2^128 queries = 2^146 gates. Zero wire bytes: every prefix component is already
+# known to the verifier (the public seed is half the public key; the rung, level and index come from the
+# proof). Structure id is the ladder rung for MTL and the public seed for the XMSS-style tree.
 #!/usr/bin/env python3
 r"""PQ infrastructure program — steps S1 and S2, built from glued partial theories.
 
@@ -141,8 +148,11 @@ class MerkleSigner:
             self.leaves.append(wots_compress(pk, self.pubseed, addr))
         self.levels = [self.leaves]
         while len(self.levels[-1]) > 1:
-            prev = self.levels[-1]
-            self.levels.append([H(b'node', prev[i], prev[i + 1]) for i in range(0, len(prev), 2)])
+            lvl, prev = len(self.levels) - 1, self.levels[-1]
+            # S2-006: the node is bound to (public seed, level, parent index), the XMSS-T address
+            # convention. Leaves already carry `addr`; without this the interior nodes did not.
+            self.levels.append([H(b'node', self.pubseed, lvl.to_bytes(1, 'big'), (i // 2).to_bytes(4, 'big'),
+                                  prev[i], prev[i + 1]) for i in range(0, len(prev), 2)])
         self.root = self.levels[-1][0]
         self.next_idx = 0
 
@@ -196,7 +206,8 @@ def _merkle_verify_checked(root, pubseed, height, msg, sig):
     node = wots_compress(wots_pk_from_sig(digest, sig['ots'], pubseed, addr), pubseed, addr)
     for lvl in range(height):
         sib = sig['auth'][lvl]
-        node = H(b'node', node, sib) if (idx >> lvl) & 1 == 0 else H(b'node', sib, node)
+        left, right = (node, sib) if (idx >> lvl) & 1 == 0 else (sib, node)
+        node = H(b'node', pubseed, lvl.to_bytes(1, 'big'), (idx >> (lvl + 1)).to_bytes(4, 'big'), left, right)
     return node == root
 
 
@@ -216,7 +227,10 @@ def ladder_rungs(n):
 
 class MTLLadder:
     """Sign the ladder once; issue condensed per-leaf proofs; verifier caches
-    the signed ladder. The underlying signature is modelled by its byte size."""
+    the signed ladder. The underlying signature is modelled by its byte size.
+    S2-006: an interior node is hashed as H('node', rung, level, parent index,
+    l, r). The three prefix fields cost nothing on the wire: the verifier reads
+    the rung from the proof and derives level and index from the walk."""
 
     def __init__(self, leaf_digests, underlying_sig_bytes):
         self.n = len(leaf_digests)
@@ -224,11 +238,12 @@ class MTLLadder:
         self.underlying_sig_bytes = underlying_sig_bytes
         self.rungs = ladder_rungs(self.n)
         self.rung_roots, self.rung_levels = [], []
-        for start, size in self.rungs:
+        for r, (start, size) in enumerate(self.rungs):
             levels = [self.leaves[start:start + size]]
             while len(levels[-1]) > 1:
-                p = levels[-1]
-                levels.append([H(b'node', p[i], p[i + 1]) for i in range(0, len(p), 2)])
+                lvl, p = len(levels) - 1, levels[-1]
+                levels.append([H(b'node', r.to_bytes(4, 'big'), lvl.to_bytes(1, 'big'), (i // 2).to_bytes(4, 'big'),
+                                 p[i], p[i + 1]) for i in range(0, len(p), 2)])
             self.rung_levels.append(levels)
             self.rung_roots.append(levels[-1][0])
         # ONE underlying signature covers the whole ladder
@@ -260,7 +275,9 @@ class MTLLadder:
             return False
         node = leaf_digest
         for lvl, sib in enumerate(proof['path']):
-            node = H(b'node', node, sib) if (idx >> lvl) & 1 == 0 else H(b'node', sib, node)
+            left, right = (node, sib) if (idx >> lvl) & 1 == 0 else (sib, node)
+            node = H(b'node', r.to_bytes(4, 'big'), lvl.to_bytes(1, 'big'), (idx >> (lvl + 1)).to_bytes(4, 'big'),
+                     left, right)
         return node == rung_roots[r]
 
 
@@ -288,7 +305,11 @@ def multiproof_nodes(leaf_indices, depth):
 
 
 class MTLMultiproof:
-    """Batched condensed signature for several leaves of the same ladder rung."""
+    """Batched condensed signature for several leaves of the same ladder rung.
+    S2-006: `build` copies nodes out of `ladder.rung_levels`, which are already
+    position-prefixed, so only `verify` recomputes a hash and it uses the same
+    (rung, level, parent index) prefix. The proof carries the rung and the leaf
+    indices; level and parent index come from the walk, so nothing is added."""
 
     @staticmethod
     def build(ladder, leaf_indices):
@@ -366,7 +387,8 @@ class MTLMultiproof:
                         if sib is None:
                             sib = supplied[(lvl, i ^ 1)]
                         left, right = (h, sib) if i & 1 == 0 else (sib, h)
-                        nxt[i >> 1] = H(b'node', left, right)
+                        nxt[i >> 1] = H(b'node', r.to_bytes(4, 'big'), lvl.to_bytes(1, 'big'),
+                                        (i >> 1).to_bytes(4, 'big'), left, right)
                     cur = nxt
                 if cur.get(0) != ladder_rung_roots[r]:
                     return False
@@ -740,7 +762,8 @@ def main(argv=None):
         print(json.dumps(report(), indent=2))
         return 0
     suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromTestCase(Tests),
-                                unittest.defaultTestLoader.loadTestsFromTestCase(AuditFixTests)])
+                                unittest.defaultTestLoader.loadTestsFromTestCase(AuditFixTests),
+                                unittest.defaultTestLoader.loadTestsFromTestCase(PositionPrefixTests)])
     r = unittest.TextTestRunner(verbosity=2).run(suite)
     return 0 if r.wasSuccessful() else 1
 
@@ -790,6 +813,93 @@ class AuditFixTests(unittest.TestCase):
                     {'idx': True, 'ots': sig['ots'], 'auth': sig['auth']}):
             self.assertFalse(merkle_verify(signer.root, signer.pubseed, 3, b'm', bad))
         self.assertFalse(merkle_verify(signer.root, signer.pubseed, 3, 'm', sig))
+
+
+# ====================================================== S2-006 regressions
+def _unprefixed_levels(leaves):
+    """The v2.0 node hash, kept in the test section only so the regressions can
+    show what the position prefix now rejects: every interior node of every
+    structure was H('node', l, r), one function holding all T targets."""
+    levels = [list(leaves)]
+    while len(levels[-1]) > 1:
+        p = levels[-1]
+        levels.append([H(b'node', p[i], p[i + 1]) for i in range(0, len(p), 2)])
+    return levels
+
+
+def _unprefixed_root(leaf_digest, idx, path):
+    node = leaf_digest
+    for lvl, sib in enumerate(path):
+        node = H(b'node', node, sib) if (idx >> lvl) & 1 == 0 else H(b'node', sib, node)
+    return node
+
+
+class PositionPrefixTests(unittest.TestCase):
+    """S2-006 / failed-assumption A4: interior nodes carry (structure id, level,
+    parent index). Each of these fails against the v2.0 hashing."""
+
+    def test_s2_006_node_hash_binds_rung_level_and_index(self):
+        a, b = H(b'pa'), H(b'pb')
+        lad = MTLLadder([a, b] * 3, 0)                        # n = 6 -> rungs (0,4),(4,2)
+        self.assertEqual(lad.rungs, [(0, 4), (4, 2)])
+        z4, z1 = b'\x00\x00\x00\x00', b'\x00'
+        want = H(b'node', z4, z1, z4, a, b)
+        self.assertEqual(lad.rung_levels[0][1][0], want)
+        # same children, different index -> different node
+        self.assertEqual(lad.rung_levels[0][1][1], H(b'node', z4, z1, b'\x00\x00\x00\x01', a, b))
+        self.assertNotEqual(lad.rung_levels[0][1][0], lad.rung_levels[0][1][1])
+        # same children, same level and index, different rung -> different node
+        self.assertEqual(lad.rung_levels[1][1][0], H(b'node', b'\x00\x00\x00\x01', z1, z4, a, b))
+        self.assertNotEqual(lad.rung_levels[0][1][0], lad.rung_levels[1][1][0])
+        # dropping any one prefix field, or all three (the v2.0 shape), changes the node
+        for dropped in (H(b'node', a, b), H(b'node', z1, z4, a, b),
+                        H(b'node', z4, z4, a, b), H(b'node', z4, z1, a, b)):
+            self.assertNotEqual(want, dropped)
+
+    def test_s2_006_condensed_proof_does_not_transplant_to_another_position(self):
+        leaves = [H(b'pa'), H(b'pb')] * 8            # repeated blocks: every subtree repeats
+        lad = MTLLadder(leaves, 0)
+        self.assertEqual(lad.rungs, [(0, 16)])
+        p0 = lad.condensed(0)
+        self.assertTrue(MTLLadder.verify(lad.rung_roots, lad.rungs, leaves[0], p0))
+        self.assertFalse(MTLLadder.verify(lad.rung_roots, lad.rungs, leaves[2], dict(p0, leaf=2)))
+        self.assertFalse(MTLLadder.verify(lad.rung_roots, lad.rungs, leaves[4], dict(p0, leaf=4)))
+        # under v2.0 the move was free: the repeated subtrees are the same bytes, so
+        # leaf 0's path reaches the same root from leaf 2 and from leaf 4.
+        old, path, idx = _unprefixed_levels(leaves), [], 0
+        for lvl in range(4):
+            path.append(old[lvl][idx ^ 1])
+            idx >>= 1
+        for j in (0, 2, 4):
+            self.assertEqual(_unprefixed_root(leaves[j], j, path), old[-1][0])
+
+    def test_s2_006_multiproof_rejects_unprefixed_nodes(self):
+        leaves = [H(b'pz', i.to_bytes(2, 'big')) for i in range(64)]
+        lad = MTLLadder(leaves, 0)
+        good = MTLMultiproof.build(lad, [5, 17])
+        self.assertTrue(MTLMultiproof.verify(lad.rung_roots, lad.rungs, leaves, good))
+        old = _unprefixed_levels(leaves)
+        stale = {0: {'leaves': good[0]['leaves'],
+                     'nodes': [(lvl, i, old[lvl][i]) for lvl, i, _ in good[0]['nodes']]}}
+        self.assertNotEqual(stale[0]['nodes'], good[0]['nodes'])      # levels >= 1 differ
+        self.assertFalse(MTLMultiproof.verify(lad.rung_roots, lad.rungs, leaves, stale))
+        # nor against the root of the wholly unprefixed structure the nodes came from
+        self.assertFalse(MTLMultiproof.verify([old[-1][0]], lad.rungs, leaves, stale))
+
+    def test_s1_006_merkle_nodes_bind_public_seed_level_and_index(self):
+        signer = MerkleSigner(3, b'\x07' * 32)
+        lv, z4, z1 = signer.levels, b'\x00\x00\x00\x00', b'\x00'
+        self.assertEqual(lv[1][0], H(b'node', signer.pubseed, z1, z4, lv[0][0], lv[0][1]))
+        self.assertEqual(lv[1][1], H(b'node', signer.pubseed, z1, b'\x00\x00\x00\x01', lv[0][2], lv[0][3]))
+        self.assertEqual(lv[2][0], H(b'node', signer.pubseed, b'\x01', z4, lv[1][0], lv[1][1]))
+        # the WOTS+ address binds the leaves only; before this the interior nodes of
+        # every key pair shared one function. The public seed now separates them.
+        other = MerkleSigner(2, b'\x08' * 32)
+        self.assertNotEqual(lv[1][0], H(b'node', other.pubseed, z1, z4, lv[0][0], lv[0][1]))
+        self.assertNotEqual(signer.root, _unprefixed_levels(lv[0])[-1][0])
+        sig = signer.sign(b'fw')
+        self.assertTrue(merkle_verify(signer.root, signer.pubseed, 3, b'fw', sig))
+        self.assertFalse(merkle_verify(signer.root, other.pubseed, 3, b'fw', sig))
 
 if __name__ == '__main__':
     sys.exit(main())

@@ -1,0 +1,15 @@
+[project]
+name = "qpt-rr"
+version = "0.1.0"
+description = "Reduction runner for the QPT-128 Mode B security proofs"
+requires-python = ">=3.11"
+dependencies = ["typer"]
+# The field, key map and scaling rule come from the sibling project qpt-classical-attack-tester,
+# found at the sibling classical-attack package's `src` or $QPT_RR_PRIMITIVES.
+
+[project.scripts]
+qpt-rr = "qpt_rr.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

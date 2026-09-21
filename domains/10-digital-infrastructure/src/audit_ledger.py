@@ -28,6 +28,9 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 SP = os.path.normpath(os.path.join(_HERE, '..', 'results'))   # regenerated reports + published ledger
 os.makedirs(SP, exist_ok=True)
 SUITES = {
+    # S1 is pinned to the v2.1 revision on purpose: it is the revision the recorded 70/70 was
+    # produced with. The current revision is s1_lms.py (v2.2, which adds S1-012 for the
+    # approved-pair fix); pointing the suite there changes the test count and the recorded total.
     'S1': (os.path.join('..', 'history', 's1_lms-v2.1.py'), 'Firmware / LMS (RFC 8554, SP 800-208)'),
     'S2': ('s2_dns_worstcase.py', 'DNSSEC (MTL ladder, multiproof, sharding)'),
     'S3': ('s3_tls_wire.py', 'TLS 1.3 / QUIC / MTC / KEMTLS'),
@@ -141,6 +144,20 @@ def attack_records(reports):
     return R
 
 
+# The figures 83 / 100 / 116 / 148 that appear below and in composition() are NIST category
+# FLOORS in log2 gates, i.e. the resource level a scheme in the category must match, and not the
+# cost of the best known attack on any scheme deployed there. 83, 116 and 148 are Grover key
+# search on AES-128 / AES-192 / AES-256: half the key length in Grover iterations charged at the
+# gate cost of one AES evaluation (64+19, 96+20, 128+20). The AES-256 entry is the G-cost
+# 1.17*2^148 of Jaques-Naehrig-Roetteler-Virdia Tables 9 and 11, which is the row the v1.43
+# constants table carries; 100 is the Category-2 entry (collision search on a 256-bit hash) and no
+# row here uses it. Putting a floor in the gates_log2 column of an ML-KEM row is the conservative
+# direction only while the best known lattice attack costs at least the floor. Analytic
+# cross-check, not measured: an independent estimator run (lattice-estimator, ADPS16 core-SVP,
+# quantum) puts ML-KEM-1024 near 2^231.6 quantum and 2^255.2 classical, and ML-KEM-512
+# (Category 1) near 2^107.6 quantum, below the 2^128 budget. Those counts are core-SVP
+# operations, not the gate units of this table, so they settle the direction of the substitution
+# and not the number written in it.
 def exponent_table(reports):
     """Cheapest-attack gate exponent per layer at production parameters."""
     s2L = reports.get('S2', {}).get('multi_target_ledger_n256', {})
@@ -149,12 +166,14 @@ def exponent_table(reports):
         {'layer': 'S1 firmware LMS n=24 (NSA-preferred)', 'cheapest_game': 'same', 'gates_log2': 96 + GATES_LOG2, 'source': 'S1-010'},
         {'layer': 'S2 DNSSEC MTL nodes, UNPREFIXED (v2.0 as built), T=2^40', 'cheapest_game': 'multi-target second preimage', 'gates_log2': s2L.get('unprefixed_gates_log2'), 'source': 'S2-006'},
         {'layer': 'S2 DNSSEC MTL nodes, prefixed (fix)', 'cheapest_game': 'second preimage', 'gates_log2': s2L.get('prefixed_gates_log2'), 'source': 'S2-006'},
-        {'layer': 'S3 TLS KEM ML-KEM-1024', 'cheapest_game': 'Category-5 reference attack', 'gates_log2': 148, 'source': 'v1.43 ledger'},
+        {'layer': 'S3 TLS KEM ML-KEM-1024', 'cheapest_game': 'Category-5 reference attack', 'gates_log2': 148,
+         'source': 'NIST Category-5 floor: Grover on AES-256, 1.17*2^148 gates (Jaques-Naehrig-Roetteler-Virdia Tables 9/11, the row the v1.43 constants table carries); not a measured ML-KEM lattice cost'},
         {'layer': 'S3 MTC inclusion proof (RFC 6962-style nodes, no index)', 'cheapest_game': 'multi-target second preimage (same issue as S2-006; T = certs/batch·batches)', 'gates_log2': None, 'source': 'flagged, not measured here'},
         {'layer': 'S4 TESLA 256-bit chain', 'cheapest_game': 'chain preimage', 'gates_log2': 128 + GATES_LOG2, 'source': 'S4 report / S1-010 law'},
         {'layer': 'S4 TESLA MAC 128-bit tag', 'cheapest_game': 'online tag guess (no offline speed-up)', 'gates_log2': None, 'source': 'per-attempt 2^-128, online only'},
         {'layer': 'S5 card LMS n=32', 'cheapest_game': '= S1', 'gates_log2': 128 + GATES_LOG2, 'source': 'S1-010'},
-        {'layer': 'S6 hybrid KEM (PQ component Cat 5)', 'cheapest_game': 'Category-5 reference attack', 'gates_log2': 148, 'source': 'S6-010'},
+        {'layer': 'S6 hybrid KEM (PQ component Cat 5)', 'cheapest_game': 'Category-5 reference attack', 'gates_log2': 148,
+         'source': 'NIST Category-5 floor, the same entry as the S3 row; S6-010 pins the hash-preimage margins (-46 / -14 / +18 at n = 128 / 192 / 256) and produces no 148'},
     ]
     for r in rows:
         r['passes_qpt128'] = None if r['gates_log2'] is None else r['gates_log2'] >= BUDGET
@@ -164,6 +183,8 @@ def exponent_table(reports):
 def composition():
     """Only the TLS session shares one attacker goal across its primitives."""
     import math
+    # The two 148 entries are the NIST Category-5 floor described above the exponent table, not a
+    # lattice cost for ML-KEM-1024; 146 is the measured Grover figure for a 256-bit hash (S1-010).
     parts = {'ephemeral KEM ML-KEM-1024': 148, 'server long-term KEM ML-KEM-1024': 148, 'MTC/transcript hash (prefixed nodes)': 146}
     total = -math.log2(sum(2.0 ** -v for v in parts.values()))
     return {'same_goal_union': {'goal': 'break one TLS session (confidentiality or authentication)', 'parts_gates_log2': parts,

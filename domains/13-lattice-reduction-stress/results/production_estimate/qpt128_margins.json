@@ -1,0 +1,60 @@
+{
+  "kappa": 130,
+  "mode_b": {
+    "citation": "modeB_rigorous_ledger_v1.47.py (values executed at tau=11, b=20, w_g=16); quoted at modeB_security_v1.49.md:135 and attack_lab_results_v1.51.md:176",
+    "double_charge_costs_bits": 0.412,
+    "error_is_conservative": true,
+    "recorded_d2_margin_bits": 7.7,
+    "recorded_total_log2": -137.7,
+    "reproducing_variant": "both_r3_rows_as_computed",
+    "residual_bits": 0.031,
+    "rows": {
+      "R1 framing": -145.0,
+      "R2 binding": -209.0,
+      "R3 proof soundness (DFMS-modelled)": -139.678072,
+      "R3 proof soundness (FAEST v2 Lemma 9.39, degree 6)": -138.093109,
+      "R4 simulation": -159.41503749927887,
+      "R5 false positive": -181.18141782251917
+    },
+    "variants": {
+      "both_r3_rows_as_computed": {
+        "combination": "both R3 rows",
+        "d2_margin_bits": 7.669,
+        "note": "what modeB_rigorous_ledger_v1.47.py sums, because the FAEST row is stored under a key distinct from the DFMS row it replaces. This is the figure the corpus quotes.",
+        "rows_counted": 6,
+        "total_log2": -137.669
+      },
+      "dfms_row_only": {
+        "combination": "DFMS row only",
+        "d2_margin_bits": 9.642,
+        "note": "the pre-v1.49 model, kept for reference; the corpus argues from the FAEST form.",
+        "rows_counted": 5,
+        "total_log2": -139.642
+      },
+      "faest_row_only": {
+        "combination": "FAEST row only",
+        "d2_margin_bits": 8.081,
+        "note": "the v1.49 revision read as a replacement, which is what its name says it is. This is the margin the arithmetic supports.",
+        "rows_counted": 5,
+        "total_log2": -138.081
+      }
+    }
+  },
+  "mode_s": {
+    "citation": "QPT128_finalization_v1.43.md:205-210 (\u00a75 Corollary B, gate units, r = 640)",
+    "recomputed_d2_margin_bits": 29.413,
+    "recomputed_total_log2": -159.413,
+    "recorded_total_log2": -159.414,
+    "residual_bits": 0.0005,
+    "residual_is_rounding": true,
+    "rows": {
+      "E1 extraction": -169.302,
+      "E2 simulation": -159.415,
+      "E3 honest preimage": -203.0,
+      "E4 key collision (1024-bit)": -500.793,
+      "E5 link coincidence": -198.023
+    }
+  },
+  "note": "Recorded constants, recomputed here rather than quoted. The two ledgers are in different currencies from the lattice estimate in notes/10-production-estimate.md \u2014 these are log2 Pr/G in gate units, that is sieving operations \u2014 and no conversion between them exists in the corpus, so none of these margins can be set against a lattice figure and vice versa.",
+  "rule": "total = log2(sum(2**v for v in rows.values())); margin = -KAPPA - total"
+}

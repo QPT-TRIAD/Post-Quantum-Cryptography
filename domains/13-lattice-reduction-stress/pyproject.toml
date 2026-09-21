@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qlwr-lattice-stress"
+version = "0.1.0"
+description = "CPU-only lattice-reduction stress test for a scaled QLWR parameter set"
+requires-python = ">=3.12"
+
+# These are the pip-installable dependencies, and they are all already present in the sage
+# environment this project runs in.
+#
+# fpylll, G6K and lattice-estimator are deliberately NOT listed. None of them is pip-installable in
+# the ordinary sense here -- G6K has never had a wheel, lattice-estimator is not on PyPI at all, and
+# fpylll's wheel vendors its own libraries so a resolver that "fixed" it could pull something
+# incompatible. They are provided by the sage environment and installed by scripts/move_tools.py.
+# Listing them would invite a resolver to break a working build.
+dependencies = [
+    "numpy",
+    "scipy",
+    "pandas",
+    "sympy",
+    "pydantic>=2",
+    "PyYAML",
+    "typer",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "hypothesis"]
+
+[project.scripts]
+qlwr-lattice-stress = "qlwr_lattice_stress.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = [
+    "slow: runs that take minutes (real sieving tours, full estimator sweeps)",
+    "engine: requires a specific reduction engine",
+    "sieve: requires G6K",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["src/qlwr_lattice_stress"]

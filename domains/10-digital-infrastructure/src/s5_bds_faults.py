@@ -16,6 +16,15 @@ Columns:
       reused, every later signature verifies.
   (4) Bound: the card's security is that of LMS (S1 audit); this file adds no
       cryptographic claim.
+
+S2-006 (2026-09-21): the design file now hashes an interior node as H('node', public
+seed, level of the children, parent index, l, r) instead of H('node', l, r), which is
+the multi-target second-preimage fix carried by S1, S2 and S3 (2^126 gates unprefixed
+at n = 256, T = 2^40; 2^146 prefixed). Everything below recomputes nodes the traversal
+also computes — the naive comparison and the self-check that folds a leaf up its auth
+path — so both carry the same prefix, and the regressions at the end fail against the
+previous hashing. Hash-call counts, state bytes and signature sizes are unchanged: the
+prefix changes the input to a hash, not the number of them or any measured length.
 """
 
 import argparse
@@ -49,7 +58,8 @@ def valid_ks(h):
 
 # ------------------------------------------------------- serialization -----
 def bds_serialize(b):
-    return {'h': b.h, 'k': b.k, 's': b.s, 'root': b.root, 'auth': list(b.auth), 'keep': list(b.keep),
+    return {'h': b.h, 'k': b.k, 's': b.s, 'root': b.root, 'pubseed': b.pubseed,
+            'auth': list(b.auth), 'keep': list(b.keep),
             'treehash': [{'i': t.i, 'next_idx': t.next_idx, 'node': t.node, 'completed': t.completed, 'stack': list(t.stack)}
                          for t in b.treehash],
             'retain': {i: dict(v) for i, v in b.retain.items()}}
@@ -58,6 +68,7 @@ def bds_serialize(b):
 def bds_restore(state, leaf_fn):
     b = BDS.__new__(BDS)
     b.leaf_fn, b.h, b.k, b.s, b.root = leaf_fn, state['h'], state['k'], state['s'], state['root']
+    b.pubseed = state['pubseed']            # S2-006: a restored state must rebuild the same nodes
     b.leaf_calls = 0
     b.auth, b.keep = list(state['auth']), list(state['keep'])
     b.treehash = []
@@ -76,7 +87,10 @@ def bds_self_check(b, leaf):
         sib = b.auth[lvl]
         if sib is None:
             return False
-        node = H(b'node', node, sib) if (s >> lvl) & 1 == 0 else H(b'node', sib, node)
+        # S2-006: the same prefix the traversal used, so the walk stays at leaf s and
+        # cannot be replayed from a leaf whose subtree happens to have the same bytes
+        left, right = (node, sib) if (s >> lvl) & 1 == 0 else (sib, node)
+        node = H(b'node', b.pubseed, lvl.to_bytes(1, 'big'), (s >> (lvl + 1)).to_bytes(4, 'big'), left, right)
     return node == b.root
 
 
@@ -153,7 +167,7 @@ def sweep(h, k, limit=None):
     def leaf_fn(i):
         counts['leaf'] += 1
         return H(b'cheap-leaf', i.to_bytes(4, 'big'))
-    b = BDS(leaf_fn, h, k)
+    b = BDS(leaf_fn, h, k, H(b'ps', b'sweep'))
     keygen_leaves = counts['leaf']
     n = (1 << h) if limit is None else min(limit, 1 << h)
     leaves, nodes, peak = [], [], 0
@@ -183,12 +197,12 @@ def composed_hashes_per_sig(sw, w=256):
 class Tests(unittest.TestCase):
     def test_S5_001_exhaustive_h2_to_h12_all_k(self):
         """S5-001 BDS == naive auth path for every leaf, h=2..12, every valid k."""
-        checked = 0
+        checked, ps = 0, H(b'ps', b'card-audit')
         for h in range(2, 13):
             leaves = [H(b'L', h.to_bytes(1, 'big'), i.to_bytes(4, 'big')) for i in range(1 << h)]
-            paths, root = naive_auth_paths(leaves)
+            paths, root = naive_auth_paths(leaves, ps)
             for k in valid_ks(h):
-                b = BDS(lambda i, L=leaves: L[i], h, k)
+                b = BDS(lambda i, L=leaves: L[i], h, k, ps)
                 self.assertEqual(b.root, root)
                 for s in range(1 << h):
                     self.assertEqual(b.auth_path(), paths[s], f'h={h} k={k} s={s}')
@@ -199,9 +213,10 @@ class Tests(unittest.TestCase):
     def test_S5_002_state_manipulation(self):
         """S5-002 skip / jump / rollback / corruption / serialize-restore behave as required."""
         h, k = 8, 2
+        ps = H(b'ps', b'card-audit')
         leaves = [H(b'M', i.to_bytes(4, 'big')) for i in range(1 << h)]
-        paths, root = naive_auth_paths(leaves)
-        b = BDS(lambda i: leaves[i], h, k)
+        paths, root = naive_auth_paths(leaves, ps)
+        b = BDS(lambda i: leaves[i], h, k, ps)
         # skip an index (burn a leaf without signing): state stays consistent
         b.advance(); b.advance()
         self.assertEqual(b.auth_path(), paths[2])
@@ -301,6 +316,66 @@ class Tests(unittest.TestCase):
             card.sign(b'b')
 
 
+# ====================================================== S2-006 regressions
+def _unprefixed_root(leaves):
+    """The v2.0 node hash, kept in the test section only, so the regressions can show
+    what the position prefix rejects."""
+    level = list(leaves)
+    while len(level) > 1:
+        level = [H(b'node', level[i], level[i + 1]) for i in range(0, len(level), 2)]
+    return level[0]
+
+
+class PositionPrefixTests(unittest.TestCase):
+    """S2-006 carried into the traversal state and its self-check. These are named
+    outside the test_S5_0NN range on purpose: audit_ledger.py collects the suite's
+    findings by that ID form, and these are regressions on a design-file fix rather
+    than new audit findings, so the ledger's per-finding rows and its total do not
+    move. Each fails against the v2.0 hashing."""
+
+    def test_s5_006_traversal_state_is_bound_to_its_position(self):
+        ps = H(b'ps', b'audit-prefix')
+        a, b = H(b'ra'), H(b'rb')
+        leaves = [a, b] * 8                                      # h = 4; every subtree repeats
+        t = BDS(lambda i: leaves[i], 4, 2, ps)
+        self.assertEqual(t.root, naive_auth_paths(leaves, ps)[1])
+        self.assertNotEqual(t.root, _unprefixed_root(leaves))
+        z4, z1 = b'\x00\x00\x00\x00', b'\x00'
+        self.assertEqual(t.auth[1], H(b'node', ps, z1, b'\x00\x00\x00\x01', a, b))
+        self.assertNotEqual(t.auth[1], H(b'node', ps, z1, z4, a, b))      # same pair, index 0
+        self.assertNotEqual(t.auth[1], H(b'node', a, b))                  # the v2.0 shape
+        # the prefix survives serialise/restore: a restored card rebuilds the same nodes
+        r = bds_restore(copy.deepcopy(bds_serialize(t)), lambda i: leaves[i])
+        self.assertEqual(r.pubseed, ps)
+        for s in range(1 << 4):
+            self.assertEqual(r.auth_path(), t.auth_path())
+            r.advance(); t.advance()
+
+    def test_s5_006_auth_path_does_not_verify_at_another_leaf(self):
+        ps = H(b'ps', b'audit-prefix')
+        leaves = [H(b'ra'), H(b'rb')] * 8
+        t = BDS(lambda i: leaves[i], 4, 2, ps)
+        self.assertTrue(bds_self_check(t, leaves[0]))
+        for s in (2, 4, 6):                    # identical child bytes one position over
+            t.s = s
+            self.assertFalse(bds_self_check(t, leaves[s]))
+        # under v2.0 every one of those moves was accepted, because the repeated
+        # subtrees made leaf 0's path the right bytes at leaves 2, 4 and 6 as well
+        old = [list(leaves)]
+        while len(old[-1]) > 1:
+            p = old[-1]
+            old.append([H(b'node', p[i], p[i + 1]) for i in range(0, len(p), 2)])
+        path, idx = [], 0
+        for lvl in range(4):
+            path.append(old[lvl][idx ^ 1])
+            idx >>= 1
+        for s in (0, 2, 4, 6):
+            node = leaves[s]
+            for lvl, sib in enumerate(path):
+                node = H(b'node', node, sib) if (s >> lvl) & 1 == 0 else H(b'node', sib, node)
+            self.assertEqual(node, old[-1][0])
+
+
 def report():
     out = {'sweeps': {}, 'composition_check': {}}
     for h, limit in ((8, None), (10, None), (12, None), (14, None), (16, None), (18, 1 << 15), (20, 1 << 15)):
@@ -348,7 +423,9 @@ def main(argv=None):
     a = ap.parse_args(argv)
     if a.report:
         print(json.dumps(report(), indent=2)); return 0
-    r = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(Tests))
+    suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromTestCase(Tests),
+                                unittest.defaultTestLoader.loadTestsFromTestCase(PositionPrefixTests)])
+    r = unittest.TextTestRunner(verbosity=2).run(suite)
     return 0 if r.wasSuccessful() else 1
 
 

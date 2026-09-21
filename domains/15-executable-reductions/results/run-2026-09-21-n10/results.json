@@ -1,0 +1,349 @@
+{
+ "meta": {
+  "n": 10,
+  "trials": 100,
+  "seed": 20260921,
+  "version": "0.1.0",
+  "generated_utc": "2026-09-21T00:10:41+00:00"
+ },
+ "scope_boundary": "A reduction-based security proof has two halves. One is a CONVERSION: a recipe that turns any adversary who breaks the scheme into a solver for a named hard problem. The other is a HARDNESS ASSUMPTION: that nobody can solve that problem. This runner executes the conversion. It builds adversaries that genuinely break toy-sized instances, feeds them to the reduction exactly as the proof writes it, and checks three things: that the adversary cannot tell the reduction's simulated world from the real one, that whatever the reduction outputs really is a solution of the hard problem, and that it succeeds as often as the theorem claims. If those hold, the logic of the proof has been confirmed by running it rather than by reading it. If they fail, the proof has a hole, and the failure is a finding at any size. What this runner CANNOT do is say anything about the hardness assumption: it shows 'if the problem is hard then the scheme is secure', never that the problem is hard. It also runs only the reductions that can be run. The proof system's own soundness theorem lives in the quantum random-oracle model and is replaced here by an ideal prover, so nothing below tests it; and where the record gives no constructive reduction at all, the runner lists that as a gap instead of passing over it. A reduction that survives every adversary tried here has survived those adversaries, not every adversary.",
+ "not_runnable": [
+  [
+   "Theorem 3 \u2014 QROM soundness of the proof system",
+   "A quantum random-oracle bound, and by the record's own account transplanted from FAEST v2 Lemma 9.39 rather than re-derived. There is no classical program to run; here the proof system is replaced by an ideal prover whose soundness error is zero by construction."
+  ],
+  [
+   "Theorem 2 step 2 \u2014 obtaining the two openings",
+   "The record runs a QROM online extractor on both proofs (DFMS22, time O(q^2)). This runner reads the openings the ideal prover was shown instead. The collision logic is tested; the extraction that feeds it is not."
+  ],
+  [
+   "Assumption A-P \u2014 privacy from one-wayness",
+   "The record says: 'We do not claim a tight decision-to-search reduction.' No constructive reduction is given, so there is nothing to run. Theorem 4 (privacy) rests on A-P as a separate assumption."
+  ],
+  [
+   "Theorem 4 \u2014 privacy",
+   "A simulation argument in the QROM (GHHM21 adaptive reprogramming) over the real proof system; not executable against an ideal prover."
+  ]
+ ],
+ "results": [
+  {
+   "experiment": {
+    "key": "t1_plain",
+    "theorem": "Theorem 1 (non-frameability, 'tight')",
+    "reduction_name": "Theorem 1 as written: Frame -> A-F1",
+    "adversary_name": "brute-force framer (approval, then challenge)",
+    "expect": "HOLDS",
+    "role": "subject",
+    "note": ""
+   },
+   "trials": 100,
+   "real_wins": 100,
+   "simulated_wins": 100,
+   "simulation_failures": 0,
+   "solved": 100,
+   "invalid_outputs": 0,
+   "claimed_conversion": 1.0,
+   "aborting_is_claimed": false,
+   "verdict": "HOLDS",
+   "reasons": [
+    "sound, simulated in every trial, indistinguishable (z = 0.0), conversion 1.00 against a claimed 1.00"
+   ],
+   "failure_messages": {},
+   "params": {
+    "n": 10,
+    "seats": 6,
+    "quorum": 4,
+    "salted": false,
+    "salt_bits": 64,
+    "trials_redrawn_for_handle_coincidence": 3
+   },
+   "conversion": 1.0,
+   "z_score": 0.0
+  },
+  {
+   "experiment": {
+    "key": "t1_quarter",
+    "theorem": "Theorem 1 (non-frameability, 'tight')",
+    "reduction_name": "Theorem 1 as written: Frame -> A-F1",
+    "adversary_name": "brute-force framer with a quarter of the search budget",
+    "expect": "HOLDS",
+    "role": "subject",
+    "note": "A probabilistic winner: the real and simulated win rates must match."
+   },
+   "trials": 100,
+   "real_wins": 24,
+   "simulated_wins": 24,
+   "simulation_failures": 0,
+   "solved": 24,
+   "invalid_outputs": 0,
+   "claimed_conversion": 1.0,
+   "aborting_is_claimed": false,
+   "verdict": "HOLDS",
+   "reasons": [
+    "sound, simulated in every trial, indistinguishable (z = 0.0), conversion 1.00 against a claimed 1.00"
+   ],
+   "failure_messages": {},
+   "params": {
+    "n": 10,
+    "seats": 6,
+    "quorum": 4,
+    "salted": false,
+    "salt_bits": 64,
+    "trials_redrawn_for_handle_coincidence": 1
+   },
+   "conversion": 1.0,
+   "z_score": 0.0
+  },
+  {
+   "experiment": {
+    "key": "t1_lazy",
+    "theorem": "Theorem 1 (non-frameability, 'tight')",
+    "reduction_name": "Theorem 1 as written: Frame -> A-F1",
+    "adversary_name": "lazy framer (gives up)",
+    "expect": "NOT EXERCISED",
+    "role": "control",
+    "note": "The reduction must output nothing at all."
+   },
+   "trials": 100,
+   "real_wins": 0,
+   "simulated_wins": 0,
+   "simulation_failures": 0,
+   "solved": 0,
+   "invalid_outputs": 0,
+   "claimed_conversion": 1.0,
+   "aborting_is_claimed": false,
+   "verdict": "NOT EXERCISED",
+   "reasons": [
+    "the adversary never won, so the conversion was never exercised; what this shows is only that the reduction output nothing wrong"
+   ],
+   "failure_messages": {},
+   "params": {
+    "n": 10,
+    "seats": 6,
+    "quorum": 4,
+    "salted": false,
+    "salt_bits": 64,
+    "trials_redrawn_for_handle_coincidence": 0
+   },
+   "conversion": null,
+   "z_score": 0.0
+  },
+  {
+   "experiment": {
+    "key": "t1_prequery",
+    "theorem": "Theorem 1 (non-frameability, 'tight')",
+    "reduction_name": "Theorem 1 as written: Frame -> A-F1",
+    "adversary_name": "pre-querying framer (challenge, then approval)",
+    "expect": "FAILS",
+    "role": "subject",
+    "note": "The adversary looks the challenge up before asking for the approval."
+   },
+   "trials": 100,
+   "real_wins": 100,
+   "simulated_wins": 0,
+   "simulation_failures": 100,
+   "solved": 0,
+   "invalid_outputs": 0,
+   "claimed_conversion": 1.0,
+   "aborting_is_claimed": false,
+   "verdict": "FAILS",
+   "reasons": [
+    "the simulation could not be carried out in 100 of 100 trials",
+    "distinguishable: the adversary wins 100/100 real games but 0/100 simulated ones (z = 14.1)",
+    "conversion 0.00 is below the claimed 1.00"
+   ],
+   "failure_messages": {
+    "cannot carry out 'programs c(m) := c*': the adversary had already asked the oracle for the challenge of b'pay alice' before requesting its approval, and an answer already given cannot be changed. The handle for the challenge it was given needs seat i*'s opening, which the reduction does not have.": 100
+   },
+   "params": {
+    "n": 10,
+    "seats": 6,
+    "quorum": 4,
+    "salted": false,
+    "salt_bits": 64,
+    "trials_redrawn_for_handle_coincidence": 1
+   },
+   "conversion": 0.0,
+   "z_score": 14.142135623730951
+  },
+  {
+   "experiment": {
+    "key": "t1_guessing",
+    "theorem": "Theorem 1 (non-frameability, 'tight')",
+    "reduction_name": "Theorem 1 repaired by guessing the approval message",
+    "adversary_name": "pre-querying framer hiding its target among 3 decoys",
+    "expect": "HOLDS, WITH LOSS",
+    "role": "subject",
+    "note": "Holds only at the reduced rate 1/5: the guessing loss."
+   },
+   "trials": 100,
+   "real_wins": 100,
+   "simulated_wins": 17,
+   "simulation_failures": 83,
+   "solved": 17,
+   "invalid_outputs": 0,
+   "claimed_conversion": 0.2,
+   "aborting_is_claimed": true,
+   "verdict": "HOLDS, WITH LOSS",
+   "reasons": [
+    "sound, and converts at 0.17 against the 0.20 it claims \u2014 a loss factor of about 5.9, paid in 83 aborted simulations of 100"
+   ],
+   "failure_messages": {
+    "guessed wrong: bet on message index 1, but the approval was requested for b'pay alice'": 9,
+    "guessed wrong: bet on message index 3, but the approval was requested for b'pay alice'": 19,
+    "guessed wrong: bet on message index 0, but the approval was requested for b'pay alice'": 18,
+    "guessed wrong: bet on message index 4, but the approval was requested for b'pay alice'": 15,
+    "guessed wrong: bet on message index 2, but the approval was requested for b'pay alice'": 22
+   },
+   "params": {
+    "n": 10,
+    "seats": 6,
+    "quorum": 4,
+    "salted": false,
+    "salt_bits": 64,
+    "trials_redrawn_for_handle_coincidence": 5
+   },
+   "conversion": 0.17,
+   "z_score": 11.911353486499417
+  },
+  {
+   "experiment": {
+    "key": "t1_salted",
+    "theorem": "Theorem 1 (non-frameability, 'tight')",
+    "reduction_name": "Theorem 1 as written: Frame -> A-F1 \u2014 on a SALTED scheme (not in the record)",
+    "adversary_name": "pre-querying framer (challenge, then approval)",
+    "expect": "HOLDS",
+    "role": "subject",
+    "note": "Candidate repair: the approving seat adds a random salt to the challenge."
+   },
+   "trials": 100,
+   "real_wins": 100,
+   "simulated_wins": 100,
+   "simulation_failures": 0,
+   "solved": 100,
+   "invalid_outputs": 0,
+   "claimed_conversion": 1.0,
+   "aborting_is_claimed": false,
+   "verdict": "HOLDS",
+   "reasons": [
+    "sound, simulated in every trial, indistinguishable (z = 0.0), conversion 1.00 against a claimed 1.00"
+   ],
+   "failure_messages": {},
+   "params": {
+    "n": 10,
+    "seats": 6,
+    "quorum": 4,
+    "salted": true,
+    "salt_bits": 64,
+    "trials_redrawn_for_handle_coincidence": 0
+   },
+   "conversion": 1.0,
+   "z_score": 0.0
+  },
+  {
+   "experiment": {
+    "key": "control_broken",
+    "theorem": "Theorem 1 (non-frameability, 'tight')",
+    "reduction_name": "CONTROL: a broken reduction (instance embedded in the wrong seat)",
+    "adversary_name": "brute-force framer (approval, then challenge)",
+    "expect": "FAILS",
+    "role": "control",
+    "note": "The runner must catch this."
+   },
+   "trials": 100,
+   "real_wins": 100,
+   "simulated_wins": 100,
+   "simulation_failures": 0,
+   "solved": 0,
+   "invalid_outputs": 100,
+   "claimed_conversion": 1.0,
+   "aborting_is_claimed": false,
+   "verdict": "FAILS",
+   "reasons": [
+    "UNSOUND: 100 output(s) did not solve the hard problem",
+    "conversion 0.00 is below the claimed 1.00"
+   ],
+   "failure_messages": {},
+   "params": {
+    "n": 10,
+    "seats": 6,
+    "quorum": 4,
+    "salted": false,
+    "salt_bits": 64,
+    "trials_redrawn_for_handle_coincidence": 1
+   },
+   "conversion": 0.0,
+   "z_score": 0.0
+  },
+  {
+   "experiment": {
+    "key": "t2_evader",
+    "theorem": "Theorem 2 step 2 (binding / evasion)",
+    "reduction_name": "Theorem 2 step 2: evasion -> collision of F",
+    "adversary_name": "collision evader (two openings of one key)",
+    "expect": "HOLDS",
+    "role": "subject",
+    "note": "Openings come from the ideal prover, standing in for the online extractor."
+   },
+   "trials": 16,
+   "real_wins": 15,
+   "simulated_wins": 15,
+   "simulation_failures": 0,
+   "solved": 15,
+   "invalid_outputs": 0,
+   "claimed_conversion": 1.0,
+   "aborting_is_claimed": false,
+   "verdict": "HOLDS",
+   "reasons": [
+    "sound, simulated in every trial, indistinguishable (z = 0.0), conversion 1.00 against a claimed 1.00"
+   ],
+   "failure_messages": {},
+   "params": {
+    "n": 7,
+    "seats": 6,
+    "quorum": 4,
+    "salted": false,
+    "salt_bits": 64,
+    "seats_named_in_total": 20,
+    "trials_redrawn_for_handle_coincidence": 1
+   },
+   "conversion": 1.0,
+   "z_score": 0.0
+  },
+  {
+   "experiment": {
+    "key": "t2_plain",
+    "theorem": "Theorem 2 step 2 (binding / evasion)",
+    "reduction_name": "Theorem 2 step 2: evasion -> collision of F",
+    "adversary_name": "plain double-signer (one opening per key)",
+    "expect": "NOT EXERCISED",
+    "role": "control",
+    "note": "Forensic completeness: every double-signing seat must be named."
+   },
+   "trials": 100,
+   "real_wins": 0,
+   "simulated_wins": 0,
+   "simulation_failures": 0,
+   "solved": 0,
+   "invalid_outputs": 0,
+   "claimed_conversion": 1.0,
+   "aborting_is_claimed": false,
+   "verdict": "NOT EXERCISED",
+   "reasons": [
+    "the adversary never won, so the conversion was never exercised; what this shows is only that the reduction output nothing wrong"
+   ],
+   "failure_messages": {},
+   "params": {
+    "n": 7,
+    "seats": 6,
+    "quorum": 4,
+    "salted": false,
+    "salt_bits": 64,
+    "seats_named_in_total": 212,
+    "trials_redrawn_for_handle_coincidence": 8
+   },
+   "conversion": null,
+   "z_score": 0.0
+  }
+ ]
+}

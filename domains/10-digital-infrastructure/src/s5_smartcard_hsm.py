@@ -28,6 +28,16 @@ Theorems borrowed and tested:
 
 Transport: ISO 7816-4 short APDU carries ≤256 B per response; extended APDUs up
 to 65,535 B. Sizes vs the classical EMV RSA-1984 (248 B) are tabulated.
+
+S2-006 (2026-09-21): interior Merkle nodes carry their position. v2.0 hashed every
+interior node of every card as H('node', l, r), one function holding the nodes of
+all T fielded devices, so an adversary tests one evaluation against all T targets at
+once: at n = 256 and T = 2^40 that is 2^108 quantum queries = 2^126 gates, inside the
+2^128 budget the card claims. Binding each node to (public seed, level, parent index)
+— the XMSS-T address convention, and what RFC 8554's (I, r) does for LMS — puts each
+target in its own function and restores 2^128 queries = 2^146 gates. The card's public
+seed is half its public key and the leaf index already travels in the signature, so the
+1,772-B signature and every APDU count below are unchanged.
 """
 
 import argparse
@@ -70,11 +80,19 @@ class _Treehash:
 
 class BDS:
     """Bounded-memory Merkle authentication-path traversal (BDS 2008), as in the
-    RFC 8391 reference implementation's bds_round / bds_treehash_update."""
+    RFC 8391 reference implementation's bds_round / bds_treehash_update.
+    S2-006: every interior node is hashed H('node', pubseed, level of the two
+    children, index of the parent, l, r). The traversal reaches the same node by
+    three different routes — the key-generation stack, the round that rebuilds
+    auth[tau] from auth[tau-1] and keep[tau-1], and a treehash update — and all
+    three must derive the same (level, index) from the state they already track,
+    or verification stops matching construction. Both are tracked: the keygen
+    stack carries (node, height, index), the round knows tau and s, and a
+    treehash node's index follows from the last leaf it consumed."""
 
-    def __init__(self, leaf_fn, h, k):
+    def __init__(self, leaf_fn, h, k, pubseed):
         assert (h - k) % 2 == 0 and k >= 2
-        self.leaf_fn, self.h, self.k = leaf_fn, h, k
+        self.leaf_fn, self.h, self.k, self.pubseed = leaf_fn, h, k, pubseed
         self.leaf_calls = 0
         self.auth = [None] * h
         self.keep = [None] * (h // 2 + 1)
@@ -94,7 +112,10 @@ class BDS:
             self._capture(node, hgt, j)
             while stack and stack[-1][1] == hgt:
                 left = stack.pop()
-                node, hgt, j = H(b'node', left[0], node), hgt + 1, j >> 1
+                # the two children sit at level hgt with indices j-1 and j, so the parent
+                # is index j >> 1; the tuple's right side still holds the pre-merge values
+                node, hgt, j = H(b'node', self.pubseed, hgt.to_bytes(1, 'big'), (j >> 1).to_bytes(4, 'big'),
+                                 left[0], node), hgt + 1, j >> 1
                 self._capture(node, hgt, j)
             stack.append((node, hgt, j))
         return stack[0][0]
@@ -129,7 +150,10 @@ class BDS:
         if tau == 0:
             self.auth[0] = self._leaf(s)
         else:
-            self.auth[tau] = H(b'node', left, right)
+            # auth[tau] for leaf s+1 is the node at level tau with index ((s+1) >> tau) ^ 1,
+            # built from two level-(tau-1) children
+            self.auth[tau] = H(b'node', self.pubseed, (tau - 1).to_bytes(1, 'big'),
+                               (((s + 1) >> tau) ^ 1).to_bytes(4, 'big'), left, right)
             for i in range(tau):
                 if i < h - k:
                     self.auth[i] = self.treehash[i].node
@@ -149,10 +173,14 @@ class BDS:
         self.s += 1
 
     def _treehash_update(self, t):
-        node, hgt = self._leaf(t.next_idx), 0
+        leaf_idx = t.next_idx
+        node, hgt = self._leaf(leaf_idx), 0
         while t.stack and t.stack[-1][1] == hgt:
             left, _ = t.stack.pop()
-            node, hgt = H(b'node', left, node), hgt + 1
+            # a completed subtree ends at the leaf just consumed, so the node stands at
+            # index leaf_idx >> hgt and its parent at leaf_idx >> (hgt + 1)
+            node, hgt = H(b'node', self.pubseed, hgt.to_bytes(1, 'big'),
+                          (leaf_idx >> (hgt + 1)).to_bytes(4, 'big'), left, node), hgt + 1
         if hgt == t.i:
             t.node, t.completed = node, True
         else:
@@ -170,11 +198,14 @@ class BDS:
                 'retain': retain, 'index': 8, 'total': auth + keep + th + stacks + retain + 8}
 
 
-def naive_auth_paths(leaves):
+def naive_auth_paths(leaves, pubseed):
+    """Independent recomputation of every auth path; the S2-006 prefix here has to
+    agree with all three BDS routes, which is what the h=2..12 comparison tests."""
     levels = [list(leaves)]
     while len(levels[-1]) > 1:
-        p = levels[-1]
-        levels.append([H(b'node', p[i], p[i + 1]) for i in range(0, len(p), 2)])
+        lvl, p = len(levels) - 1, levels[-1]
+        levels.append([H(b'node', pubseed, lvl.to_bytes(1, 'big'), (i // 2).to_bytes(4, 'big'),
+                         p[i], p[i + 1]) for i in range(0, len(p), 2)])
     out = []
     for idx in range(len(leaves)):
         path, j = [], idx
@@ -195,7 +226,7 @@ class CardSigner:
         self.h = h
         self.ps = H(b'ps', seed)
         self.seed = seed
-        self.bds = BDS(self._leaf, h, k)
+        self.bds = BDS(self._leaf, h, k, self.ps)
         self.root = self.bds.root
         self.committed_index = 0
 
@@ -223,7 +254,9 @@ class CardSigner:
         d = H(b'msg', self.root, addr, msg)
         node = self.w.pk_from_sig(d, sig['ots'], self.ps, addr)
         for lvl, sib in enumerate(sig['path']):
-            node = H(b'node', node, sib) if (idx >> lvl) & 1 == 0 else H(b'node', sib, node)
+            left, right = (node, sib) if (idx >> lvl) & 1 == 0 else (sib, node)
+            node = H(b'node', self.ps, lvl.to_bytes(1, 'big'), (idx >> (lvl + 1)).to_bytes(4, 'big'),
+                     left, right)
         return node == self.root
 
 
@@ -271,6 +304,7 @@ def apdu_table():
 # ----------------------------------------------------------------- tests ----
 class Tests(unittest.TestCase):
     def test_t1_bds_matches_naive_for_every_leaf(self):
+        ps = H(b'ps', b'card')
         for h, k in ((6, 2), (8, 2), (8, 4)):
             leaves = [H(b'leaf', h.to_bytes(1, 'big'), i.to_bytes(4, 'big')) for i in range(1 << h)]
             calls = [0]
@@ -278,8 +312,8 @@ class Tests(unittest.TestCase):
             def leaf_fn(i, leaves=leaves, calls=calls):
                 calls[0] += 1
                 return leaves[i]
-            bds = BDS(leaf_fn, h, k)
-            paths, root = naive_auth_paths(leaves)
+            bds = BDS(leaf_fn, h, k, ps)
+            paths, root = naive_auth_paths(leaves, ps)
             self.assertEqual(bds.root, root)
             after_keygen = calls[0]
             self.assertEqual(after_keygen, 1 << h)
@@ -327,6 +361,76 @@ class Tests(unittest.TestCase):
         self.assertTrue(all(v['fits_one_extended_apdu'] for v in t.values()))
 
 
+# ====================================================== S2-006 regressions
+def _unprefixed_levels(leaves):
+    """The v2.0 node hash, kept in the test section only so the regressions can show
+    what the position prefix now rejects: every interior node of every card was
+    H('node', l, r), one function holding all T targets."""
+    levels = [list(leaves)]
+    while len(levels[-1]) > 1:
+        p = levels[-1]
+        levels.append([H(b'node', p[i], p[i + 1]) for i in range(0, len(p), 2)])
+    return levels
+
+
+class PositionPrefixTests(unittest.TestCase):
+    """S2-006 on the card tree: an interior node carries (public seed, level,
+    parent index). Each of these fails against the v2.0 hashing."""
+
+    def test_s5_006_node_hash_binds_seed_level_and_index(self):
+        ps = H(b'ps', b'bind')
+        a, b = H(b'la'), H(b'lb')
+        leaves = [a, b] * 8                                   # h = 4; every subtree repeats
+        bds = BDS(lambda i: leaves[i], 4, 2, ps)
+        paths, root = naive_auth_paths(leaves, ps)
+        self.assertEqual(bds.root, root)                      # keygen, treehash and round agree
+        z4, z1 = b'\x00\x00\x00\x00', b'\x00'
+        n0 = H(b'node', ps, z1, z4, a, b)                     # children at level 0 -> parent (1, 0)
+        n1 = H(b'node', ps, z1, b'\x00\x00\x00\x01', a, b)    # same children, parent (1, 1)
+        self.assertNotEqual(n0, n1)
+        self.assertEqual(bds.auth_path()[1], n1)              # leaf 0's level-1 sibling is (1, 1)
+        self.assertEqual(bds.auth_path()[2], H(b'node', ps, b'\x01', b'\x00\x00\x00\x01',
+                                               H(b'node', ps, z1, b'\x00\x00\x00\x02', a, b),
+                                               H(b'node', ps, z1, b'\x00\x00\x00\x03', a, b)))
+        # dropping any one prefix field, or all three (the v2.0 shape), changes the node
+        for dropped in (H(b'node', a, b), H(b'node', z1, z4, a, b),
+                        H(b'node', ps, z4, a, b), H(b'node', ps, z1, a, b)):
+            self.assertNotEqual(n0, dropped)
+        # another device with the same leaf bytes no longer shares the interior nodes
+        other = H(b'ps', b'other-card')
+        self.assertNotEqual(bds.root, naive_auth_paths(leaves, other)[1])
+        self.assertNotEqual(bds.root, _unprefixed_levels(leaves)[-1][0])
+
+    def test_s5_006_auth_path_does_not_transplant_to_another_leaf(self):
+        ps = H(b'ps', b'transplant')
+        leaves = [H(b'la'), H(b'lb')] * 8
+        paths, _ = naive_auth_paths(leaves, ps)
+        for j in (2, 4, 6):                                   # identical child bytes, other positions
+            self.assertNotEqual(paths[0], paths[j])
+        # under v2.0 the move was free: the repeated subtrees are the same bytes, so
+        # leaf 0's path reaches the same root from leaves 2, 4 and 6 as well.
+        old, path, idx = _unprefixed_levels(leaves), [], 0
+        for lvl in range(4):
+            path.append(old[lvl][idx ^ 1])
+            idx >>= 1
+        for j in (0, 2, 4, 6):
+            node, idx = leaves[j], j
+            for lvl, sib in enumerate(path):
+                node = H(b'node', node, sib) if (idx >> lvl) & 1 == 0 else H(b'node', sib, node)
+            self.assertEqual(node, old[-1][0])
+
+    def test_s5_006_card_signer_verifies_against_the_prefixed_tree(self):
+        card = CardSigner(h=4, k=2, w=16, seed=b'card-prefix')
+        leaves = [card._leaf(i) for i in range(16)]
+        self.assertEqual(card.root, naive_auth_paths(leaves, card.ps)[1])
+        self.assertNotEqual(card.root, _unprefixed_levels(leaves)[-1][0])
+        for i in range(16):
+            sig = card.sign(b'txn-%d' % i)
+            self.assertTrue(card.verify(b'txn-%d' % i, sig))
+            moved = dict(sig, idx=(i + 1) % 16)               # same path at another position
+            self.assertFalse(card.verify(b'txn-%d' % i, moved))
+
+
 def report():
     card = CardSigner(h=8, k=2)
     s1s2.hash_calls_reset()
@@ -357,7 +461,9 @@ def main(argv=None):
     a = ap.parse_args(argv)
     if a.report:
         print(json.dumps(report(), indent=2)); return 0
-    r = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(Tests))
+    suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromTestCase(Tests),
+                                unittest.defaultTestLoader.loadTestsFromTestCase(PositionPrefixTests)])
+    r = unittest.TextTestRunner(verbosity=2).run(suite)
     return 0 if r.wasSuccessful() else 1
 
 

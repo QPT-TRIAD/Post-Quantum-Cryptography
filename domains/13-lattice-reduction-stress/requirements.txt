@@ -1,0 +1,19 @@
+# pip-installable dependencies only.
+#
+# fpylll, G6K and lattice-estimator are NOT here and cannot be: G6K has never had a published
+# wheel, lattice-estimator is not on PyPI at all, and fpylll's wheel vendors its own copies of
+# libfplll/libgmp/libmpfr, so an ordinary install would not give anything else a library to link
+# against. All three are provided by the `sage` conda environment and registered by
+# scripts/move_tools.py. See README.md.
+numpy
+scipy
+pandas
+sympy
+pydantic>=2
+PyYAML
+typer
+matplotlib
+
+# development
+pytest
+hypothesis

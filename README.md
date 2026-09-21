@@ -234,6 +234,10 @@ missing:
 | `domains/09-security-games-and-attack-lab` | The games the construction must survive and the attacks actually run against it: 24 violation attempts against the real implementation, zero successful violations, at deliberately weak parameters. |
 | `domains/10-digital-infrastructure` | Six deployment studies — firmware signing, DNSSEC, TLS and the Web PKI, constrained broadcast, smart cards and HSMs, and category migration — each measured, none a deployment. |
 | `domains/11-independent-audit-stack` | Independent checks that attempt to disprove the claims: mathematics, symbolic protocol models, primitives against conformance vectors, sanitizers and fuzzing, property and differential testing, fault injection, and a specification-only re-implementation of the B0 wire format. |
+| `domains/12-quantum-search-measurement` | Exact simulation of quantum search against oracle circuits that are actually built, including a reversible SHA-256 compression function verified against a reference implementation. Measures the two search laws the ledgers assume, and prices one oracle query in gates instead of assuming the price. |
+| `domains/13-lattice-reduction-stress` | Real lattice reduction against the rounding-based trace function at dimensions a desktop reaches, plus the community estimator at full scale. Its own measurement code is the subject of four recorded defects, two of which changed previously recorded numbers. |
+| `domains/14-classical-attack-surface` | The raw primitives with no framing or proof layer around them, attacked classically at scaled sizes to map how the work grows. Every campaign is gated by controls whose verdicts are known in advance, and refuses to report subject verdicts when a control misbehaves. |
+| `domains/15-executable-reductions` | The security reductions of the hidden-signer design, implemented as programs and run against adversaries that genuinely win. Records that the non-frameability reduction, as written, cannot be carried out against one legitimate adversary class — a gap in a proof, not a break of the scheme. |
 | `records/` | The programme's own mistakes: the register of refuted hypotheses, the release record of the fixes, canonical copies of the audit ledger and checklist, the findings of the verification pass, and the provenance of every file. |
 | `tooling/` | How to rebuild the environment and re-run everything, with the package guide and the import inventory. |
 
@@ -282,7 +286,11 @@ no root. `tooling/packages.md` says what each package is and how far its output 
 `tooling/imports.md` says which script needs which package.
 
 **Nearly everything reproduces from this repository alone; five layers do not.** The scripts under
-`domains/01`–`domains/10` run from the repository alone, and so do most of the audit stack. Five
+`domains/01`–`domains/10` run from the repository alone, and so do most of the audit stack. The four
+engines in `domains/12`–`domains/15` are installable packages with their own test suites, run with
+`pytest` from the domain directory; each names the third-party packages it needs in its own README,
+and each is written so that a missing engine is recorded as a run that did not happen rather than
+silently skipped. Five
 layers under `domains/11-independent-audit-stack` do not: they read their audited input files from a
 local copy of the read-only research tree, that tree is **not shipped with this repository**, and
 without it they exit 1 with a message naming `PQT_SRC`. The five, all named relative to

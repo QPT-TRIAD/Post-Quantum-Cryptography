@@ -1,0 +1,51 @@
+{
+  "families": [
+    "usvp",
+    "dual"
+  ],
+  "noise_bound": 128,
+  "note": "An infinite cost is the model declining to answer, not a large number. Compare the thresholds against the recorded readings before quoting any cost: below a threshold the correct statement is 'no applicable attack in this model', which is not a security claim.",
+  "nu": 256,
+  "q_l": 65536,
+  "recorded_readings": {
+    "exposure": {
+      "dual": true,
+      "m": 672352,
+      "samples_after_normal_form": 672096,
+      "usvp": true
+    },
+    "rows": {
+      "dual": true,
+      "m": 608,
+      "samples_after_normal_form": 352,
+      "usvp": true
+    }
+  },
+  "thresholds": {
+    "dual": 536,
+    "usvp": 532
+  },
+  "transitions": [
+    {
+      "dual": false,
+      "m": 256,
+      "m_over_nu": 1.0,
+      "samples_after_normal_form": 256,
+      "usvp": false
+    },
+    {
+      "dual": false,
+      "m": 532,
+      "m_over_nu": 2.0781,
+      "samples_after_normal_form": 276,
+      "usvp": true
+    },
+    {
+      "dual": true,
+      "m": 536,
+      "m_over_nu": 2.0938,
+      "samples_after_normal_form": 280,
+      "usvp": true
+    }
+  ]
+}
